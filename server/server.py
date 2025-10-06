@@ -3,11 +3,11 @@ import http.server
 import socketserver
 import os
 
-PORT = 8000
+PORT = 8080
 
 # Get absolute path to client directory
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-CLIENT_DIR = os.path.join(os.path.dirname(SCRIPT_DIR), "client")
+CLIENT_DIR = os.path.join(os.path.dirname(SCRIPT_DIR), '')
 
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):

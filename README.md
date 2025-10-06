@@ -15,8 +15,8 @@ A Three.js-based 3D visualization featuring an animated torus knot with interact
 
 ```
 .
+├── index.html       # Main HTML with control panel UI (GitHub Pages entry point)
 ├── client/          # Client-side WebGL application
-│   ├── index.html   # Main HTML with control panel UI
 │   ├── styles.css   # Styling including control panel
 │   └── src/
 │       ├── renderer.js  # Three.js renderer and scene setup
@@ -27,6 +27,11 @@ A Three.js-based 3D visualization featuring an animated torus knot with interact
 
 ## Running the Application
 
+### GitHub Pages (Live Demo)
+Simply visit the GitHub Pages URL once deployed - the app runs entirely in the browser.
+
+### Local Development
+
 1. Start the server:
    ```bash
    cd server
@@ -35,7 +40,7 @@ A Three.js-based 3D visualization featuring an animated torus knot with interact
 
 2. Open your browser and navigate to:
    ```
-   http://localhost:8000
+   http://localhost:8080
    ```
 
 3. Use the control panel in the top-right corner to experiment with visualization parameters
