@@ -53,7 +53,7 @@ export class Renderer {
         this.scene.add(ambientLight);
 
         // Main directional light
-        this.directionalLight = new THREE.DirectionalLight(parseColor('#4db8ff'), 1.5);
+        this.directionalLight = new THREE.DirectionalLight(parseColor('#4db8ff'), 4.5);
         this.directionalLight.position.set(5, 5, 5);
         this.scene.add(this.directionalLight);
 
@@ -93,8 +93,8 @@ export class Renderer {
 
         const material = new THREE.MeshStandardMaterial({
             color: parseColor('#0f9987ff'),
-            metalness: 0.7,
-            roughness: 0.3,
+            metalness: 1.0,
+            roughness: 0.25,
             normalMap: normalMap,
             normalScale: new THREE.Vector2(0.5, 0.5)
         });
