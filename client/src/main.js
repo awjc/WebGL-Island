@@ -1,9 +1,13 @@
 let renderer;
 
-function init() {
+async function init() {
     const canvas = document.getElementById('glCanvas');
 
     try {
+        // Load shaders first
+        await loadShaders();
+
+        // Initialize renderer with loaded shaders
         renderer = new Renderer(canvas);
         animate();
     } catch (error) {

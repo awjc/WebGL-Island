@@ -1,21 +1,19 @@
-const vertexShaderSource = `
-    attribute vec2 a_position;
-    uniform float u_rotation;
-
-    void main() {
-        float s = sin(u_rotation);
-        float c = cos(u_rotation);
-        mat2 rotation = mat2(c, s, -s, c);
-        vec2 rotatedPosition = rotation * a_position;
-        gl_Position = vec4(rotatedPosition, 0.0, 1.0);
+// Shader loader utility
+async function loadShader(url) {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`Failed to load shader: ${url}`);
     }
-`;
+    return response.text();
+}
 
-const fragmentShaderSource = `
-    precision mediump float;
-    uniform vec3 u_color;
+// Load shaders
+let vertexShaderSource = null;
+let fragmentShaderSource = null;
 
-    void main() {
-        gl_FragColor = vec4(u_color, 1.0);
-    }
-`;
+async function loadShaders() {
+    [vertexShaderSource, fragmentShaderSource] = await Promise.all([
+        loadShader('src/shaders/vertex.glsl'),
+        loadShader('src/shaders/fragment.glsl')
+    ]);
+}
