@@ -80,7 +80,7 @@ export class Renderer {
         normalMap.repeat.set(4, 4);
 
         const material = new THREE.MeshStandardMaterial({
-            color: '#4db8ff',
+            color: '#4d77ffff',
             metalness: 0.7,
             roughness: 0.3,
             normalMap: normalMap,
