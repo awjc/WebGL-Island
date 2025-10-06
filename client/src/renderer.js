@@ -1,5 +1,14 @@
 import * as THREE from 'three';
 
+// Helper to convert any hex format to THREE.Color
+function parseColor(hex) {
+    // Strip alpha channel if present (8-digit hex)
+    if (hex.startsWith('#') && hex.length === 9) {
+        hex = hex.slice(0, 7);
+    }
+    return new THREE.Color(hex);
+}
+
 export class Renderer {
     constructor(canvas) {
         this.canvas = canvas;
@@ -10,7 +19,7 @@ export class Renderer {
             antialias: true
         });
         this.renderer.setPixelRatio(window.devicePixelRatio);
-        this.renderer.setClearColor('#1a1a1a');
+        this.renderer.setClearColor(parseColor('#1a1a1a'));
 
         // Create scene
         this.scene = new THREE.Scene();
@@ -37,21 +46,21 @@ export class Renderer {
 
     setupLighting() {
         // Ambient light for base illumination
-        const ambientLight = new THREE.AmbientLight('#ffffff', 0.3);
+        const ambientLight = new THREE.AmbientLight(parseColor('#ffffff'), 0.3);
         this.scene.add(ambientLight);
 
         // Main directional light
-        this.directionalLight = new THREE.DirectionalLight('#4db8ff', 1.5);
+        this.directionalLight = new THREE.DirectionalLight(parseColor('#4db8ff'), 1.5);
         this.directionalLight.position.set(5, 5, 5);
         this.scene.add(this.directionalLight);
 
         // Secondary point light for dynamic effect
-        this.pointLight = new THREE.PointLight('#ff6b35', 1, 10);
+        this.pointLight = new THREE.PointLight(parseColor('#ff6b35'), 1, 10);
         this.pointLight.position.set(-3, 2, 3);
         this.scene.add(this.pointLight);
 
         // Accent light
-        const accentLight = new THREE.PointLight('#9d4edd', 0.8, 8);
+        const accentLight = new THREE.PointLight(parseColor('#9d4edd'), 0.8, 8);
         accentLight.position.set(0, -3, 2);
         this.scene.add(accentLight);
     }
@@ -80,7 +89,7 @@ export class Renderer {
         normalMap.repeat.set(4, 4);
 
         const material = new THREE.MeshStandardMaterial({
-            color: '#4d77ffff',
+            color: parseColor('#0f9987ff'),
             metalness: 0.7,
             roughness: 0.3,
             normalMap: normalMap,
