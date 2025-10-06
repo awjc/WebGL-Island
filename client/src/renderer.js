@@ -13,6 +13,9 @@ export class Renderer {
     constructor(canvas) {
         this.canvas = canvas;
 
+        // Control parameters
+        this.rotationSpeed = 1.0;
+
         // Create Three.js renderer
         this.renderer = new THREE.WebGLRenderer({
             canvas: canvas,
@@ -109,10 +112,27 @@ export class Renderer {
         this.camera.updateProjectionMatrix();
     }
 
+    // Control methods
+    setMetalness(value) {
+        this.spinner.material.metalness = value;
+    }
+
+    setRoughness(value) {
+        this.spinner.material.roughness = value;
+    }
+
+    setRotationSpeed(value) {
+        this.rotationSpeed = value;
+    }
+
+    setLightIntensity(value) {
+        this.directionalLight.intensity = value;
+    }
+
     render() {
-        // Rotate the spinner
-        this.spinner.rotation.x += 0.001;
-        this.spinner.rotation.y += 0.002;
+        // Rotate the spinner with configurable speed
+        this.spinner.rotation.x += 0.001 * this.rotationSpeed;
+        this.spinner.rotation.y += 0.002 * this.rotationSpeed;
 
         // Animate the point light in a circular motion
         const time = Date.now() * 0.001;
