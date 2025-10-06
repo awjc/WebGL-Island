@@ -1,17 +1,15 @@
+import { Renderer } from './renderer.js';
+
 let renderer;
 
-async function init() {
+function init() {
     const canvas = document.getElementById('glCanvas');
 
     try {
-        // Load shaders first
-        await loadShaders();
-
-        // Initialize renderer with loaded shaders
         renderer = new Renderer(canvas);
         animate();
     } catch (error) {
-        console.error('Failed to initialize WebGL:', error);
+        console.error('Failed to initialize:', error);
     }
 }
 
