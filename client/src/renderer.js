@@ -111,8 +111,8 @@ export class Renderer {
 
     render() {
         // Rotate the spinner
-        this.spinner.rotation.x += 0.01;
-        this.spinner.rotation.y += 0.02;
+        this.spinner.rotation.x += 0.001;
+        this.spinner.rotation.y += 0.002;
 
         // Animate the point light in a circular motion
         const time = Date.now() * 0.001;
