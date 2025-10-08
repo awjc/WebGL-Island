@@ -1,58 +1,38 @@
 import { Renderer } from './renderer.js';
 
 let renderer;
+let fpsCounter;
+let lastTime = performance.now();
+let frames = 0;
 
 function init() {
     const canvas = document.getElementById('glCanvas');
+    fpsCounter = document.getElementById('fps-counter');
 
     try {
         renderer = new Renderer(canvas);
-        setupControls();
         animate();
     } catch (error) {
         console.error('Failed to initialize:', error);
     }
 }
 
-function setupControls() {
-    // Metalness control
-    const metalnessSlider = document.getElementById('metalness');
-    const metalnessValue = document.getElementById('metalnessValue');
-    metalnessSlider.addEventListener('input', (e) => {
-        const value = parseFloat(e.target.value);
-        metalnessValue.textContent = value.toFixed(2);
-        renderer.setMetalness(value);
-    });
+function updateFPS() {
+    frames++;
+    const currentTime = performance.now();
+    const deltaTime = currentTime - lastTime;
 
-    // Roughness control
-    const roughnessSlider = document.getElementById('roughness');
-    const roughnessValue = document.getElementById('roughnessValue');
-    roughnessSlider.addEventListener('input', (e) => {
-        const value = parseFloat(e.target.value);
-        roughnessValue.textContent = value.toFixed(2);
-        renderer.setRoughness(value);
-    });
-
-    // Rotation speed control
-    const rotationSpeedSlider = document.getElementById('rotationSpeed');
-    const rotationSpeedValue = document.getElementById('rotationSpeedValue');
-    rotationSpeedSlider.addEventListener('input', (e) => {
-        const value = parseFloat(e.target.value);
-        rotationSpeedValue.textContent = value.toFixed(1);
-        renderer.setRotationSpeed(value);
-    });
-
-    // Light intensity control
-    const lightIntensitySlider = document.getElementById('lightIntensity');
-    const lightIntensityValue = document.getElementById('lightIntensityValue');
-    lightIntensitySlider.addEventListener('input', (e) => {
-        const value = parseFloat(e.target.value);
-        lightIntensityValue.textContent = value.toFixed(1);
-        renderer.setLightIntensity(value);
-    });
+    // Update FPS display every second
+    if (deltaTime >= 1000) {
+        const fps = Math.round((frames * 1000) / deltaTime);
+        fpsCounter.textContent = `${fps} FPS`;
+        frames = 0;
+        lastTime = currentTime;
+    }
 }
 
 function animate() {
+    updateFPS();
     renderer.render();
     requestAnimationFrame(animate);
 }

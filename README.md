@@ -1,26 +1,17 @@
 # WebGL Island
 
-A Three.js-based 3D visualization featuring an animated torus knot with interactive controls.
-
-## Features
-
-- **3D Torus Knot**: Procedurally textured spinning geometry with normal mapping
-- **Dynamic Lighting**: Multi-light setup with animated point light
-- **Interactive Controls**: Real-time sliders to adjust:
-  - Material metalness and roughness
-  - Rotation speed
-  - Light intensity
+A blank Three.js starter template with basic WebGL setup.
 
 ## Project Structure
 
 ```
 .
-├── index.html       # Main HTML with control panel UI (GitHub Pages entry point)
+├── index.html       # Main HTML entry point (GitHub Pages compatible)
 ├── client/          # Client-side WebGL application
-│   ├── styles.css   # Styling including control panel
+│   ├── styles.css   # Basic styling
 │   └── src/
 │       ├── renderer.js  # Three.js renderer and scene setup
-│       └── main.js      # Entry point and control handlers
+│       └── main.js      # Entry point and animation loop
 └── server/          # Development server
     └── server.py
 ```
@@ -42,8 +33,6 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
    ```
    http://localhost:8080
    ```
-
-3. Use the control panel in the top-right corner to experiment with visualization parameters
 
 ## Requirements
 
