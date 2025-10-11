@@ -21,11 +21,15 @@ export class World {
     start() {
         console.log('Starting world simulation...');
 
-        // Spawn initial food scattered around island
-        this.spawnInitialFood(20);
+        // Spawn initial food scattered evenly around island
+        this.spawnInitialFood(40);
 
-        // Spawn one creature at center to start
+        // Spawn multiple creatures at different starting positions
         this.spawnCreature(0, 0);
+        this.spawnCreature(10, 10);
+        this.spawnCreature(-10, 10);
+        this.spawnCreature(10, -10);
+        this.spawnCreature(-10, -10);
 
         console.log(`World started with ${this.foodEntities.length} food and ${this.creatures.length} creatures`);
 
@@ -86,17 +90,30 @@ export class World {
     }
 
     /**
-     * Spawn initial food scattered randomly on island
+     * Spawn initial food scattered evenly on island using jittered grid
      */
     spawnInitialFood(count) {
-        for (let i = 0; i < count; i++) {
-            // Random position on island (keep away from edge)
-            const angle = Math.random() * Math.PI * 2;
-            const radius = Math.random() * 40;
-            const x = Math.cos(angle) * radius;
-            const z = Math.sin(angle) * radius;
+        // Calculate grid dimensions for even distribution
+        const gridSize = Math.ceil(Math.sqrt(count));
+        const cellSize = 80 / gridSize; // 80 is diameter of usable island area
+        const offset = -40; // Start from corner
 
-            this.spawnFood(x, z);
+        let spawned = 0;
+        for (let i = 0; i < gridSize && spawned < count; i++) {
+            for (let j = 0; j < gridSize && spawned < count; j++) {
+                // Grid position with random jitter for natural look
+                const jitterX = (Math.random() - 0.5) * cellSize * 0.8;
+                const jitterZ = (Math.random() - 0.5) * cellSize * 0.8;
+                const x = offset + (i + 0.5) * cellSize + jitterX;
+                const z = offset + (j + 0.5) * cellSize + jitterZ;
+
+                // Only spawn if within island radius
+                const distFromCenter = Math.sqrt(x * x + z * z);
+                if (distFromCenter < 42) { // Keep slightly away from edge
+                    this.spawnFood(x, z);
+                    spawned++;
+                }
+            }
         }
     }
 

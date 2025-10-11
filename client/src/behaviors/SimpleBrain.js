@@ -18,18 +18,12 @@ export class SimpleBrain {
      */
     think(deltaTime, world) {
         const c = this.creature;
-        const previousState = c.state;
 
         // State transitions based on energy level
         if (c.energy < 40) {
             c.state = 'seeking_food';
         } else if (c.energy > 70) {
             c.state = 'wandering';
-        }
-
-        // Log state changes
-        if (previousState !== c.state) {
-            console.log(`State change: ${previousState} -> ${c.state} (energy: ${c.energy.toFixed(1)})`);
         }
 
         // Execute behavior based on current state
@@ -72,9 +66,7 @@ export class SimpleBrain {
 
             if (distance < 1.5) {
                 // Close enough to eat
-                console.log(`Creature eating! Distance: ${distance.toFixed(2)}, Energy before: ${this.creature.energy.toFixed(1)}`);
                 this.creature.eat(nearestFood);
-                console.log(`Energy after: ${this.creature.energy.toFixed(1)}, State: ${this.creature.state}`);
                 // Continue seeking if still hungry, otherwise return to wandering
                 if (this.creature.energy > 70) {
                     this.creature.state = 'wandering';
