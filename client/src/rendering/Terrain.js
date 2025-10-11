@@ -14,7 +14,7 @@ export class Terrain {
 
         // Grass-green material with some roughness
         const material = new THREE.MeshStandardMaterial({
-            color: '#07270e', // Grass green
+            color: '#07220d', // Grass green
             roughness: 0.8,
             metalness: 0.0
         });

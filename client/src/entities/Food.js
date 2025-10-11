@@ -15,11 +15,11 @@ export class Food extends Entity {
         this.respawnDelay = 20; // Seconds until respawn
 
         // Visual: small light green sphere
-        const geometry = new THREE.SphereGeometry(0.5, 8, 8);
+        const geometry = new THREE.SphereGeometry(0.3, 8, 8);
         const material = new THREE.MeshStandardMaterial({
-            color: '#138813', // Light green
+            color: '#02b602', // Light green
             roughness: 0.6,
-            metalness: 0.0
+            metalness: 0.2
         });
 
         this.mesh = new THREE.Mesh(geometry, material);
