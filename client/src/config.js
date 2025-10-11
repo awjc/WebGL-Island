@@ -4,6 +4,21 @@
  */
 
 // ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
+
+/**
+ * Parse hex color string to integer
+ * @param {string} hexColor - Color in format '#RRGGBB' or '#RRGGBBAA'
+ * @returns {number} Integer representation of the color (alpha stripped if present)
+ */
+function parseColor(hexColor) {
+    // Remove '#' and optional alpha channel (last 2 characters)
+    const hex = hexColor.replace('#', '').slice(0, 6);
+    return parseInt(hex, 16);
+}
+
+// ============================================================================
 // WORLD SETTINGS
 // ============================================================================
 
@@ -78,14 +93,15 @@ export const VISUAL_CONFIG = {
     // Tree decoration
     TREE_COUNT: 15,                 // Number of decorative trees on island
 
-    // Colors
-    TERRAIN_COLOR: '#07220d',       // Grass green
-    FOOD_COLOR: '#90ee90',          // Light green
+    // Colors (hex strings parsed to integers for Three.js)
+    // Format: '#RRGGBB' or '#RRGGBBAA' (alpha will be stripped)
+    TERRAIN_COLOR: parseColor('#104420ff'),       // Grass green
+    FOOD_COLOR: parseColor('#90ee90'),          // Light green
 
     // Creature colors
-    CREATURE_HEALTHY_COLOR: '#4169e1',   // Blue when healthy
-    CREATURE_HUNGRY_COLOR: '#ff3333',    // Red when seeking food
-    CREATURE_WANDERING_FADE: '#ff8833',  // Orange transition when wandering but low energy
+    CREATURE_HEALTHY_COLOR: parseColor('#4169e1'),   // Blue when healthy
+    CREATURE_HUNGRY_COLOR: parseColor('#ff3333'),    // Red when seeking food
+    CREATURE_WANDERING_FADE: parseColor('#ff8833'),  // Orange transition when wandering but low energy
 };
 
 // ============================================================================
