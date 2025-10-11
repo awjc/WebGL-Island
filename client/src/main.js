@@ -1,8 +1,10 @@
 import { Renderer } from './renderer.js';
 import { Terrain } from './rendering/Terrain.js';
+import { Tree } from './rendering/Tree.js';
 
 let renderer;
 let terrain;
+let trees = [];
 let fpsCounter;
 let lastTime = performance.now();
 let frames = 0;
@@ -22,7 +24,14 @@ function init() {
         terrain = new Terrain();
         renderer.addMesh(terrain.mesh);
 
+        // Create and add decorative trees
+        trees = Tree.createForest(15); // 15 trees scattered on island
+        trees.forEach(tree => {
+            renderer.addMesh(tree.mesh);
+        });
+
         console.log('Island ecosystem initialized successfully');
+        console.log(`Added ${trees.length} trees to the island`);
 
         // Start animation loop
         animate();

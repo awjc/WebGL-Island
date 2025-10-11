@@ -18,7 +18,13 @@ This is the foundational iteration that gets a simple 3D island rendered with in
    - Rotated to lie flat on XZ plane
    - Receives shadows
 
-3. **client/src/renderer.js** - Enhanced
+3. **client/src/rendering/Tree.js** - Created
+   - Simple tree geometry (brown trunk + green cone foliage)
+   - Static factory method `createForest()` for generating multiple trees
+   - Random placement within island radius
+   - Casts shadows for depth perception
+
+4. **client/src/renderer.js** - Enhanced
    - Added `OrbitControls` for mouse camera movement
    - Changed background to sky blue (#87CEEB)
    - Positioned camera at (0, 50, 50) looking down at island
@@ -27,12 +33,13 @@ This is the foundational iteration that gets a simple 3D island rendered with in
    - Configured shadow mapping
    - Added `addMesh()` and `removeMesh()` helper methods
 
-4. **client/src/main.js** - Updated
+5. **client/src/main.js** - Updated
    - Imports and initializes `Terrain` class
-   - Adds terrain mesh to renderer scene
+   - Imports and adds decorative `Tree` instances (15 trees)
+   - Adds terrain and tree meshes to renderer scene
    - Maintains existing FPS counter functionality
 
-5. **README.md** - Updated
+6. **README.md** - Updated
    - Reflected new project structure
    - Added references to planning documents
 
@@ -42,6 +49,8 @@ This is the foundational iteration that gets a simple 3D island rendered with in
 - Circular green island at center of scene
 - Proper lighting with ambient + directional lights
 - Shadow casting enabled (ready for future entities)
+- 15 decorative trees scattered randomly for spatial reference
+- Trees cast shadows on the island for depth perception
 
 ✅ **Camera Controls**
 - Left mouse drag: Rotate around island
@@ -73,6 +82,8 @@ This is the foundational iteration that gets a simple 3D island rendered with in
 
 3. You should see:
    - A green circular island in the center
+   - 15 simple trees (brown trunk, green cone top) scattered on island
+   - Tree shadows on the ground
    - Sky blue background
    - FPS counter in top-right corner
 
