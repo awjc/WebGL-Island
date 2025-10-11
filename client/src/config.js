@@ -93,12 +93,12 @@ export const VISUAL_CONFIG = {
 // ============================================================================
 
 export const AUDIO_CONFIG = {
-    DEATH_SOUND_VOLUME: 0.12,
+    DEATH_SOUND_VOLUME: 0.08,
     DEATH_SOUND_FREQ_START: 200,
     DEATH_SOUND_FREQ_END: 100,
     DEATH_SOUND_DURATION: 0.5,
 
-    EAT_SOUND_VOLUME: 0.2,
+    EAT_SOUND_VOLUME: 0.50,
     EAT_SOUND_FREQ_START: 200,
     EAT_SOUND_FREQ_END: 600,
     EAT_SOUND_DURATION: 0.1,
