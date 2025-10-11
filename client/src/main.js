@@ -2,11 +2,13 @@ import { Renderer } from './renderer.js';
 import { Terrain } from './rendering/Terrain.js';
 import { Tree } from './rendering/Tree.js';
 import { World } from './core/World.js';
+import { ControlPanel } from './ui/ControlPanel.js';
 
 let renderer;
 let terrain;
 let trees = [];
 let world;
+let controlPanel;
 let fpsCounter;
 let lastTime = performance.now();
 let frames = 0;
@@ -38,6 +40,9 @@ function init() {
         // Initialize world simulation
         world = new World(renderer);
         world.start();
+
+        // Create control panel UI
+        controlPanel = new ControlPanel(world);
 
         // Start animation loop
         animate();

@@ -149,4 +149,46 @@ export class World {
             this.lastTimestamp = performance.now(); // Reset to avoid time jump
         }
     }
+
+    /**
+     * Reset simulation with new parameters
+     */
+    reset(creatureCount, foodCount) {
+        // Remove all existing creatures
+        for (let i = this.creatures.length - 1; i >= 0; i--) {
+            const creature = this.creatures[i];
+            this.renderer.removeMesh(creature.mesh);
+        }
+        this.creatures = [];
+
+        // Remove all existing food
+        for (let i = this.foodEntities.length - 1; i >= 0; i--) {
+            const food = this.foodEntities[i];
+            this.renderer.removeMesh(food.mesh);
+        }
+        this.foodEntities = [];
+
+        // Reset simulation time
+        this.time = 0;
+
+        // Spawn new food
+        this.spawnInitialFood(foodCount);
+
+        // Spawn new creatures in a grid pattern
+        const spacing = 20;
+        const gridSize = Math.ceil(Math.sqrt(creatureCount));
+        const offset = -(gridSize - 1) * spacing / 2;
+
+        let spawned = 0;
+        for (let i = 0; i < gridSize && spawned < creatureCount; i++) {
+            for (let j = 0; j < gridSize && spawned < creatureCount; j++) {
+                const x = offset + i * spacing;
+                const z = offset + j * spacing;
+                this.spawnCreature(x, z);
+                spawned++;
+            }
+        }
+
+        console.log(`Simulation reset: ${this.creatures.length} creatures, ${this.foodEntities.length} food`);
+    }
 }
