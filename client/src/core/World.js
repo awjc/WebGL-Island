@@ -95,8 +95,9 @@ export class World {
     spawnInitialFood(count) {
         // Calculate grid dimensions for even distribution
         const gridSize = Math.ceil(Math.sqrt(count));
-        const cellSize = 80 / gridSize; // 80 is diameter of usable island area
-        const offset = -40; // Start from corner
+        const islandSize = 100; // 100 is diameter of usable island area
+        const cellSize = islandSize / gridSize; 
+        const offset = -islandSize / 2; // Start from corner
 
         let spawned = 0;
         for (let i = 0; i < gridSize && spawned < count; i++) {
@@ -109,7 +110,7 @@ export class World {
 
                 // Only spawn if within island radius
                 const distFromCenter = Math.sqrt(x * x + z * z);
-                if (distFromCenter < 42) { // Keep slightly away from edge
+                if (distFromCenter < islandSize / 2 * 0.98) { // Keep slightly away from edge
                     this.spawnFood(x, z);
                     spawned++;
                 }

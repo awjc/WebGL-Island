@@ -4,8 +4,8 @@
 export class ControlPanel {
     constructor(world) {
         this.world = world;
-        this.foodCount = 40;
-        this.creatureCount = 5;
+        this.foodCount = 80;
+        this.creatureCount = 12;
         this.createPanel();
     }
 
@@ -19,13 +19,13 @@ export class ControlPanel {
             <h3>Island Control</h3>
 
             <div class="control-group">
-                <label for="food-slider">Food Count: <span id="food-value">40</span></label>
-                <input type="range" id="food-slider" min="10" max="100" value="40" step="5">
+                <label for="food-slider">Food Count: <span id="food-value">80</span></label>
+                <input type="range" id="food-slider" min="5" max="1000" value="80" step="5">
             </div>
 
             <div class="control-group">
-                <label for="creature-slider">Creatures: <span id="creature-value">5</span></label>
-                <input type="range" id="creature-slider" min="1" max="20" value="5" step="1">
+                <label for="creature-slider">Creatures: <span id="creature-value">12</span></label>
+                <input type="range" id="creature-slider" min="1" max="40" value="12" step="1">
             </div>
 
             <button id="reset-button">Reset Simulation</button>
