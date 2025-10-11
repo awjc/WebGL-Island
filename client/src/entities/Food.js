@@ -17,7 +17,7 @@ export class Food extends Entity {
         // Visual: small light green sphere
         const geometry = new THREE.SphereGeometry(0.5, 8, 8);
         const material = new THREE.MeshStandardMaterial({
-            color: '#90ee90', // Light green
+            color: '#138813', // Light green
             roughness: 0.6,
             metalness: 0.0
         });
