@@ -10,7 +10,7 @@ export class Creature extends Entity {
         super(x, z);
 
         this.species = species;
-        this.energy = 100;
+        this.energy = 60; // Start at 60% energy (hungry sooner for testing)
         this.maxEnergy = 100;
         this.speed = 5; // Units per second
         this.perceptionRadius = 15; // How far creature can "see"
