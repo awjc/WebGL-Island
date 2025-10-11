@@ -39,6 +39,13 @@ export class Renderer {
         this.controls.maxDistance = 150;
         this.controls.maxPolarAngle = Math.PI / 2 - 0.1; // Prevent going below ground
 
+        // Configure mouse buttons - middle button same as right (pan)
+        this.controls.mouseButtons = {
+            LEFT: THREE.MOUSE.PAN,      // Left: pan
+            MIDDLE: THREE.MOUSE.PAN,    // Middle: pan (same as right)
+            RIGHT: THREE.MOUSE.ROTATE,   // Right: orbit
+        };
+
         // Add lights
         this.setupLights();
 
