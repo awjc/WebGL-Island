@@ -61,12 +61,12 @@ export const FOOD_CONFIG = {
 
 export const UI_CONFIG = {
     // Control panel sliders
-    FOOD_SLIDER_MIN: 10,
-    FOOD_SLIDER_MAX: 100,
+    FOOD_SLIDER_MIN: 5,
+    FOOD_SLIDER_MAX: 1000,
     FOOD_SLIDER_STEP: 5,
 
     CREATURE_SLIDER_MIN: 1,
-    CREATURE_SLIDER_MAX: 20,
+    CREATURE_SLIDER_MAX: 50,
     CREATURE_SLIDER_STEP: 1,
 };
 
