@@ -12,4 +12,6 @@ Begin by reading the README.md file to understand the project structure and orga
   so it can be tweaked in only one place. E.g. don't say "const x = 40;" and then in a comment
   above that, say "we set x to 40". No need to mention the literal value in the comment, and
   if the code will re-use it, save it to a const variable first.
-
+- When coding colors, always prefer the style of '#AA77FF' instead of 0xAA77FF,
+  since the style of string with # prefix allows VSCode to offer a nice color 
+  swatch picker tool.

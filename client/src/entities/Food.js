@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Entity } from '../core/Entity.js';
-import { FOOD_CONFIG } from '../config.js';
+import { FOOD_CONFIG, VISUAL_CONFIG } from '../config.js';
 
 /**
  * Food entity - static resource that creatures can eat
@@ -16,11 +16,11 @@ export class Food extends Entity {
         this.respawnDelay = FOOD_CONFIG.RESPAWN_DELAY;
 
         // Visual: small light green sphere
-        const geometry = new THREE.SphereGeometry(0.3, 8, 8);
+        const geometry = new THREE.SphereGeometry(0.5, 8, 8);
         const material = new THREE.MeshStandardMaterial({
-            color: '#02b602', // Light green
+            color: VISUAL_CONFIG.FOOD_COLOR,
             roughness: 0.6,
-            metalness: 0.2
+            metalness: 0.0
         });
 
         this.mesh = new THREE.Mesh(geometry, material);

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { WORLD_CONFIG, VISUAL_CONFIG } from '../config.js';
 
 /**
  * Terrain class - creates a simple circular island
@@ -10,11 +11,11 @@ export class Terrain {
 
     createIsland() {
         // Create a circular island geometry
-        const geometry = new THREE.CircleGeometry(50, 32);
+        const geometry = new THREE.CircleGeometry(WORLD_CONFIG.ISLAND_RADIUS, 32);
 
         // Grass-green material with some roughness
         const material = new THREE.MeshStandardMaterial({
-            color: '#07220d', // Grass green
+            color: VISUAL_CONFIG.TERRAIN_COLOR,
             roughness: 0.8,
             metalness: 0.0
         });

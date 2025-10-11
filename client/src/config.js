@@ -79,13 +79,13 @@ export const VISUAL_CONFIG = {
     TREE_COUNT: 15,                 // Number of decorative trees on island
 
     // Colors
-    TERRAIN_COLOR: '#4a7c59',       // Grass green
+    TERRAIN_COLOR: '#07220d',       // Grass green
     FOOD_COLOR: '#90ee90',          // Light green
 
     // Creature colors
-    CREATURE_HEALTHY_COLOR: 0x4169e1,   // Blue when healthy
-    CREATURE_HUNGRY_COLOR: 0xff3333,    // Red when seeking food
-    CREATURE_WANDERING_FADE: 0xff8833,  // Orange transition when wandering but low energy
+    CREATURE_HEALTHY_COLOR: '#4169e1',   // Blue when healthy
+    CREATURE_HUNGRY_COLOR: '#ff3333',    // Red when seeking food
+    CREATURE_WANDERING_FADE: '#ff8833',  // Orange transition when wandering but low energy
 };
 
 // ============================================================================

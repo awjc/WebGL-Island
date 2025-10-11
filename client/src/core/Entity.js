@@ -1,3 +1,5 @@
+import { WORLD_CONFIG } from '../config.js';
+
 /**
  * Base Entity class - represents any object in the world
  * All entities have position, velocity, and can update each frame
@@ -25,13 +27,12 @@ export class Entity {
 
         // Keep entities on island (simple boundary check)
         const distFromCenter = Math.sqrt(this.position.x ** 2 + this.position.z ** 2);
-        const islandRadius = 48; // Island radius minus buffer
 
-        if (distFromCenter > islandRadius) {
+        if (distFromCenter > WORLD_CONFIG.ISLAND_USABLE_RADIUS) {
             // Push back toward center
             const angle = Math.atan2(this.position.z, this.position.x);
-            this.position.x = Math.cos(angle) * islandRadius;
-            this.position.z = Math.sin(angle) * islandRadius;
+            this.position.x = Math.cos(angle) * WORLD_CONFIG.ISLAND_USABLE_RADIUS;
+            this.position.z = Math.sin(angle) * WORLD_CONFIG.ISLAND_USABLE_RADIUS;
 
             // Reflect velocity (bounce)
             const normal = { x: -Math.cos(angle), z: -Math.sin(angle) };

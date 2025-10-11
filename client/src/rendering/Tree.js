@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { WORLD_CONFIG } from '../config.js';
 
 /**
  * Tree class - creates simple decorative trees for the island
@@ -44,13 +45,15 @@ export class Tree {
     /**
      * Create multiple trees scattered on the island
      */
-    static createForest(count = 15, islandRadius = 45) {
+    static createForest(count) {
         const trees = [];
+        // Use slightly smaller radius to keep trees away from edge
+        const placementRadius = WORLD_CONFIG.ISLAND_USABLE_RADIUS - 5;
 
         for (let i = 0; i < count; i++) {
             // Random angle and radius
             const angle = Math.random() * Math.PI * 2;
-            const radius = Math.random() * islandRadius;
+            const radius = Math.random() * placementRadius;
 
             const x = Math.cos(angle) * radius;
             const z = Math.sin(angle) * radius;

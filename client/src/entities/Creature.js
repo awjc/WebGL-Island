@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { Entity } from '../core/Entity.js';
 import { SimpleBrain } from '../behaviors/SimpleBrain.js';
 import { soundManager } from '../utils/SoundManager.js';
-import { CREATURE_CONFIG } from '../config.js';
+import { CREATURE_CONFIG, VISUAL_CONFIG } from '../config.js';
 
 /**
  * Creature entity - living being that moves, eats, and has energy
@@ -71,19 +71,26 @@ export class Creature extends Entity {
         // Color changes based on state with sharper transition
         let color;
         if (this.state === 'seeking_food') {
-            // Bright red when actively seeking food (#ff3333)
-            const hungerIntensity = 1 - (this.energy / 40); // 0 to 1 as energy goes from 40 to 0
-            const redValue = Math.floor(0xff);
-            const greenValue = Math.floor(0x33 + (0x66 - 0x33) * (this.energy / 40));
-            const blueValue = Math.floor(0x33);
-            color = (redValue << 16) | (greenValue << 8) | blueValue;
+            // Bright red when actively seeking food
+            const hungerIntensity = 1 - (this.energy / CREATURE_CONFIG.HUNGER_THRESHOLD);
+            color = VISUAL_CONFIG.CREATURE_HUNGRY_COLOR;
         } else {
             // Blue when wandering, fades toward orange as energy drops
-            // Interpolate between blue (#4169e1) and orange (#ff8833)
             const t = 1 - energyPercent; // 0 (full energy) to 1 (low energy)
-            const red = Math.floor(0x41 + (0xff - 0x41) * t);
-            const green = Math.floor(0x69 + (0x88 - 0x69) * t);
-            const blue = Math.floor(0xe1 + (0x33 - 0xe1) * t);
+
+            // Extract RGB components from config colors
+            const healthyR = (VISUAL_CONFIG.CREATURE_HEALTHY_COLOR >> 16) & 0xff;
+            const healthyG = (VISUAL_CONFIG.CREATURE_HEALTHY_COLOR >> 8) & 0xff;
+            const healthyB = VISUAL_CONFIG.CREATURE_HEALTHY_COLOR & 0xff;
+
+            const fadeR = (VISUAL_CONFIG.CREATURE_WANDERING_FADE >> 16) & 0xff;
+            const fadeG = (VISUAL_CONFIG.CREATURE_WANDERING_FADE >> 8) & 0xff;
+            const fadeB = VISUAL_CONFIG.CREATURE_WANDERING_FADE & 0xff;
+
+            // Interpolate
+            const red = Math.floor(healthyR + (fadeR - healthyR) * t);
+            const green = Math.floor(healthyG + (fadeG - healthyG) * t);
+            const blue = Math.floor(healthyB + (fadeB - healthyB) * t);
             color = (red << 16) | (green << 8) | blue;
         }
 
