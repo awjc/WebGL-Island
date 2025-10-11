@@ -8,7 +8,7 @@ An island ecosystem simulation with creatures that live, eat, and evolve.
 .
 ├── index.html       # Main HTML entry point (GitHub Pages compatible)
 ├── client/          # Client-side WebGL application
-│   ├── styles.css   # Basic styling
+│   ├── styles.css   # UI styling and control panel
 │   ├── ITERATION_1.md   # Island and camera controls
 │   ├── ITERATION_2.md   # Entities and movement
 │   ├── ITERATION_3.md   # AI behavior and food seeking
@@ -17,12 +17,14 @@ An island ecosystem simulation with creatures that live, eat, and evolve.
 │       ├── renderer.js       # Three.js renderer and scene setup
 │       ├── core/
 │       │   ├── Entity.js     # Base entity class
-│       │   └── World.js      # Simulation manager
+│       │   └── World.js      # Simulation manager with reset
 │       ├── entities/
-│       │   ├── Creature.js   # Living creatures with AI
+│       │   ├── Creature.js   # Living creatures with AI and visual feedback
 │       │   └── Food.js       # Food resources
 │       ├── behaviors/
 │       │   └── SimpleBrain.js  # AI state machine for creatures
+│       ├── ui/
+│       │   └── ControlPanel.js # Interactive control panel
 │       └── rendering/
 │           ├── Terrain.js    # Island terrain geometry
 │           └── Tree.js       # Decorative trees
@@ -85,9 +87,43 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 - ✅ Creatures can live indefinitely with food
 - ✅ Emergent clustering around food sources
 
+### Recent Enhancements
+- ✅ **Visual hunger feedback**: Creatures change color from blue (healthy) to red (hungry)
+- ✅ **Color-coded states**: Bright red when actively seeking food, blue/orange when wandering
+- ✅ **Balanced food consumption**: Creatures need multiple food items to become satisfied
+- ✅ **Dynamic starting conditions**: Creatures spawn with randomized hunger levels (50-70%)
+- ✅ **Improved food distribution**: Even grid-based placement with natural jitter
+- ✅ **Scalable population**: 5 creatures and 40 food items by default
+
+### Interactive Controls
+- ✅ **Control panel UI**: Real-time simulation controls in upper left corner
+- ✅ **Food slider**: Adjust food count (10-100)
+- ✅ **Creature slider**: Adjust creature count (1-20)
+- ✅ **Reset simulation**: Restart with custom parameters instantly
+- ✅ **Live value updates**: Slider values display in real-time
+
+## How to Use
+
+1. **Camera Controls**:
+   - Left click + drag: Rotate view around island
+   - Right click + drag: Pan camera
+   - Scroll wheel: Zoom in/out
+
+2. **Simulation Controls**:
+   - Use the control panel (upper left) to adjust population settings
+   - Drag sliders to set desired food and creature counts
+   - Click "Reset Simulation" to apply changes
+
+3. **Visual Indicators**:
+   - **Blue creatures**: Healthy and wandering
+   - **Red creatures**: Hungry and seeking food
+   - **Green spheres**: Available food
+   - **Smaller creatures**: Lower energy (shrink as they starve)
+
 ## Next Steps
 
-See [MVP_PLAN.md](MVP_PLAN.md) for the full implementation roadmap. Upcoming iterations:
-- **Iteration 4**: UI control panel with spawn buttons
-- **Iteration 5**: Population statistics display
-- **Iteration 6**: Pause/resume and simulation controls
+See [MVP_PLAN.md](MVP_PLAN.md) for the full implementation roadmap. Potential future additions:
+- **Population statistics**: Live counters for creatures, food, deaths
+- **Reproduction system**: Creatures spawn offspring when well-fed
+- **Multiple species**: Predator/prey dynamics
+- **Pause/speed controls**: Fine-tune simulation playback
