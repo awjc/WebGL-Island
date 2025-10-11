@@ -42,7 +42,7 @@ export class Renderer {
         // Configure mouse buttons - middle button same as right (pan)
         this.controls.mouseButtons = {
             LEFT: THREE.MOUSE.PAN,      // Left: pan
-            MIDDLE: THREE.MOUSE.PAN,    // Middle: pan (same as right)
+            MIDDLE: THREE.MOUSE.PAN,    // Middle: pan (same as left)
             RIGHT: THREE.MOUSE.ROTATE,   // Right: orbit
         };
 
