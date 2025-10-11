@@ -9,7 +9,7 @@ export class Food extends Entity {
     constructor(x, z) {
         super(x, z);
 
-        this.nutrition = 30; // Energy provided when eaten
+        this.nutrition = 15; // Energy provided when eaten (reduced for more eating)
         this.isConsumed = false;
         this.respawnTimer = 0;
         this.respawnDelay = 20; // Seconds until respawn
