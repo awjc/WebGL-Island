@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Entity } from '../core/Entity.js';
+import { SimpleBrain } from '../behaviors/SimpleBrain.js';
 
 /**
  * Creature entity - living being that moves, eats, and has energy
@@ -17,9 +18,8 @@ export class Creature extends Entity {
         this.age = 0;
         this.isDead = false;
 
-        // Simple wandering behavior state
-        this.wanderTimer = 0;
-        this.wanderDirection = this.randomDirection();
+        // AI brain for decision making
+        this.brain = new SimpleBrain(this);
 
         // Visual: colored cube (blue for herbivore)
         const color = species === 'herbivore' ? '#4169e1' : '#e14141';
@@ -38,7 +38,7 @@ export class Creature extends Entity {
     }
 
     /**
-     * Update creature - handles aging, energy, and basic movement
+     * Update creature - handles aging, energy, and AI behavior
      */
     update(deltaTime, world) {
         // Age and lose energy over time
@@ -51,10 +51,10 @@ export class Creature extends Entity {
             return;
         }
 
-        // Simple wandering behavior (will be replaced with brain in next iteration)
-        this.wander(deltaTime);
+        // Run AI brain to decide behavior
+        this.brain.think(deltaTime, world);
 
-        // Apply velocity from wandering
+        // Apply velocity from brain decisions
         super.update(deltaTime, world);
 
         // Update visual based on energy (scale changes with energy)
@@ -66,31 +66,6 @@ export class Creature extends Entity {
             const angle = Math.atan2(this.velocity.z, this.velocity.x);
             this.mesh.rotation.y = -angle;
         }
-    }
-
-    /**
-     * Simple wandering behavior - changes direction randomly
-     */
-    wander(deltaTime) {
-        this.wanderTimer += deltaTime;
-
-        // Change direction every 3 seconds
-        if (this.wanderTimer > 3) {
-            this.wanderDirection = this.randomDirection();
-            this.wanderTimer = 0;
-        }
-
-        // Set velocity in wander direction
-        this.velocity.x = this.wanderDirection.x * this.speed;
-        this.velocity.z = this.wanderDirection.z * this.speed;
-    }
-
-    /**
-     * Generate random direction vector
-     */
-    randomDirection() {
-        const angle = Math.random() * Math.PI * 2;
-        return { x: Math.cos(angle), z: Math.sin(angle) };
     }
 
     /**

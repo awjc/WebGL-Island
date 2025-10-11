@@ -3,7 +3,8 @@
     "allow": [
       "Bash(dir:*)",
       "Bash(python:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080)"
     ],
     "deny": [],
     "ask": []
