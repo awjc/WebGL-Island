@@ -56,3 +56,7 @@ coverage/
 
 # Misc
 .cache/
+
+
+# VSCode / Claude Code is creating random .tmp. files for some reason
+*.tmp.*

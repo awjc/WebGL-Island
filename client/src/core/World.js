@@ -1,5 +1,7 @@
 import { Creature } from '../entities/Creature.js';
 import { Food } from '../entities/Food.js';
+import { soundManager } from '../utils/SoundManager.js';
+import { WORLD_CONFIG } from '../config.js';
 
 /**
  * World class - manages all entities and simulation state
@@ -13,27 +15,16 @@ export class World {
         this.time = 0;
         this.isPaused = false;
         this.lastTimestamp = 0;
+        this.soundManager = soundManager;
     }
 
     /**
-     * Start the simulation - spawn initial entities and begin update loop
+     * Start the simulation - begin update loop (entities spawned separately by reset())
      */
     start() {
         console.log('Starting world simulation...');
 
-        // Spawn initial food scattered evenly around island
-        this.spawnInitialFood(40);
-
-        // Spawn multiple creatures at different starting positions
-        this.spawnCreature(0, 0);
-        this.spawnCreature(10, 10);
-        this.spawnCreature(-10, 10);
-        this.spawnCreature(10, -10);
-        this.spawnCreature(-10, -10);
-
-        console.log(`World started with ${this.foodEntities.length} food and ${this.creatures.length} creatures`);
-
-        // Start update loop
+        // Start update loop (entities will be spawned by ControlPanel calling reset())
         this.lastTimestamp = performance.now();
         this.update();
     }
@@ -95,8 +86,8 @@ export class World {
     spawnInitialFood(count) {
         // Calculate grid dimensions for even distribution
         const gridSize = Math.ceil(Math.sqrt(count));
-        const islandSize = 100; // 100 is diameter of usable island area
-        const cellSize = islandSize / gridSize; 
+        const islandSize = WORLD_CONFIG.ISLAND_RADIUS * 2;
+        const cellSize = islandSize / gridSize;
         const offset = -islandSize / 2; // Start from corner
 
         let spawned = 0;
@@ -110,7 +101,7 @@ export class World {
 
                 // Only spawn if within island radius
                 const distFromCenter = Math.sqrt(x * x + z * z);
-                if (distFromCenter < islandSize / 2 * 0.98) { // Keep slightly away from edge
+                if (distFromCenter < WORLD_CONFIG.ISLAND_USABLE_RADIUS) {
                     this.spawnFood(x, z);
                     spawned++;
                 }
@@ -127,6 +118,9 @@ export class World {
             this.creatures.splice(index, 1);
             this.renderer.removeMesh(creature.mesh);
             console.log(`Creature ${creature.id} died at age ${creature.age.toFixed(1)}s`);
+
+            // Play death sound
+            this.soundManager.playDeathSound();
         }
     }
 

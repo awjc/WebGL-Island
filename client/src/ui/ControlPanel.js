@@ -1,12 +1,17 @@
+import { WORLD_CONFIG, UI_CONFIG } from '../config.js';
+
 /**
  * ControlPanel - UI overlay for simulation controls
  */
 export class ControlPanel {
     constructor(world) {
         this.world = world;
-        this.foodCount = 80;
-        this.creatureCount = 12;
+        this.foodCount = WORLD_CONFIG.DEFAULT_FOOD_COUNT;
+        this.creatureCount = WORLD_CONFIG.DEFAULT_CREATURE_COUNT;
         this.createPanel();
+
+        // Initialize simulation with default values
+        this.resetSimulation();
     }
 
     /**
@@ -19,13 +24,13 @@ export class ControlPanel {
             <h3>Island Control</h3>
 
             <div class="control-group">
-                <label for="food-slider">Food Count: <span id="food-value">80</span></label>
-                <input type="range" id="food-slider" min="5" max="1000" value="80" step="5">
+                <label for="food-slider">Food Count: <span id="food-value">${WORLD_CONFIG.DEFAULT_FOOD_COUNT}</span></label>
+                <input type="range" id="food-slider" min="${UI_CONFIG.FOOD_SLIDER_MIN}" max="${UI_CONFIG.FOOD_SLIDER_MAX}" value="${WORLD_CONFIG.DEFAULT_FOOD_COUNT}" step="${UI_CONFIG.FOOD_SLIDER_STEP}">
             </div>
 
             <div class="control-group">
-                <label for="creature-slider">Creatures: <span id="creature-value">12</span></label>
-                <input type="range" id="creature-slider" min="1" max="40" value="12" step="1">
+                <label for="creature-slider">Creatures: <span id="creature-value">${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}</span></label>
+                <input type="range" id="creature-slider" min="${UI_CONFIG.CREATURE_SLIDER_MIN}" max="${UI_CONFIG.CREATURE_SLIDER_MAX}" value="${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}" step="${UI_CONFIG.CREATURE_SLIDER_STEP}">
             </div>
 
             <button id="reset-button">Reset Simulation</button>

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { Entity } from '../core/Entity.js';
+import { FOOD_CONFIG } from '../config.js';
 
 /**
  * Food entity - static resource that creatures can eat
@@ -9,10 +10,10 @@ export class Food extends Entity {
     constructor(x, z) {
         super(x, z);
 
-        this.nutrition = 15; // Energy provided when eaten (reduced for more eating)
+        this.nutrition = FOOD_CONFIG.NUTRITION;
         this.isConsumed = false;
         this.respawnTimer = 0;
-        this.respawnDelay = 20; // Seconds until respawn
+        this.respawnDelay = FOOD_CONFIG.RESPAWN_DELAY;
 
         // Visual: small light green sphere
         const geometry = new THREE.SphereGeometry(0.3, 8, 8);

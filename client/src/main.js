@@ -3,6 +3,7 @@ import { Terrain } from './rendering/Terrain.js';
 import { Tree } from './rendering/Tree.js';
 import { World } from './core/World.js';
 import { ControlPanel } from './ui/ControlPanel.js';
+import { VISUAL_CONFIG } from './config.js';
 
 let renderer;
 let terrain;
@@ -29,7 +30,7 @@ function init() {
         renderer.addMesh(terrain.mesh);
 
         // Create and add decorative trees
-        trees = Tree.createForest(15); // 15 trees scattered on island
+        trees = Tree.createForest(VISUAL_CONFIG.TREE_COUNT);
         trees.forEach(tree => {
             renderer.addMesh(tree.mesh);
         });

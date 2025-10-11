@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { Entity } from '../core/Entity.js';
 import { SimpleBrain } from '../behaviors/SimpleBrain.js';
+import { soundManager } from '../utils/SoundManager.js';
+import { CREATURE_CONFIG } from '../config.js';
 
 /**
  * Creature entity - living being that moves, eats, and has energy
@@ -10,10 +12,11 @@ export class Creature extends Entity {
         super(x, z);
 
         this.species = species;
-        this.energy = 50 + Math.random() * 20; // Random start: 50-70 energy
-        this.maxEnergy = 100;
-        this.speed = 5; // Units per second
-        this.perceptionRadius = 15; // How far creature can "see"
+        this.energy = CREATURE_CONFIG.STARTING_ENERGY_MIN +
+                      Math.random() * (CREATURE_CONFIG.STARTING_ENERGY_MAX - CREATURE_CONFIG.STARTING_ENERGY_MIN);
+        this.maxEnergy = CREATURE_CONFIG.MAX_ENERGY;
+        this.speed = CREATURE_CONFIG.SPEED;
+        this.perceptionRadius = CREATURE_CONFIG.PERCEPTION_RADIUS;
         this.state = 'wandering';
         this.age = 0;
         this.isDead = false;
@@ -43,7 +46,7 @@ export class Creature extends Entity {
     update(deltaTime, world) {
         // Age and lose energy over time
         this.age += deltaTime;
-        this.energy -= 2 * deltaTime; // Lose 2 energy per second
+        this.energy -= CREATURE_CONFIG.ENERGY_DRAIN_RATE * deltaTime;
 
         // Die if out of energy
         if (this.energy <= 0) {
@@ -61,7 +64,8 @@ export class Creature extends Entity {
         const energyPercent = this.energy / this.maxEnergy;
 
         // Scale changes with energy
-        const scale = 0.5 + energyPercent * 0.5;
+        const scale = CREATURE_CONFIG.MIN_SCALE +
+                      energyPercent * (CREATURE_CONFIG.MAX_SCALE - CREATURE_CONFIG.MIN_SCALE);
         this.mesh.scale.set(scale, scale, scale);
 
         // Color changes based on state with sharper transition
@@ -98,5 +102,8 @@ export class Creature extends Entity {
     eat(food) {
         this.energy = Math.min(this.maxEnergy, this.energy + food.nutrition);
         food.consume();
+
+        // Play eating sound
+        soundManager.playEatSound();
     }
 }

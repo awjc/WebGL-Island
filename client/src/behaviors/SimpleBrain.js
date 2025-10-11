@@ -1,3 +1,5 @@
+import { CREATURE_CONFIG } from '../config.js';
+
 /**
  * SimpleBrain - AI state machine for creature behavior
  *
@@ -10,7 +12,7 @@ export class SimpleBrain {
         this.creature = creature;
         this.wanderTimer = 0;
         this.wanderDirection = this.randomDirection();
-        this.wanderChangeInterval = 3; // Seconds between direction changes
+        this.wanderChangeInterval = CREATURE_CONFIG.WANDER_DIRECTION_CHANGE;
     }
 
     /**
@@ -20,9 +22,9 @@ export class SimpleBrain {
         const c = this.creature;
 
         // State transitions based on energy level
-        if (c.energy < 40) {
+        if (c.energy < CREATURE_CONFIG.HUNGER_THRESHOLD) {
             c.state = 'seeking_food';
-        } else if (c.energy > 70) {
+        } else if (c.energy > CREATURE_CONFIG.SATISFIED_THRESHOLD) {
             c.state = 'wandering';
         }
 
@@ -64,19 +66,18 @@ export class SimpleBrain {
         if (nearestFood) {
             const distance = this.distanceTo(nearestFood);
 
-            if (distance < 1.5) {
+            if (distance < CREATURE_CONFIG.EATING_DISTANCE) {
                 // Close enough to eat
                 this.creature.eat(nearestFood);
                 // Continue seeking if still hungry, otherwise return to wandering
-                if (this.creature.energy > 70) {
+                if (this.creature.energy > CREATURE_CONFIG.SATISFIED_THRESHOLD) {
                     this.creature.state = 'wandering';
                 }
             } else {
                 // Move toward food at increased speed
                 const direction = this.directionTo(nearestFood);
-                const seekSpeedMultiplier = 1.5; // Move faster when hungry
-                this.creature.velocity.x = direction.x * this.creature.speed * seekSpeedMultiplier;
-                this.creature.velocity.z = direction.z * this.creature.speed * seekSpeedMultiplier;
+                this.creature.velocity.x = direction.x * this.creature.speed * CREATURE_CONFIG.SEEK_SPEED_MULTIPLIER;
+                this.creature.velocity.z = direction.z * this.creature.speed * CREATURE_CONFIG.SEEK_SPEED_MULTIPLIER;
             }
         } else {
             // No food nearby, wander instead
