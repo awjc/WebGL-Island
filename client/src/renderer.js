@@ -14,7 +14,7 @@ export class Renderer {
             antialias: true
         });
         this.renderer.setPixelRatio(window.devicePixelRatio);
-        this.renderer.setClearColor(0x87CEEB); // Sky blue background
+        this.renderer.setClearColor('#87CEEB'); // Sky blue background
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
@@ -49,11 +49,11 @@ export class Renderer {
 
     setupLights() {
         // Ambient light for overall illumination
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        const ambientLight = new THREE.AmbientLight('#ffffff', 0.6);
         this.scene.add(ambientLight);
 
         // Directional light (sun) for shadows and definition
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        const directionalLight = new THREE.DirectionalLight('#ffffff', 0.8);
         directionalLight.position.set(50, 100, 30);
         directionalLight.castShadow = true;
 

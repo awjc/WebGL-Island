@@ -22,7 +22,7 @@ export class Creature extends Entity {
         this.wanderDirection = this.randomDirection();
 
         // Visual: colored cube (blue for herbivore)
-        const color = species === 'herbivore' ? 0x4169e1 : 0xe14141;
+        const color = species === 'herbivore' ? '#4169e1' : '#e14141';
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshStandardMaterial({
             color: color,

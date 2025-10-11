@@ -161,7 +161,7 @@ Keep it dead simple for MVP:
 createTerrain() {
   const geometry = new THREE.CircleGeometry(50, 32);
   const material = new THREE.MeshStandardMaterial({
-    color: 0x4a7c59, // grass green
+    color: '#4a7c59', // grass green
     roughness: 0.8
   });
   const mesh = new THREE.Mesh(geometry, material);
@@ -251,7 +251,7 @@ export class Food extends Entity {
     // Visual: small green sphere
     this.mesh = new THREE.Mesh(
       new THREE.SphereGeometry(0.5, 8, 8),
-      new THREE.MeshStandardMaterial({ color: 0x90ee90 })
+      new THREE.MeshStandardMaterial({ color: '#90ee90' })
     );
     this.mesh.position.set(x, 0.5, z);
   }
@@ -297,7 +297,7 @@ export class Creature extends Entity {
     this.brain = new SimpleBrain(this);
 
     // Visual: colored cube (blue for herbivore)
-    const color = species === 'herbivore' ? 0x4169e1 : 0xe14141;
+    const color = species === 'herbivore' ? '#4169e1' : '#e14141';
     this.mesh = new THREE.Mesh(
       new THREE.BoxGeometry(1, 1, 1),
       new THREE.MeshStandardMaterial({ color })

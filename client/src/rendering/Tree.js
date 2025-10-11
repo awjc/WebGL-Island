@@ -16,7 +16,7 @@ export class Tree {
         // Trunk - brown cylinder
         const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.4, 3, 8);
         const trunkMaterial = new THREE.MeshStandardMaterial({
-            color: 0x4a3728, // Dark brown
+            color: '#4a3728', // Dark brown
             roughness: 0.9
         });
         const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
@@ -27,7 +27,7 @@ export class Tree {
         // Foliage - green cone on top
         const foliageGeometry = new THREE.ConeGeometry(1.5, 3, 8);
         const foliageMaterial = new THREE.MeshStandardMaterial({
-            color: 0x2d5a3d, // Dark green
+            color: '#2d5a3d', // Dark green
             roughness: 0.8
         });
         const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
