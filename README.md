@@ -13,6 +13,7 @@ An island ecosystem simulation with creatures that live, eat, and evolve.
 │   ├── ITERATION_2.md   # Entities and movement
 │   ├── ITERATION_3.md   # AI behavior and food seeking
 │   └── src/
+│       ├── config.js         # Centralized configuration (all sim parameters)
 │       ├── main.js           # Entry point and animation loop
 │       ├── renderer.js       # Three.js renderer and scene setup
 │       ├── core/
@@ -25,6 +26,8 @@ An island ecosystem simulation with creatures that live, eat, and evolve.
 │       │   └── SimpleBrain.js  # AI state machine for creatures
 │       ├── ui/
 │       │   └── ControlPanel.js # Interactive control panel
+│       ├── utils/
+│       │   └── SoundManager.js # Procedural sound effects (Web Audio API)
 │       └── rendering/
 │           ├── Terrain.js    # Island terrain geometry
 │           └── Tree.js       # Decorative trees
@@ -33,6 +36,17 @@ An island ecosystem simulation with creatures that live, eat, and evolve.
 ├── PROJECT_PLAN.md  # Full architectural vision
 └── MVP_PLAN.md      # Minimal viable product implementation plan
 ```
+
+## Configuration
+
+All simulation parameters are centralized in [client/src/config.js](client/src/config.js). This includes:
+- **Default populations**: Food count (80), creature count (12)
+- **Creature behavior**: Energy levels, hunger thresholds, movement speeds
+- **World settings**: Island size, boundaries
+- **UI ranges**: Slider min/max values
+- **Audio/visual settings**: Colors, sound parameters
+
+To adjust the simulation, edit values in config.js and refresh the browser.
 
 ## Running the Application
 
@@ -90,10 +104,11 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 ### Recent Enhancements
 - ✅ **Visual hunger feedback**: Creatures change color from blue (healthy) to red (hungry)
 - ✅ **Color-coded states**: Bright red when actively seeking food, blue/orange when wandering
+- ✅ **Procedural sound effects**: Death sounds and eating chirps using Web Audio API
 - ✅ **Balanced food consumption**: Creatures need multiple food items to become satisfied
 - ✅ **Dynamic starting conditions**: Creatures spawn with randomized hunger levels (50-70%)
 - ✅ **Improved food distribution**: Even grid-based placement with natural jitter
-- ✅ **Scalable population**: 5 creatures and 40 food items by default
+- ✅ **Centralized configuration**: All parameters in config.js for easy tweaking
 
 ### Interactive Controls
 - ✅ **Control panel UI**: Real-time simulation controls in upper left corner
