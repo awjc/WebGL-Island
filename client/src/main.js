@@ -1,22 +1,39 @@
 import { Renderer } from './renderer.js';
+import { Terrain } from './rendering/Terrain.js';
 
 let renderer;
+let terrain;
 let fpsCounter;
 let lastTime = performance.now();
 let frames = 0;
 
+/**
+ * Initialize the application
+ */
 function init() {
     const canvas = document.getElementById('glCanvas');
     fpsCounter = document.getElementById('fps-counter');
 
     try {
+        // Initialize renderer
         renderer = new Renderer(canvas);
+
+        // Create and add terrain (island)
+        terrain = new Terrain();
+        renderer.addMesh(terrain.mesh);
+
+        console.log('Island ecosystem initialized successfully');
+
+        // Start animation loop
         animate();
     } catch (error) {
         console.error('Failed to initialize:', error);
     }
 }
 
+/**
+ * Update FPS counter
+ */
 function updateFPS() {
     frames++;
     const currentTime = performance.now();
@@ -31,10 +48,14 @@ function updateFPS() {
     }
 }
 
+/**
+ * Main animation loop
+ */
 function animate() {
     updateFPS();
     renderer.render();
     requestAnimationFrame(animate);
 }
 
+// Start when DOM is ready
 window.addEventListener('DOMContentLoaded', init);

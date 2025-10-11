@@ -1,6 +1,6 @@
 # WebGL Island
 
-A blank Three.js starter template with basic WebGL setup.
+An island ecosystem simulation with creatures that live, eat, and evolve.
 
 ## Project Structure
 
@@ -10,10 +10,14 @@ A blank Three.js starter template with basic WebGL setup.
 ├── client/          # Client-side WebGL application
 │   ├── styles.css   # Basic styling
 │   └── src/
-│       ├── renderer.js  # Three.js renderer and scene setup
-│       └── main.js      # Entry point and animation loop
-└── server/          # Development server
-    └── server.py
+│       ├── main.js           # Entry point and animation loop
+│       ├── renderer.js       # Three.js renderer and scene setup
+│       └── rendering/
+│           └── Terrain.js    # Island terrain geometry
+├── server/          # Development server
+│   └── server.py
+├── PROJECT_PLAN.md  # Full architectural vision
+└── MVP_PLAN.md      # Minimal viable product implementation plan
 ```
 
 ## Running the Application
