@@ -10,7 +10,7 @@ export class Creature extends Entity {
         super(x, z);
 
         this.species = species;
-        this.energy = 60; // Start at 60% energy (hungry sooner for testing)
+        this.energy = 50 + Math.random() * 20; // Random start: 50-70 energy
         this.maxEnergy = 100;
         this.speed = 5; // Units per second
         this.perceptionRadius = 15; // How far creature can "see"
@@ -64,13 +64,25 @@ export class Creature extends Entity {
         const scale = 0.5 + energyPercent * 0.5;
         this.mesh.scale.set(scale, scale, scale);
 
-        // Color changes with energy: blue (healthy) -> red (hungry)
-        // Interpolate between blue (#4169e1) and red (#e14141)
-        const red = Math.floor(0x41 + (0xe1 - 0x41) * (1 - energyPercent));
-        const green = Math.floor(0x69 + (0x41 - 0x69) * (1 - energyPercent));
-        const blue = Math.floor(0xe1 + (0x41 - 0xe1) * (1 - energyPercent));
+        // Color changes based on state with sharper transition
+        let color;
+        if (this.state === 'seeking_food') {
+            // Bright red when actively seeking food (#ff3333)
+            const hungerIntensity = 1 - (this.energy / 40); // 0 to 1 as energy goes from 40 to 0
+            const redValue = Math.floor(0xff);
+            const greenValue = Math.floor(0x33 + (0x66 - 0x33) * (this.energy / 40));
+            const blueValue = Math.floor(0x33);
+            color = (redValue << 16) | (greenValue << 8) | blueValue;
+        } else {
+            // Blue when wandering, fades toward orange as energy drops
+            // Interpolate between blue (#4169e1) and orange (#ff8833)
+            const t = 1 - energyPercent; // 0 (full energy) to 1 (low energy)
+            const red = Math.floor(0x41 + (0xff - 0x41) * t);
+            const green = Math.floor(0x69 + (0x88 - 0x69) * t);
+            const blue = Math.floor(0xe1 + (0x33 - 0xe1) * t);
+            color = (red << 16) | (green << 8) | blue;
+        }
 
-        const color = (red << 16) | (green << 8) | blue;
         this.mesh.material.color.setHex(color);
 
         // Face movement direction
