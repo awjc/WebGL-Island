@@ -1,10 +1,12 @@
 import { Renderer } from './renderer.js';
 import { Terrain } from './rendering/Terrain.js';
 import { Tree } from './rendering/Tree.js';
+import { World } from './core/World.js';
 
 let renderer;
 let terrain;
 let trees = [];
+let world;
 let fpsCounter;
 let lastTime = performance.now();
 let frames = 0;
@@ -32,6 +34,10 @@ function init() {
 
         console.log('Island ecosystem initialized successfully');
         console.log(`Added ${trees.length} trees to the island`);
+
+        // Initialize world simulation
+        world = new World(renderer);
+        world.start();
 
         // Start animation loop
         animate();

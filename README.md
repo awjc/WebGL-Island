@@ -9,11 +9,20 @@ An island ecosystem simulation with creatures that live, eat, and evolve.
 ├── index.html       # Main HTML entry point (GitHub Pages compatible)
 ├── client/          # Client-side WebGL application
 │   ├── styles.css   # Basic styling
+│   ├── ITERATION_1.md   # Island and camera controls
+│   ├── ITERATION_2.md   # Entities and movement
 │   └── src/
 │       ├── main.js           # Entry point and animation loop
 │       ├── renderer.js       # Three.js renderer and scene setup
+│       ├── core/
+│       │   ├── Entity.js     # Base entity class
+│       │   └── World.js      # Simulation manager
+│       ├── entities/
+│       │   ├── Creature.js   # Living creatures
+│       │   └── Food.js       # Food resources
 │       └── rendering/
-│           └── Terrain.js    # Island terrain geometry
+│           ├── Terrain.js    # Island terrain geometry
+│           └── Tree.js       # Decorative trees
 ├── server/          # Development server
 │   └── server.py
 ├── PROJECT_PLAN.md  # Full architectural vision
