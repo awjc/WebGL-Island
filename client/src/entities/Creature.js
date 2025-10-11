@@ -57,9 +57,21 @@ export class Creature extends Entity {
         // Apply velocity from brain decisions
         super.update(deltaTime, world);
 
-        // Update visual based on energy (scale changes with energy)
-        const scale = 0.5 + (this.energy / this.maxEnergy) * 0.5;
+        // Update visual based on energy
+        const energyPercent = this.energy / this.maxEnergy;
+
+        // Scale changes with energy
+        const scale = 0.5 + energyPercent * 0.5;
         this.mesh.scale.set(scale, scale, scale);
+
+        // Color changes with energy: blue (healthy) -> red (hungry)
+        // Interpolate between blue (#4169e1) and red (#e14141)
+        const red = Math.floor(0x41 + (0xe1 - 0x41) * (1 - energyPercent));
+        const green = Math.floor(0x69 + (0x41 - 0x69) * (1 - energyPercent));
+        const blue = Math.floor(0xe1 + (0x41 - 0xe1) * (1 - energyPercent));
+
+        const color = (red << 16) | (green << 8) | blue;
+        this.mesh.material.color.setHex(color);
 
         // Face movement direction
         if (this.velocity.x !== 0 || this.velocity.z !== 0) {
