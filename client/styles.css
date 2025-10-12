@@ -60,6 +60,13 @@ body {
     margin-bottom: 20px;
     border-bottom: 2px solid #4a7c59;
     padding-bottom: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.2s;
+}
+
+.panel-header:hover {
+    opacity: 0.8;
 }
 
 #control-panel h3 {

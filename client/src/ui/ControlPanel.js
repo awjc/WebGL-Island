@@ -143,11 +143,13 @@ export class ControlPanel {
             muteBtn.textContent = this.isMuted ? 'Unmute' : 'Mute';
         });
 
-        // Toggle panel button
+        // Toggle panel - clicking header or button
         const toggleBtn = document.getElementById('btn-toggle-panel');
+        const panelHeader = document.querySelector('.panel-header');
         const panelContent = document.getElementById('panel-content');
         const controlPanel = document.getElementById('control-panel');
-        toggleBtn.addEventListener('click', () => {
+
+        const togglePanel = () => {
             this.isMinimized = !this.isMinimized;
             if (this.isMinimized) {
                 panelContent.style.display = 'none';
@@ -158,7 +160,11 @@ export class ControlPanel {
                 toggleBtn.textContent = '−';
                 controlPanel.classList.remove('minimized');
             }
-        });
+        };
+
+        // Make entire header clickable
+        panelHeader.addEventListener('click', togglePanel);
+        panelHeader.style.cursor = 'pointer';
     }
 
     /**
