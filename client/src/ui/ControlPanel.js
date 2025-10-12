@@ -79,14 +79,17 @@ export class ControlPanel {
                 </div>
 
                 <div class="control-group speed-control">
-                    <label for="speed-slider">Simulation Speed: <span id="speed-value">${UI_CONFIG.DEFAULT_SPEED}x</span></label>
+                    <label for="speed-slider">
+                        <span class="label-text">Simulation Speed: <span id="speed-value">${UI_CONFIG.DEFAULT_SPEED}x</span></span>
+                        <button id="btn-reset-speed" class="inline-toggle" title="Reset to 1x">1x</button>
+                    </label>
                     <input type="range" id="speed-slider" min="${UI_CONFIG.SPEED_SLIDER_MIN}" max="${UI_CONFIG.SPEED_SLIDER_MAX}" value="${UI_CONFIG.DEFAULT_SPEED}" step="${UI_CONFIG.SPEED_SLIDER_STEP}">
                 </div>
 
                 <div class="control-group volume-control">
                     <label for="volume-slider">
-                        Volume: <span id="volume-value">${Math.round(UI_CONFIG.DEFAULT_VOLUME * 100)}%</span>
-                        <button id="btn-mute" class="mute-toggle" title="Mute/Unmute">🔊</button>
+                        <span class="label-text">Volume: <span id="volume-value">${Math.round(UI_CONFIG.DEFAULT_VOLUME * 100)}%</span></span>
+                        <button id="btn-mute" class="inline-toggle" title="Mute/Unmute">🔊</button>
                     </label>
                     <input type="range" id="volume-slider" min="${UI_CONFIG.VOLUME_SLIDER_MIN}" max="${UI_CONFIG.VOLUME_SLIDER_MAX}" value="${UI_CONFIG.DEFAULT_VOLUME}" step="${UI_CONFIG.VOLUME_SLIDER_STEP}">
                 </div>
@@ -244,6 +247,14 @@ export class ControlPanel {
             const speed = parseFloat(e.target.value);
             this.world.setTimeScale(speed);
             speedValue.textContent = speed.toFixed(1) + 'x';
+        });
+
+        // Reset speed button
+        const resetSpeedBtn = document.getElementById('btn-reset-speed');
+        resetSpeedBtn.addEventListener('click', () => {
+            speedSlider.value = UI_CONFIG.DEFAULT_SPEED;
+            this.world.setTimeScale(UI_CONFIG.DEFAULT_SPEED);
+            speedValue.textContent = UI_CONFIG.DEFAULT_SPEED.toFixed(1) + 'x';
         });
 
         // Show state icons checkbox

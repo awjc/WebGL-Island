@@ -203,25 +203,26 @@ body {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.mute-toggle {
+.inline-toggle {
     background: #4a7c59;
     color: white;
     border: none;
     border-radius: 3px;
-    width: 30px;
+    min-width: 30px;
     height: 24px;
-    font-size: 14px;
+    font-size: 12px;
+    font-weight: bold;
     cursor: pointer;
-    margin-left: 8px;
-    padding: 0;
+    padding: 0 6px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
     vertical-align: middle;
+    flex-shrink: 0;
 }
 
-.mute-toggle:hover {
+.inline-toggle:hover {
     background: #5a8c69;
     transform: scale(1.05);
 }
@@ -231,7 +232,9 @@ body {
 }
 
 .control-group label {
-    display: block;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 8px;
     color: #ccc;
     font-size: 13px;
