@@ -10,6 +10,7 @@ export class ControlPanel {
         this.foodCount = WORLD_CONFIG.DEFAULT_FOOD_COUNT;
         this.creatureCount = WORLD_CONFIG.DEFAULT_CREATURE_COUNT;
         this.isMuted = false;
+        this.volumeBeforeMute = UI_CONFIG.DEFAULT_VOLUME;
 
         // Start minimized on mobile devices
         this.isMinimized = this.isMobileDevice();
@@ -72,11 +73,18 @@ export class ControlPanel {
                 <button id="btn-spawn-creature" class="action-button">Spawn Creature</button>
                 <button id="btn-spawn-food" class="action-button">Spawn Food</button>
                 <button id="btn-pause" class="action-button">Pause</button>
-                <button id="btn-mute" class="action-button">Mute</button>
 
                 <div class="control-group speed-control">
                     <label for="speed-slider">Simulation Speed: <span id="speed-value">${UI_CONFIG.DEFAULT_SPEED}x</span></label>
                     <input type="range" id="speed-slider" min="${UI_CONFIG.SPEED_SLIDER_MIN}" max="${UI_CONFIG.SPEED_SLIDER_MAX}" value="${UI_CONFIG.DEFAULT_SPEED}" step="${UI_CONFIG.SPEED_SLIDER_STEP}">
+                </div>
+
+                <div class="control-group volume-control">
+                    <label for="volume-slider">
+                        Volume: <span id="volume-value">${Math.round(UI_CONFIG.DEFAULT_VOLUME * 100)}%</span>
+                        <button id="btn-mute" class="mute-toggle" title="Mute/Unmute">🔊</button>
+                    </label>
+                    <input type="range" id="volume-slider" min="${UI_CONFIG.VOLUME_SLIDER_MIN}" max="${UI_CONFIG.VOLUME_SLIDER_MAX}" value="${UI_CONFIG.DEFAULT_VOLUME}" step="${UI_CONFIG.VOLUME_SLIDER_STEP}">
                 </div>
             </div>
 
@@ -172,12 +180,37 @@ export class ControlPanel {
             pauseBtn.textContent = this.world.isPaused ? 'Resume' : 'Pause';
         });
 
-        // Mute button
+        // Volume slider
+        const volumeSlider = document.getElementById('volume-slider');
+        const volumeValue = document.getElementById('volume-value');
+        volumeSlider.addEventListener('input', (e) => {
+            const volume = parseFloat(e.target.value);
+            soundManager.setVolume(volume);
+            volumeValue.textContent = Math.round(volume * 100) + '%';
+
+            // Update mute button if volume is changed while muted
+            if (this.isMuted && volume > 0) {
+                this.isMuted = false;
+                soundManager.setEnabled(true);
+                document.getElementById('btn-mute').textContent = '🔊';
+            }
+        });
+
+        // Mute toggle button
         const muteBtn = document.getElementById('btn-mute');
         muteBtn.addEventListener('click', () => {
             this.isMuted = !this.isMuted;
-            soundManager.setEnabled(!this.isMuted);
-            muteBtn.textContent = this.isMuted ? 'Unmute' : 'Mute';
+
+            if (this.isMuted) {
+                // Mute: save current volume and set to 0
+                this.volumeBeforeMute = parseFloat(volumeSlider.value);
+                soundManager.setEnabled(false);
+                muteBtn.textContent = '🔇';
+            } else {
+                // Unmute: restore previous volume
+                soundManager.setEnabled(true);
+                muteBtn.textContent = '🔊';
+            }
         });
 
         // Speed slider

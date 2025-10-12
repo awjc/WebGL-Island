@@ -9,6 +9,7 @@ export class SoundManager {
         // Create audio context (will be activated on first user interaction)
         this.audioContext = null;
         this.enabled = true;
+        this.volume = 1.0; // Master volume (0.0 - 1.0)
     }
 
     /**
@@ -46,8 +47,8 @@ export class SoundManager {
                 now + AUDIO_CONFIG.DEATH_SOUND_DURATION
             );
 
-            // Fade out envelope
-            gainNode.gain.setValueAtTime(AUDIO_CONFIG.DEATH_SOUND_VOLUME, now);
+            // Fade out envelope (apply master volume)
+            gainNode.gain.setValueAtTime(AUDIO_CONFIG.DEATH_SOUND_VOLUME * this.volume, now);
             gainNode.gain.exponentialRampToValueAtTime(0.01, now + AUDIO_CONFIG.DEATH_SOUND_DURATION);
 
             // Use a slightly harsh wave for a "sad" effect
@@ -87,9 +88,9 @@ export class SoundManager {
                 now + AUDIO_CONFIG.EAT_SOUND_DURATION
             );
 
-            // Quick fade in and out
+            // Quick fade in and out (apply master volume)
             gainNode.gain.setValueAtTime(0, now);
-            gainNode.gain.linearRampToValueAtTime(AUDIO_CONFIG.EAT_SOUND_VOLUME, now + 0.02);
+            gainNode.gain.linearRampToValueAtTime(AUDIO_CONFIG.EAT_SOUND_VOLUME * this.volume, now + 0.02);
             gainNode.gain.exponentialRampToValueAtTime(0.01, now + AUDIO_CONFIG.EAT_SOUND_DURATION);
 
             oscillator.type = 'sine';
@@ -126,9 +127,9 @@ export class SoundManager {
                 now + AUDIO_CONFIG.BIRTH_SOUND_DURATION
             );
 
-            // Quick fade in and out
+            // Quick fade in and out (apply master volume)
             gainNode.gain.setValueAtTime(0, now);
-            gainNode.gain.linearRampToValueAtTime(AUDIO_CONFIG.BIRTH_SOUND_VOLUME, now + 0.05);
+            gainNode.gain.linearRampToValueAtTime(AUDIO_CONFIG.BIRTH_SOUND_VOLUME * this.volume, now + 0.05);
             gainNode.gain.exponentialRampToValueAtTime(0.01, now + AUDIO_CONFIG.BIRTH_SOUND_DURATION);
 
             oscillator.type = 'sine';
@@ -146,6 +147,13 @@ export class SoundManager {
      */
     setEnabled(enabled) {
         this.enabled = enabled;
+    }
+
+    /**
+     * Set master volume (0.0 - 1.0)
+     */
+    setVolume(volume) {
+        this.volume = Math.max(0, Math.min(1, volume)); // Clamp 0-1
     }
 }
 

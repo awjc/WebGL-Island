@@ -168,10 +168,34 @@ body {
     transform: translateY(0);
 }
 
-.speed-control {
+.speed-control,
+.volume-control {
     margin-top: 16px;
     padding-top: 16px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mute-toggle {
+    background: #4a7c59;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    width: 30px;
+    height: 24px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 8px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    vertical-align: middle;
+}
+
+.mute-toggle:hover {
+    background: #5a8c69;
+    transform: scale(1.05);
 }
 
 .control-group {

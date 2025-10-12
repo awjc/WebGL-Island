@@ -89,6 +89,12 @@ export const UI_CONFIG = {
     SPEED_SLIDER_MAX: 10.0,
     SPEED_SLIDER_STEP: 0.1,
     DEFAULT_SPEED: 1.0,
+
+    // Audio volume
+    VOLUME_SLIDER_MIN: 0,
+    VOLUME_SLIDER_MAX: 1.0,
+    VOLUME_SLIDER_STEP: 0.05,
+    DEFAULT_VOLUME: 1.0,
 };
 
 // ============================================================================
