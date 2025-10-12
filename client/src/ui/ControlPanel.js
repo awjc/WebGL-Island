@@ -72,7 +72,11 @@ export class ControlPanel {
                 <h4>Quick Actions</h4>
                 <button id="btn-spawn-creature" class="action-button">Spawn Creature</button>
                 <button id="btn-spawn-food" class="action-button">Spawn Food</button>
-                <button id="btn-pause" class="action-button">Pause</button>
+
+                <div class="button-group">
+                    <button id="btn-play-pause" class="action-button half-width" title="Pause">⏸</button>
+                    <button id="btn-step-forward" class="action-button half-width" title="Step Forward (1 frame)" disabled>▶|</button>
+                </div>
 
                 <div class="control-group speed-control">
                     <label for="speed-slider">Simulation Speed: <span id="speed-value">${UI_CONFIG.DEFAULT_SPEED}x</span></label>
@@ -180,11 +184,24 @@ export class ControlPanel {
             this.world.spawnFood(x, z);
         });
 
-        // Pause button
-        const pauseBtn = document.getElementById('btn-pause');
-        pauseBtn.addEventListener('click', () => {
+        // Play/Pause button
+        const playPauseBtn = document.getElementById('btn-play-pause');
+        const stepForwardBtn = document.getElementById('btn-step-forward');
+
+        playPauseBtn.addEventListener('click', () => {
             this.world.togglePause();
-            pauseBtn.textContent = this.world.isPaused ? 'Resume' : 'Pause';
+            playPauseBtn.textContent = this.world.isPaused ? '▶' : '⏸';
+            playPauseBtn.title = this.world.isPaused ? 'Play' : 'Pause';
+
+            // Enable/disable step forward button based on pause state
+            stepForwardBtn.disabled = !this.world.isPaused;
+        });
+
+        // Step forward button
+        stepForwardBtn.addEventListener('click', () => {
+            if (this.world.isPaused) {
+                this.world.stepForward();
+            }
         });
 
         // Volume slider

@@ -187,6 +187,34 @@ export class World {
     }
 
     /**
+     * Step forward by one frame (only works when paused)
+     */
+    stepForward() {
+        if (!this.isPaused) return;
+
+        // Use a fixed delta time for consistent single-frame steps
+        const fixedDeltaTime = 1 / 20; // 1/20th of a second per step
+
+        // Update all creatures
+        for (let i = this.creatures.length - 1; i >= 0; i--) {
+            const creature = this.creatures[i];
+            creature.update(fixedDeltaTime, this);
+
+            // Remove dead creatures
+            if (creature.isDead) {
+                this.removeCreature(creature);
+            }
+        }
+
+        // Update all food
+        for (const food of this.foodEntities) {
+            food.update(fixedDeltaTime, this);
+        }
+
+        this.time += fixedDeltaTime;
+    }
+
+    /**
      * Set simulation speed (time scale multiplier)
      */
     setTimeScale(scale) {
