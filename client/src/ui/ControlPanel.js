@@ -1,4 +1,5 @@
 import { WORLD_CONFIG, UI_CONFIG } from '../config.js';
+import { soundManager } from '../utils/SoundManager.js';
 
 /**
  * ControlPanel - UI overlay for simulation controls
@@ -8,6 +9,7 @@ export class ControlPanel {
         this.world = world;
         this.foodCount = WORLD_CONFIG.DEFAULT_FOOD_COUNT;
         this.creatureCount = WORLD_CONFIG.DEFAULT_CREATURE_COUNT;
+        this.isMuted = false;
         this.createPanel();
 
         // Initialize simulation with default values
@@ -44,6 +46,7 @@ export class ControlPanel {
                 <button id="btn-spawn-creature" class="action-button">Spawn Creature</button>
                 <button id="btn-spawn-food" class="action-button">Spawn Food</button>
                 <button id="btn-pause" class="action-button">Pause</button>
+                <button id="btn-mute" class="action-button">Mute</button>
             </div>
 
             <div class="reset-section">
@@ -124,6 +127,14 @@ export class ControlPanel {
         pauseBtn.addEventListener('click', () => {
             this.world.togglePause();
             pauseBtn.textContent = this.world.isPaused ? 'Resume' : 'Pause';
+        });
+
+        // Mute button
+        const muteBtn = document.getElementById('btn-mute');
+        muteBtn.addEventListener('click', () => {
+            this.isMuted = !this.isMuted;
+            soundManager.setEnabled(!this.isMuted);
+            muteBtn.textContent = this.isMuted ? 'Unmute' : 'Mute';
         });
     }
 
