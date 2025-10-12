@@ -168,6 +168,12 @@ body {
     transform: translateY(0);
 }
 
+.speed-control {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .control-group {
     margin-bottom: 16px;
 }

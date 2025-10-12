@@ -15,6 +15,7 @@ export class World {
         this.time = 0;
         this.isPaused = false;
         this.lastTimestamp = 0;
+        this.timeScale = 1.0; // Simulation speed multiplier
         this.soundManager = soundManager;
     }
 
@@ -34,7 +35,8 @@ export class World {
      */
     update(timestamp = performance.now()) {
         if (!this.isPaused) {
-            const deltaTime = (timestamp - this.lastTimestamp) / 1000; // Convert to seconds
+            const rawDeltaTime = (timestamp - this.lastTimestamp) / 1000; // Convert to seconds
+            const deltaTime = rawDeltaTime * this.timeScale; // Apply time scale
             this.lastTimestamp = timestamp;
 
             // Update all creatures
@@ -156,6 +158,13 @@ export class World {
         if (!this.isPaused) {
             this.lastTimestamp = performance.now(); // Reset to avoid time jump
         }
+    }
+
+    /**
+     * Set simulation speed (time scale multiplier)
+     */
+    setTimeScale(scale) {
+        this.timeScale = Math.max(0.1, Math.min(5.0, scale)); // Clamp between 0.1x and 5x
     }
 
     /**

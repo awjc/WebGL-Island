@@ -52,6 +52,11 @@ export class ControlPanel {
                 <button id="btn-spawn-food" class="action-button">Spawn Food</button>
                 <button id="btn-pause" class="action-button">Pause</button>
                 <button id="btn-mute" class="action-button">Mute</button>
+
+                <div class="control-group speed-control">
+                    <label for="speed-slider">Simulation Speed: <span id="speed-value">${UI_CONFIG.DEFAULT_SPEED}x</span></label>
+                    <input type="range" id="speed-slider" min="${UI_CONFIG.SPEED_SLIDER_MIN}" max="${UI_CONFIG.SPEED_SLIDER_MAX}" value="${UI_CONFIG.DEFAULT_SPEED}" step="${UI_CONFIG.SPEED_SLIDER_STEP}">
+                </div>
             </div>
 
             <div class="reset-section">
@@ -141,6 +146,15 @@ export class ControlPanel {
             this.isMuted = !this.isMuted;
             soundManager.setEnabled(!this.isMuted);
             muteBtn.textContent = this.isMuted ? 'Unmute' : 'Mute';
+        });
+
+        // Speed slider
+        const speedSlider = document.getElementById('speed-slider');
+        const speedValue = document.getElementById('speed-value');
+        speedSlider.addEventListener('input', (e) => {
+            const speed = parseFloat(e.target.value);
+            this.world.setTimeScale(speed);
+            speedValue.textContent = speed.toFixed(1) + 'x';
         });
 
         // Toggle panel - clicking header or button
