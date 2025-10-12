@@ -71,26 +71,36 @@ export class Creature extends Entity {
     createSeekingIndicator(baseSize) {
         // Create a sprite for the "!" indicator
         const canvas = document.createElement('canvas');
-        canvas.width = 64;
-        canvas.height = 64;
+        canvas.width = 128;
+        canvas.height = 128;
         const ctx = canvas.getContext('2d');
+
+        // Clear canvas with transparency
+        ctx.clearRect(0, 0, 128, 128);
+
+        // Draw white background circle for visibility
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(64, 64, 50, 0, Math.PI * 2);
+        ctx.fill();
 
         // Draw red "!" on canvas
         ctx.fillStyle = '#FF0000';
-        ctx.font = 'bold 48px Arial';
+        ctx.font = 'bold 96px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('!', 32, 32);
+        ctx.fillText('!', 64, 64);
 
         const texture = new THREE.CanvasTexture(canvas);
         const material = new THREE.SpriteMaterial({
             map: texture,
-            transparent: true
+            transparent: true,
+            depthTest: false // Always visible on top
         });
 
         this.seekingIndicator = new THREE.Sprite(material);
-        this.seekingIndicator.scale.set(0.5, 0.5, 1);
-        this.seekingIndicator.position.y = baseSize * 1.5; // Float above creature
+        this.seekingIndicator.scale.set(1.0, 1.0, 1.0); // Bigger scale
+        this.seekingIndicator.position.y = baseSize * 2.0; // Higher above creature
         this.seekingIndicator.visible = false;
 
         this.mesh.add(this.seekingIndicator);
