@@ -1,7 +1,7 @@
 import { Creature } from '../entities/Creature.js';
 import { Food } from '../entities/Food.js';
 import { soundManager } from '../utils/SoundManager.js';
-import { WORLD_CONFIG } from '../config.js';
+import { WORLD_CONFIG, UI_CONFIG } from '../config.js';
 
 /**
  * World class - manages all entities and simulation state
@@ -17,6 +17,7 @@ export class World {
         this.lastTimestamp = 0;
         this.timeScale = 1.0; // Simulation speed multiplier
         this.soundManager = soundManager;
+        this.showStateIcons = UI_CONFIG.SHOW_STATE_ICONS; // Track icon visibility state
 
         // Statistics tracking
         this.totalBirths = 0;
@@ -71,6 +72,7 @@ export class World {
      */
     spawnCreature(x, z, species = 'herbivore') {
         const creature = new Creature(x, z, species);
+        creature.setShowStateIcon(this.showStateIcons); // Apply current icon setting
         this.creatures.push(creature);
         this.renderer.addMesh(creature.mesh);
         return creature;
@@ -91,6 +93,7 @@ export class World {
      */
     spawnOffspring(x, z, parentDNA) {
         const offspring = new Creature(x, z, 'herbivore', parentDNA);
+        offspring.setShowStateIcon(this.showStateIcons); // Apply current icon setting
         this.creatures.push(offspring);
         this.renderer.addMesh(offspring.mesh);
         this.totalBirths++;
@@ -194,6 +197,7 @@ export class World {
      * Toggle visibility of state icons on creatures
      */
     setShowStateIcons(show) {
+        this.showStateIcons = show; // Store the state
         for (const creature of this.creatures) {
             creature.setShowStateIcon(show);
         }
