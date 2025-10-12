@@ -48,20 +48,17 @@ export class DNA {
 
     /**
      * Get color based on genetic hue
+     * Creature gets darker when hungrier, but maintains its genetic hue
      */
     getColor(energyPercent, state) {
         // Base color from genetics (hue shifts the base color)
         const baseHue = this.genes.hue * 360; // Convert to degrees
 
-        if (state === 'seeking_food') {
-            // Red when hungry
-            return this.hslToHex(0, 100, 50);
-        } else {
-            // Healthy color based on genetic hue and energy
-            const saturation = 50 + energyPercent * 30; // More saturated when healthy
-            const lightness = 40 + energyPercent * 20;  // Brighter when healthy
-            return this.hslToHex(baseHue, saturation, lightness);
-        }
+        // Color based on genetic hue and energy level
+        // Lower energy = darker (lower lightness), maintaining same hue
+        const saturation = 50 + energyPercent * 30; // More saturated when healthy
+        const lightness = 10 + energyPercent * 50;  // Very dark when hungry (10-60 range)
+        return this.hslToHex(baseHue, saturation, lightness);
     }
 
     /**
