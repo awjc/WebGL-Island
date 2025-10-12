@@ -23,23 +23,52 @@ export class ControlPanel {
         panel.innerHTML = `
             <h3>Island Control</h3>
 
-            <div class="control-group">
-                <label for="food-slider">Food Count: <span id="food-value">${WORLD_CONFIG.DEFAULT_FOOD_COUNT}</span></label>
-                <input type="range" id="food-slider" min="${UI_CONFIG.FOOD_SLIDER_MIN}" max="${UI_CONFIG.FOOD_SLIDER_MAX}" value="${WORLD_CONFIG.DEFAULT_FOOD_COUNT}" step="${UI_CONFIG.FOOD_SLIDER_STEP}">
+            <div class="stats-section">
+                <h4>Statistics</h4>
+                <div class="stat-item">
+                    <span class="stat-label">Population:</span>
+                    <span id="stat-population" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Food Available:</span>
+                    <span id="stat-food" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Simulation Time:</span>
+                    <span id="stat-time" class="stat-value">0s</span>
+                </div>
             </div>
 
-            <div class="control-group">
-                <label for="creature-slider">Creatures: <span id="creature-value">${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}</span></label>
-                <input type="range" id="creature-slider" min="${UI_CONFIG.CREATURE_SLIDER_MIN}" max="${UI_CONFIG.CREATURE_SLIDER_MAX}" value="${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}" step="${UI_CONFIG.CREATURE_SLIDER_STEP}">
+            <div class="controls-section">
+                <h4>Quick Actions</h4>
+                <button id="btn-spawn-creature" class="action-button">Spawn Creature</button>
+                <button id="btn-spawn-food" class="action-button">Spawn Food</button>
+                <button id="btn-pause" class="action-button">Pause</button>
             </div>
 
-            <button id="reset-button">Reset Simulation</button>
+            <div class="reset-section">
+                <h4>Reset Simulation</h4>
+                <div class="control-group">
+                    <label for="food-slider">Food Count: <span id="food-value">${WORLD_CONFIG.DEFAULT_FOOD_COUNT}</span></label>
+                    <input type="range" id="food-slider" min="${UI_CONFIG.FOOD_SLIDER_MIN}" max="${UI_CONFIG.FOOD_SLIDER_MAX}" value="${WORLD_CONFIG.DEFAULT_FOOD_COUNT}" step="${UI_CONFIG.FOOD_SLIDER_STEP}">
+                </div>
+
+                <div class="control-group">
+                    <label for="creature-slider">Creatures: <span id="creature-value">${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}</span></label>
+                    <input type="range" id="creature-slider" min="${UI_CONFIG.CREATURE_SLIDER_MIN}" max="${UI_CONFIG.CREATURE_SLIDER_MAX}" value="${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}" step="${UI_CONFIG.CREATURE_SLIDER_STEP}">
+                </div>
+
+                <button id="reset-button" class="reset-button">Reset Simulation</button>
+            </div>
         `;
 
         document.body.appendChild(panel);
 
         // Set up event listeners
         this.setupEventListeners();
+
+        // Start statistics update loop
+        this.startStatsUpdate();
     }
 
     /**
@@ -67,6 +96,47 @@ export class ControlPanel {
         resetButton.addEventListener('click', () => {
             this.resetSimulation();
         });
+
+        // Spawn creature button
+        const spawnCreatureBtn = document.getElementById('btn-spawn-creature');
+        spawnCreatureBtn.addEventListener('click', () => {
+            // Spawn at random position within usable radius
+            const angle = Math.random() * Math.PI * 2;
+            const radius = Math.random() * 30;
+            const x = Math.cos(angle) * radius;
+            const z = Math.sin(angle) * radius;
+            this.world.spawnCreature(x, z);
+        });
+
+        // Spawn food button
+        const spawnFoodBtn = document.getElementById('btn-spawn-food');
+        spawnFoodBtn.addEventListener('click', () => {
+            // Spawn at random position within usable radius
+            const angle = Math.random() * Math.PI * 2;
+            const radius = Math.random() * 40;
+            const x = Math.cos(angle) * radius;
+            const z = Math.sin(angle) * radius;
+            this.world.spawnFood(x, z);
+        });
+
+        // Pause button
+        const pauseBtn = document.getElementById('btn-pause');
+        pauseBtn.addEventListener('click', () => {
+            this.world.togglePause();
+            pauseBtn.textContent = this.world.isPaused ? 'Resume' : 'Pause';
+        });
+    }
+
+    /**
+     * Update statistics display
+     */
+    startStatsUpdate() {
+        setInterval(() => {
+            const stats = this.world.getStats();
+            document.getElementById('stat-population').textContent = stats.population;
+            document.getElementById('stat-food').textContent = stats.foodCount;
+            document.getElementById('stat-time').textContent = stats.simulationTime + 's';
+        }, 100); // Update 10 times per second
     }
 
     /**

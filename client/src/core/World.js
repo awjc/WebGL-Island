@@ -85,27 +85,40 @@ export class World {
      */
     spawnInitialFood(count) {
         // Calculate grid dimensions for even distribution
-        const gridSize = Math.ceil(Math.sqrt(count));
+        // Oversample to ensure we get enough valid positions
+        const gridSize = Math.ceil(Math.sqrt(count * 1.5));
         const islandSize = WORLD_CONFIG.ISLAND_RADIUS * 2;
         const cellSize = islandSize / gridSize;
         const offset = -islandSize / 2; // Start from corner
 
-        let spawned = 0;
-        for (let i = 0; i < gridSize && spawned < count; i++) {
-            for (let j = 0; j < gridSize && spawned < count; j++) {
+        // Generate all valid positions first
+        const validPositions = [];
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
                 // Grid position with random jitter for natural look
                 const jitterX = (Math.random() - 0.5) * cellSize * 0.8;
                 const jitterZ = (Math.random() - 0.5) * cellSize * 0.8;
                 const x = offset + (i + 0.5) * cellSize + jitterX;
                 const z = offset + (j + 0.5) * cellSize + jitterZ;
 
-                // Only spawn if within island radius
+                // Only include if within island radius
                 const distFromCenter = Math.sqrt(x * x + z * z);
                 if (distFromCenter < WORLD_CONFIG.ISLAND_USABLE_RADIUS) {
-                    this.spawnFood(x, z);
-                    spawned++;
+                    validPositions.push({ x, z });
                 }
             }
+        }
+
+        // Shuffle positions for randomness
+        for (let i = validPositions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [validPositions[i], validPositions[j]] = [validPositions[j], validPositions[i]];
+        }
+
+        // Spawn exactly count food items
+        for (let i = 0; i < Math.min(count, validPositions.length); i++) {
+            const pos = validPositions[i];
+            this.spawnFood(pos.x, pos.z);
         }
     }
 

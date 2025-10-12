@@ -12,6 +12,7 @@ An island ecosystem simulation with creatures that live, eat, and evolve.
 │   ├── ITERATION_1.md   # Island and camera controls
 │   ├── ITERATION_2.md   # Entities and movement
 │   ├── ITERATION_3.md   # AI behavior and food seeking
+│   ├── ITERATION_4.md   # Enhanced UI and statistics
 │   └── src/
 │       ├── config.js         # Centralized configuration (all sim parameters)
 │       ├── main.js           # Entry point and animation loop
@@ -100,8 +101,6 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 - ✅ Eating mechanics for survival
 - ✅ Creatures can live indefinitely with food
 - ✅ Emergent clustering around food sources
-
-### Recent Enhancements
 - ✅ **Visual hunger feedback**: Creatures change color from blue (healthy) to red (hungry)
 - ✅ **Color-coded states**: Bright red when actively seeking food, blue/orange when wandering
 - ✅ **Procedural sound effects**: Death sounds and eating chirps using Web Audio API
@@ -110,12 +109,22 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 - ✅ **Improved food distribution**: Even grid-based placement with natural jitter
 - ✅ **Centralized configuration**: All parameters in config.js for easy tweaking
 
+### Iteration 4: Enhanced UI and Statistics
+- ✅ **Live statistics display**: Real-time population, food count, and simulation time
+- ✅ **Quick action buttons**: Spawn individual creatures or food items on demand
+- ✅ **Pause/resume control**: Freeze simulation while maintaining camera controls
+- ✅ **Organized control panel**: Logical sections for monitoring and interaction
+- ✅ **Visual polish**: Hover effects, smooth animations, color-coded interface
+- ✅ **Reset functionality**: Adjust population sliders and restart simulation
+
 ### Interactive Controls
-- ✅ **Control panel UI**: Real-time simulation controls in upper left corner
-- ✅ **Food slider**: Adjust food count (10-100)
-- ✅ **Creature slider**: Adjust creature count (1-20)
-- ✅ **Reset simulation**: Restart with custom parameters instantly
-- ✅ **Live value updates**: Slider values display in real-time
+- ✅ **Statistics section**: Monitor population, available food, and elapsed time (updates 10x/sec)
+- ✅ **Spawn creature**: Add single creature at random location
+- ✅ **Spawn food**: Add single food item at random location
+- ✅ **Pause/resume**: Freeze/unfreeze simulation time
+- ✅ **Food slider**: Adjust food count (10-100) for resets
+- ✅ **Creature slider**: Adjust creature count (1-20) for resets
+- ✅ **Reset simulation**: Restart with custom parameters
 
 ## How to Use
 
@@ -125,9 +134,9 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
    - Scroll wheel: Zoom in/out
 
 2. **Simulation Controls**:
-   - Use the control panel (upper left) to adjust population settings
-   - Drag sliders to set desired food and creature counts
-   - Click "Reset Simulation" to apply changes
+   - Monitor live statistics in the control panel (upper left)
+   - Use quick action buttons to spawn entities or pause the simulation
+   - Adjust sliders and click "Reset Simulation" to restart with new parameters
 
 3. **Visual Indicators**:
    - **Blue creatures**: Healthy and wandering
@@ -138,7 +147,8 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 ## Next Steps
 
 See [MVP_PLAN.md](MVP_PLAN.md) for the full implementation roadmap. Potential future additions:
-- **Population statistics**: Live counters for creatures, food, deaths
 - **Reproduction system**: Creatures spawn offspring when well-fed
 - **Multiple species**: Predator/prey dynamics
-- **Pause/speed controls**: Fine-tune simulation playback
+- **Speed controls**: Slow-motion or fast-forward simulation
+- **Population graphs**: Visual history of population over time
+- **Advanced statistics**: Average lifespan, death counter, behavior metrics
