@@ -86,6 +86,13 @@ export class ControlPanel {
                     </label>
                     <input type="range" id="volume-slider" min="${UI_CONFIG.VOLUME_SLIDER_MIN}" max="${UI_CONFIG.VOLUME_SLIDER_MAX}" value="${UI_CONFIG.DEFAULT_VOLUME}" step="${UI_CONFIG.VOLUME_SLIDER_STEP}">
                 </div>
+
+                <div class="control-group checkbox-control">
+                    <label>
+                        <input type="checkbox" id="show-icons-checkbox" ${UI_CONFIG.SHOW_STATE_ICONS ? 'checked' : ''}>
+                        Show State Icons
+                    </label>
+                </div>
             </div>
 
             <div class="reset-section">
@@ -220,6 +227,12 @@ export class ControlPanel {
             const speed = parseFloat(e.target.value);
             this.world.setTimeScale(speed);
             speedValue.textContent = speed.toFixed(1) + 'x';
+        });
+
+        // Show state icons checkbox
+        const showIconsCheckbox = document.getElementById('show-icons-checkbox');
+        showIconsCheckbox.addEventListener('change', (e) => {
+            this.world.setShowStateIcons(e.target.checked);
         });
 
         // Toggle panel - clicking header or button

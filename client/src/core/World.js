@@ -191,6 +191,15 @@ export class World {
     }
 
     /**
+     * Toggle visibility of state icons on creatures
+     */
+    setShowStateIcons(show) {
+        for (const creature of this.creatures) {
+            creature.setShowStateIcon(show);
+        }
+    }
+
+    /**
      * Reset simulation with new parameters
      */
     reset(creatureCount, foodCount) {

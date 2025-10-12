@@ -95,6 +95,9 @@ export const UI_CONFIG = {
     VOLUME_SLIDER_MAX: 1.0,
     VOLUME_SLIDER_STEP: 0.05,
     DEFAULT_VOLUME: 0.5,
+
+    // Visual features
+    SHOW_STATE_ICONS: true,         // Show floating icons above creatures
 };
 
 // ============================================================================

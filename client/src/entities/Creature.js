@@ -3,7 +3,7 @@ import { Entity } from '../core/Entity.js';
 import { SimpleBrain } from '../behaviors/SimpleBrain.js';
 import { soundManager } from '../utils/SoundManager.js';
 import { DNA } from '../genetics/DNA.js';
-import { CREATURE_CONFIG, GENETICS_CONFIG } from '../config.js';
+import { CREATURE_CONFIG, GENETICS_CONFIG, UI_CONFIG } from '../config.js';
 
 /**
  * Creature entity - living being that moves, eats, and has energy
@@ -40,6 +40,7 @@ export class Creature extends Entity {
         this.age = 0;
         this.isDead = false;
         this.timeSinceReproduction = 0; // Cooldown timer
+        this.showStateIcon = UI_CONFIG.SHOW_STATE_ICONS; // Control icon visibility
 
         // AI brain for decision making
         this.brain = new SimpleBrain(this);
@@ -152,9 +153,9 @@ export class Creature extends Entity {
         const opacity = 0.3 + energyPercent * 0.7; // Range: 0.3 (very hungry) to 1.0 (full)
         this.mesh.material.opacity = opacity;
 
-        // Show "!" indicator when actively seeking food
+        // Show "!" indicator when actively seeking food (if icons are enabled)
         if (this.seekingIndicator) {
-            this.seekingIndicator.visible = (this.state === 'seeking_food');
+            this.seekingIndicator.visible = this.showStateIcon && (this.state === 'seeking_food');
             // Fade indicator opacity to match creature
             this.seekingIndicator.material.opacity = opacity;
         }
@@ -205,5 +206,12 @@ export class Creature extends Entity {
 
         // Play eating sound
         soundManager.playEatSound();
+    }
+
+    /**
+     * Set whether state icons should be shown
+     */
+    setShowStateIcon(show) {
+        this.showStateIcon = show;
     }
 }
