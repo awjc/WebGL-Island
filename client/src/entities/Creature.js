@@ -50,7 +50,9 @@ export class Creature extends Entity {
         const material = new THREE.MeshStandardMaterial({
             color: this.dna.getColor(1.0, 'wandering'),
             roughness: 0.7,
-            metalness: 0.1
+            metalness: 0.1,
+            transparent: true,
+            opacity: 1.0
         });
 
         this.mesh = new THREE.Mesh(geometry, material);
@@ -58,6 +60,40 @@ export class Creature extends Entity {
         this.mesh.castShadow = true;
 
         this.position.y = 0.5 * baseSize; // Update entity position to match
+
+        // Create "!" indicator for seeking food state
+        this.createSeekingIndicator(baseSize);
+    }
+
+    /**
+     * Create the "!" indicator that shows when seeking food
+     */
+    createSeekingIndicator(baseSize) {
+        // Create a sprite for the "!" indicator
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+
+        // Draw red "!" on canvas
+        ctx.fillStyle = '#FF0000';
+        ctx.font = 'bold 48px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('!', 32, 32);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        const material = new THREE.SpriteMaterial({
+            map: texture,
+            transparent: true
+        });
+
+        this.seekingIndicator = new THREE.Sprite(material);
+        this.seekingIndicator.scale.set(0.5, 0.5, 1);
+        this.seekingIndicator.position.y = baseSize * 1.5; // Float above creature
+        this.seekingIndicator.visible = false;
+
+        this.mesh.add(this.seekingIndicator);
     }
 
     /**
@@ -97,6 +133,15 @@ export class Creature extends Entity {
         // Color from DNA based on state and energy
         const color = this.dna.getColor(energyPercent, this.state);
         this.mesh.material.color.setHex(color);
+
+        // Opacity fades as creature gets hungrier (fading away from earth)
+        const opacity = 0.3 + energyPercent * 0.7; // Range: 0.3 (very hungry) to 1.0 (full)
+        this.mesh.material.opacity = opacity;
+
+        // Show "!" indicator when actively seeking food
+        if (this.seekingIndicator) {
+            this.seekingIndicator.visible = (this.state === 'seeking_food');
+        }
 
         // Face movement direction
         if (this.velocity.x !== 0 || this.velocity.z !== 0) {
