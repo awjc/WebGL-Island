@@ -94,7 +94,7 @@ export const UI_CONFIG = {
     VOLUME_SLIDER_MIN: 0,
     VOLUME_SLIDER_MAX: 1.0,
     VOLUME_SLIDER_STEP: 0.05,
-    DEFAULT_VOLUME: 1.0,
+    DEFAULT_VOLUME: 0.5,
 };
 
 // ============================================================================
