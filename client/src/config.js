@@ -50,7 +50,7 @@ export const CREATURE_CONFIG = {
     // AI behavior
     PERCEPTION_RADIUS: 15,          // How far creature can "see" food
     HUNGER_THRESHOLD: 40,           // Energy level to start seeking food
-    SATISFIED_THRESHOLD: 70,        // Energy level to stop seeking food
+    SATISFIED_THRESHOLD: 95,        // Energy level to stop seeking food
     EATING_DISTANCE: 1.5,           // How close to be to eat food
 
     // Wandering behavior
@@ -111,6 +111,24 @@ export const VISUAL_CONFIG = {
 };
 
 // ============================================================================
+// GENETICS SETTINGS
+// ============================================================================
+
+export const GENETICS_CONFIG = {
+    MUTATION_RATE: 0.15,            // 15% chance per gene to mutate
+    MUTATION_AMOUNT: 0.2,           // Max change per mutation (±0.1)
+
+    // Reproduction settings
+    REPRODUCTION_ENERGY_THRESHOLD: 85,  // Energy needed to reproduce
+    REPRODUCTION_ENERGY_COST: 40,       // Energy lost when reproducing
+    REPRODUCTION_COOLDOWN: 30,          // Seconds between reproductions
+
+    // Offspring settings
+    OFFSPRING_STARTING_ENERGY: 60,      // Baby creatures start with this energy
+    OFFSPRING_SPAWN_DISTANCE: 2,        // How far from parent to spawn
+};
+
+// ============================================================================
 // AUDIO SETTINGS
 // ============================================================================
 
@@ -124,4 +142,9 @@ export const AUDIO_CONFIG = {
     EAT_SOUND_FREQ_START: 200,
     EAT_SOUND_FREQ_END: 600,
     EAT_SOUND_DURATION: 0.1,
+
+    BIRTH_SOUND_VOLUME: 0.15,
+    BIRTH_SOUND_FREQ_START: 400,
+    BIRTH_SOUND_FREQ_END: 800,
+    BIRTH_SOUND_DURATION: 0.2,
 };

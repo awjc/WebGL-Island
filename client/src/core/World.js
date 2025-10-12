@@ -17,6 +17,10 @@ export class World {
         this.lastTimestamp = 0;
         this.timeScale = 1.0; // Simulation speed multiplier
         this.soundManager = soundManager;
+
+        // Statistics tracking
+        this.totalBirths = 0;
+        this.totalDeaths = 0;
     }
 
     /**
@@ -83,6 +87,22 @@ export class World {
     }
 
     /**
+     * Spawn offspring from parent DNA
+     */
+    spawnOffspring(x, z, parentDNA) {
+        const offspring = new Creature(x, z, 'herbivore', parentDNA);
+        this.creatures.push(offspring);
+        this.renderer.addMesh(offspring.mesh);
+        this.totalBirths++;
+
+        // Play birth sound
+        this.soundManager.playBirthSound();
+
+        console.log(`Birth! Generation ${offspring.generation}, Population: ${this.creatures.length}`);
+        return offspring;
+    }
+
+    /**
      * Spawn initial food scattered evenly on island using jittered grid
      */
     spawnInitialFood(count) {
@@ -132,7 +152,8 @@ export class World {
         if (index > -1) {
             this.creatures.splice(index, 1);
             this.renderer.removeMesh(creature.mesh);
-            console.log(`Creature ${creature.id} died at age ${creature.age.toFixed(1)}s`);
+            this.totalDeaths++;
+            console.log(`Creature ${creature.id} died at age ${creature.age.toFixed(1)}s, Gen ${creature.generation}`);
 
             // Play death sound
             this.soundManager.playDeathSound();
@@ -146,7 +167,9 @@ export class World {
         return {
             population: this.creatures.length,
             foodCount: this.foodEntities.filter(f => !f.isConsumed).length,
-            simulationTime: Math.floor(this.time)
+            simulationTime: Math.floor(this.time),
+            totalBirths: this.totalBirths,
+            totalDeaths: this.totalDeaths
         };
     }
 
@@ -185,8 +208,10 @@ export class World {
         }
         this.foodEntities = [];
 
-        // Reset simulation time
+        // Reset simulation time and statistics
         this.time = 0;
+        this.totalBirths = 0;
+        this.totalDeaths = 0;
 
         // Spawn new food
         this.spawnInitialFood(foodCount);

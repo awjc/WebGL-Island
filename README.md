@@ -13,20 +13,23 @@ An island ecosystem simulation with creatures that live, eat, and evolve.
 │   ├── ITERATION_2.md   # Entities and movement
 │   ├── ITERATION_3.md   # AI behavior and food seeking
 │   ├── ITERATION_4.md   # Enhanced UI and statistics
+│   ├── ITERATION_5.md   # Reproduction and genetics
 │   └── src/
 │       ├── config.js         # Centralized configuration (all sim parameters)
 │       ├── main.js           # Entry point and animation loop
 │       ├── renderer.js       # Three.js renderer and scene setup
 │       ├── core/
 │       │   ├── Entity.js     # Base entity class
-│       │   └── World.js      # Simulation manager with reset
+│       │   └── World.js      # Simulation manager with offspring spawning
 │       ├── entities/
-│       │   ├── Creature.js   # Living creatures with AI and visual feedback
+│       │   ├── Creature.js   # Living creatures with genetics and reproduction
 │       │   └── Food.js       # Food resources
+│       ├── genetics/
+│       │   └── DNA.js        # Genetic traits and mutation system
 │       ├── behaviors/
 │       │   └── SimpleBrain.js  # AI state machine for creatures
 │       ├── ui/
-│       │   └── ControlPanel.js # Interactive control panel
+│       │   └── ControlPanel.js # Interactive control panel with stats
 │       ├── utils/
 │       │   └── SoundManager.js # Procedural sound effects (Web Audio API)
 │       └── rendering/
@@ -43,6 +46,7 @@ An island ecosystem simulation with creatures that live, eat, and evolve.
 All simulation parameters are centralized in [client/src/config.js](client/src/config.js). This includes:
 - **Default populations**: Food count (80), creature count (12)
 - **Creature behavior**: Energy levels, hunger thresholds, movement speeds
+- **Genetics**: Mutation rates, reproduction thresholds, offspring settings
 - **World settings**: Island size, boundaries
 - **UI ranges**: Slider min/max values
 - **Audio/visual settings**: Colors, sound parameters
@@ -116,15 +120,32 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 - ✅ **Organized control panel**: Logical sections for monitoring and interaction
 - ✅ **Visual polish**: Hover effects, smooth animations, color-coded interface
 - ✅ **Reset functionality**: Adjust population sliders and restart simulation
+- ✅ **Mute/unmute button**: Toggle all sound effects
+- ✅ **Simulation speed control**: Adjust time scale from 0.1x to 10x
+- ✅ **Minimize control panel**: Collapsible UI, auto-minimizes on mobile
+
+### Iteration 5: Reproduction & Genetics
+- ✅ **DNA system**: Five genetic traits (speed, perception, efficiency, size, hue)
+- ✅ **Reproduction mechanics**: Creatures spawn offspring when energy > 85%
+- ✅ **Genetic inheritance**: Offspring inherit mutated traits from parents
+- ✅ **Mutation system**: 15% chance per gene, ±0.1 variation
+- ✅ **Visual variation**: Size and color diversity based on genetics
+- ✅ **Generation tracking**: Each creature knows its generation number
+- ✅ **Birth/death statistics**: Track total births and deaths
+- ✅ **Birth sound effect**: Pleasant rising tone for reproduction events
+- ✅ **Evolution dynamics**: Traits affect survival and reproduction success
 
 ### Interactive Controls
-- ✅ **Statistics section**: Monitor population, available food, and elapsed time (updates 10x/sec)
+- ✅ **Statistics section**: Monitor population, food, births, deaths, and time (updates 10x/sec)
 - ✅ **Spawn creature**: Add single creature at random location
 - ✅ **Spawn food**: Add single food item at random location
 - ✅ **Pause/resume**: Freeze/unfreeze simulation time
-- ✅ **Food slider**: Adjust food count (10-100) for resets
-- ✅ **Creature slider**: Adjust creature count (1-20) for resets
+- ✅ **Mute/unmute**: Toggle sound effects
+- ✅ **Speed slider**: Adjust simulation speed (0.1x - 10x)
+- ✅ **Food slider**: Adjust food count (5-1000) for resets
+- ✅ **Creature slider**: Adjust creature count (1-50) for resets
 - ✅ **Reset simulation**: Restart with custom parameters
+- ✅ **Minimize panel**: Click header to collapse/expand (auto-minimizes on mobile)
 
 ## How to Use
 
@@ -139,16 +160,24 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
    - Adjust sliders and click "Reset Simulation" to restart with new parameters
 
 3. **Visual Indicators**:
-   - **Blue creatures**: Healthy and wandering
-   - **Red creatures**: Hungry and seeking food
+   - **Varied colors**: Each creature has unique color based on genetics
+   - **Red tint**: Hungry and actively seeking food
+   - **Size variation**: Genetic size differences (0.8x - 1.2x)
    - **Green spheres**: Available food
-   - **Smaller creatures**: Lower energy (shrink as they starve)
+   - **Scale with energy**: Creatures shrink as they lose energy
+
+4. **Observing Evolution**:
+   - Increase simulation speed (5-10x) to see evolution faster
+   - Watch births/deaths statistics to track population growth
+   - Notice color diversity increasing as populations reproduce
+   - Observe behavioral differences (some creatures faster, better perception)
+   - Family groups may cluster near food sources
 
 ## Next Steps
 
-See [MVP_PLAN.md](MVP_PLAN.md) for the full implementation roadmap. Potential future additions:
-- **Reproduction system**: Creatures spawn offspring when well-fed
-- **Multiple species**: Predator/prey dynamics
-- **Speed controls**: Slow-motion or fast-forward simulation
-- **Population graphs**: Visual history of population over time
-- **Advanced statistics**: Average lifespan, death counter, behavior metrics
+See [IDEAS.md](IDEAS.md) for comprehensive future feature ideas. Priority additions:
+- **Predator-prey ecosystem**: Carnivores that hunt herbivores
+- **Advanced genetics**: More complex traits, sexual reproduction, fitness metrics
+- **Scenario system**: Preset configurations, custom scenarios, save/load
+- **Visual enhancements**: Particle effects, trails, phylogenetic trees
+- **Population graphs**: Historical data visualization

@@ -103,6 +103,45 @@ export class SoundManager {
     }
 
     /**
+     * Play birth sound - a happy rising tone
+     */
+    playBirthSound() {
+        if (!this.enabled) return;
+
+        try {
+            const ctx = this.initAudioContext();
+            const now = ctx.currentTime;
+
+            // Create oscillator
+            const oscillator = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(ctx.destination);
+
+            // Rising frequency for happy sound
+            oscillator.frequency.setValueAtTime(AUDIO_CONFIG.BIRTH_SOUND_FREQ_START, now);
+            oscillator.frequency.exponentialRampToValueAtTime(
+                AUDIO_CONFIG.BIRTH_SOUND_FREQ_END,
+                now + AUDIO_CONFIG.BIRTH_SOUND_DURATION
+            );
+
+            // Quick fade in and out
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(AUDIO_CONFIG.BIRTH_SOUND_VOLUME, now + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + AUDIO_CONFIG.BIRTH_SOUND_DURATION);
+
+            oscillator.type = 'sine';
+
+            oscillator.start(now);
+            oscillator.stop(now + AUDIO_CONFIG.BIRTH_SOUND_DURATION);
+
+        } catch (error) {
+            console.warn('Could not play birth sound:', error);
+        }
+    }
+
+    /**
      * Enable/disable all sounds
      */
     setEnabled(enabled) {
