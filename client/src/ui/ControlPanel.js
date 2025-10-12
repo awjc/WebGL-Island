@@ -10,11 +10,24 @@ export class ControlPanel {
         this.foodCount = WORLD_CONFIG.DEFAULT_FOOD_COUNT;
         this.creatureCount = WORLD_CONFIG.DEFAULT_CREATURE_COUNT;
         this.isMuted = false;
-        this.isMinimized = false;
+
+        // Start minimized on mobile devices
+        this.isMinimized = this.isMobileDevice();
+
         this.createPanel();
 
         // Initialize simulation with default values
         this.resetSimulation();
+    }
+
+    /**
+     * Detect if user is on a mobile device
+     */
+    isMobileDevice() {
+        // Check if screen width is mobile-sized or if it's a touch device
+        return window.innerWidth <= 768 ||
+               ('ontouchstart' in window) ||
+               (navigator.maxTouchPoints > 0);
     }
 
     /**
@@ -77,6 +90,17 @@ export class ControlPanel {
         `;
 
         document.body.appendChild(panel);
+
+        // Apply initial minimized state if on mobile
+        if (this.isMinimized) {
+            const panelContent = document.getElementById('panel-content');
+            const toggleBtn = document.getElementById('btn-toggle-panel');
+            const controlPanel = document.getElementById('control-panel');
+
+            panelContent.style.display = 'none';
+            toggleBtn.textContent = '+';
+            controlPanel.classList.add('minimized');
+        }
 
         // Set up event listeners
         this.setupEventListeners();
