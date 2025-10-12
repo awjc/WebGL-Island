@@ -164,7 +164,7 @@ export class World {
      * Set simulation speed (time scale multiplier)
      */
     setTimeScale(scale) {
-        this.timeScale = Math.max(0.1, Math.min(5.0, scale)); // Clamp between 0.1x and 5x
+        this.timeScale = Math.max(0.1, Math.min(10.0, scale)); // Clamp between 0.1x and 10x
     }
 
     /**
