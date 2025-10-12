@@ -84,12 +84,16 @@ export class Creature extends Entity {
         ctx.arc(64, 64, 50, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw red "!" on canvas
+        // Draw red "!" on canvas - bolder and wider
         ctx.fillStyle = '#FF0000';
-        ctx.font = 'bold 96px Arial';
+        ctx.font = 'bold 100px Impact, Arial Black, sans-serif'; // Wider, bolder font
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
+
+        // Draw multiple times for extra boldness
         ctx.fillText('!', 64, 64);
+        ctx.fillText('!', 64.5, 64); // Slight offset for extra thickness
+        ctx.fillText('!', 63.5, 64);
 
         const texture = new THREE.CanvasTexture(canvas);
         const material = new THREE.SpriteMaterial({
@@ -151,6 +155,8 @@ export class Creature extends Entity {
         // Show "!" indicator when actively seeking food
         if (this.seekingIndicator) {
             this.seekingIndicator.visible = (this.state === 'seeking_food');
+            // Fade indicator opacity to match creature
+            this.seekingIndicator.material.opacity = opacity;
         }
 
         // Face movement direction
