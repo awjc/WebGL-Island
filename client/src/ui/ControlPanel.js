@@ -105,12 +105,16 @@ export class ControlPanel {
             <div class="reset-section">
                 <h4>Reset Simulation</h4>
                 <div class="control-group">
-                    <label for="food-slider">Food Count: <span id="food-value">${WORLD_CONFIG.DEFAULT_FOOD_COUNT}</span></label>
+                    <label for="food-slider">
+                        <span class="label-text">Food Count: <span id="food-value">${WORLD_CONFIG.DEFAULT_FOOD_COUNT}</span></span>
+                    </label>
                     <input type="range" id="food-slider" min="${UI_CONFIG.FOOD_SLIDER_MIN}" max="${UI_CONFIG.FOOD_SLIDER_MAX}" value="${WORLD_CONFIG.DEFAULT_FOOD_COUNT}" step="${UI_CONFIG.FOOD_SLIDER_STEP}">
                 </div>
 
                 <div class="control-group">
-                    <label for="creature-slider">Creatures: <span id="creature-value">${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}</span></label>
+                    <label for="creature-slider">
+                        <span class="label-text">Creatures: <span id="creature-value">${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}</span></span>
+                    </label>
                     <input type="range" id="creature-slider" min="${UI_CONFIG.CREATURE_SLIDER_MIN}" max="${UI_CONFIG.CREATURE_SLIDER_MAX}" value="${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}" step="${UI_CONFIG.CREATURE_SLIDER_STEP}">
                 </div>
 

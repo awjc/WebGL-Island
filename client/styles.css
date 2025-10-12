@@ -240,7 +240,12 @@ body {
     font-size: 13px;
 }
 
-.control-group label span {
+.control-group label .label-text {
+    color: #ccc;
+    font-weight: normal;
+}
+
+.control-group label .label-text span {
     color: #4a7c59;
     font-weight: bold;
 }
