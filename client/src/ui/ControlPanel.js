@@ -10,6 +10,7 @@ export class ControlPanel {
         this.foodCount = WORLD_CONFIG.DEFAULT_FOOD_COUNT;
         this.creatureCount = WORLD_CONFIG.DEFAULT_CREATURE_COUNT;
         this.isMuted = false;
+        this.isMinimized = false;
         this.createPanel();
 
         // Initialize simulation with default values
@@ -23,9 +24,13 @@ export class ControlPanel {
         const panel = document.createElement('div');
         panel.id = 'control-panel';
         panel.innerHTML = `
-            <h3>Island Control</h3>
+            <div class="panel-header">
+                <h3>Island Control</h3>
+                <button id="btn-toggle-panel" class="toggle-button" title="Minimize/Maximize">−</button>
+            </div>
 
-            <div class="stats-section">
+            <div id="panel-content" class="panel-content">
+                <div class="stats-section">
                 <h4>Statistics</h4>
                 <div class="stat-item">
                     <span class="stat-label">Population:</span>
@@ -62,6 +67,7 @@ export class ControlPanel {
                 </div>
 
                 <button id="reset-button" class="reset-button">Reset Simulation</button>
+            </div>
             </div>
         `;
 
@@ -135,6 +141,23 @@ export class ControlPanel {
             this.isMuted = !this.isMuted;
             soundManager.setEnabled(!this.isMuted);
             muteBtn.textContent = this.isMuted ? 'Unmute' : 'Mute';
+        });
+
+        // Toggle panel button
+        const toggleBtn = document.getElementById('btn-toggle-panel');
+        const panelContent = document.getElementById('panel-content');
+        const controlPanel = document.getElementById('control-panel');
+        toggleBtn.addEventListener('click', () => {
+            this.isMinimized = !this.isMinimized;
+            if (this.isMinimized) {
+                panelContent.style.display = 'none';
+                toggleBtn.textContent = '+';
+                controlPanel.classList.add('minimized');
+            } else {
+                panelContent.style.display = 'block';
+                toggleBtn.textContent = '−';
+                controlPanel.classList.remove('minimized');
+            }
         });
     }
 
