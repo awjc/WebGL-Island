@@ -101,7 +101,7 @@ body {
 }
 
 #control-panel h4 {
-    margin: 0 0 12px 0;
+    margin: 0 0 8px 0;
     font-size: 14px;
     color: #90ee90;
     text-transform: uppercase;
@@ -111,14 +111,15 @@ body {
 .stats-section,
 .controls-section,
 .reset-section {
-    margin-bottom: 24px;
-    padding-bottom: 20px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .reset-section {
     border-bottom: none;
     padding-bottom: 0;
+    margin-top: 20px;
 }
 
 .stats-section {
@@ -198,8 +199,8 @@ body {
 
 .speed-control,
 .volume-control {
-    margin-top: 16px;
-    padding-top: 16px;
+    margin-top: 12px;
+    padding-top: 12px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -228,7 +229,7 @@ body {
 }
 
 .control-group {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .control-group label {
@@ -313,8 +314,8 @@ input[type="range"]::-moz-range-thumb:hover {
 
 /* Checkbox control styling */
 .checkbox-control {
-    margin-top: 16px;
-    padding-top: 16px;
+    margin-top: 12px;
+    padding-top: 12px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 

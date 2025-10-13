@@ -69,10 +69,7 @@ export class ControlPanel {
             </div>
 
             <div class="controls-section">
-                <h4>Quick Actions</h4>
-                <button id="btn-spawn-creature" class="action-button">Spawn Creature</button>
-                <button id="btn-spawn-food" class="action-button">Spawn Food</button>
-
+                <h4>Controls</h4>
                 <div class="button-group">
                     <button id="btn-play-pause" class="action-button half-width" title="Pause">⏸</button>
                     <button id="btn-step-forward" class="action-button half-width" title="Step Forward (1 frame)" disabled>▶|</button>
@@ -167,28 +164,6 @@ export class ControlPanel {
         const resetButton = document.getElementById('reset-button');
         resetButton.addEventListener('click', () => {
             this.resetSimulation();
-        });
-
-        // Spawn creature button
-        const spawnCreatureBtn = document.getElementById('btn-spawn-creature');
-        spawnCreatureBtn.addEventListener('click', () => {
-            // Spawn at random position within usable radius
-            const angle = Math.random() * Math.PI * 2;
-            const radius = Math.random() * 30;
-            const x = Math.cos(angle) * radius;
-            const z = Math.sin(angle) * radius;
-            this.world.spawnCreature(x, z);
-        });
-
-        // Spawn food button
-        const spawnFoodBtn = document.getElementById('btn-spawn-food');
-        spawnFoodBtn.addEventListener('click', () => {
-            // Spawn at random position within usable radius
-            const angle = Math.random() * Math.PI * 2;
-            const radius = Math.random() * 40;
-            const x = Math.cos(angle) * radius;
-            const z = Math.sin(angle) * radius;
-            this.world.spawnFood(x, z);
         });
 
         // Play/Pause button
