@@ -11,11 +11,16 @@
     <canvas id="glCanvas"></canvas>
     <div id="fps-counter">0 FPS</div>
 
+    <div id="graph-container">
+        <canvas id="population-graph"></canvas>
+    </div>
+
     <script type="importmap">
     {
         "imports": {
             "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
-            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+            "chart.js/auto": "https://esm.sh/chart.js@4.4.1/auto"
         }
     }
     </script>

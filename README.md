@@ -29,7 +29,8 @@ An island ecosystem simulation with creatures that live, eat, and evolve.
 │       ├── behaviors/
 │       │   └── SimpleBrain.js  # AI state machine for creatures
 │       ├── ui/
-│       │   └── ControlPanel.js # Interactive control panel with stats
+│       │   ├── ControlPanel.js # Interactive control panel with stats
+│       │   └── PopulationGraph.js # Real-time population graphs (Chart.js)
 │       ├── utils/
 │       │   └── SoundManager.js # Procedural sound effects (Web Audio API)
 │       └── rendering/
@@ -79,6 +80,7 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 ## Technologies
 
 - [Three.js](https://threejs.org/) - 3D graphics library
+- [Chart.js](https://www.chartjs.org/) - Population data visualization
 - WebGL - Hardware-accelerated graphics
 - Vanilla JavaScript (ES6 modules)
 
@@ -135,8 +137,18 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 - ✅ **Birth sound effect**: Pleasant rising tone for reproduction events
 - ✅ **Evolution dynamics**: Traits affect survival and reproduction success
 
+### Iteration 6: Population Graphs & Analytics
+- ✅ **Real-time population graphs**: Live Chart.js visualization of ecosystem trends
+- ✅ **Multi-dataset tracking**: Population count, food availability, birth rate, death rate
+- ✅ **Dual Y-axis display**: Counts (left) and rates per second (right)
+- ✅ **Rolling window**: Last 300 seconds of data for performance
+- ✅ **Toggle visibility**: Show/hide graph via control panel checkbox
+- ✅ **Responsive design**: Adapts to mobile screens
+- ✅ **Automatic reset**: Graph clears when simulation resets
+
 ### Interactive Controls
 - ✅ **Statistics section**: Monitor population, food, births, deaths, and time (updates 10x/sec)
+- ✅ **Population graph**: Real-time line charts showing trends over time (toggle on/off)
 - ✅ **Spawn creature**: Add single creature at random location
 - ✅ **Spawn food**: Add single food item at random location
 - ✅ **Pause/resume**: Freeze/unfreeze simulation time
@@ -146,6 +158,8 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 - ✅ **Creature slider**: Adjust creature count (1-50) for resets
 - ✅ **Reset simulation**: Restart with custom parameters
 - ✅ **Minimize panel**: Click header to collapse/expand (auto-minimizes on mobile)
+- ✅ **Show state icons**: Toggle the "!" indicators above creatures
+- ✅ **Show graph**: Toggle population graph visibility
 
 ## How to Use
 
@@ -156,8 +170,10 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 
 2. **Simulation Controls**:
    - Monitor live statistics in the control panel (upper left)
+   - View real-time population graphs (bottom left) showing trends over time
    - Use quick action buttons to spawn entities or pause the simulation
    - Adjust sliders and click "Reset Simulation" to restart with new parameters
+   - Toggle graph visibility with the "Show Population Graph" checkbox
 
 3. **Visual Indicators**:
    - **Varied colors**: Each creature has unique color based on genetics
@@ -168,10 +184,12 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 
 4. **Observing Evolution**:
    - Increase simulation speed (5-10x) to see evolution faster
-   - Watch births/deaths statistics to track population growth
+   - Watch the population graph to identify boom/bust cycles and equilibrium
+   - Monitor birth/death rates to understand population dynamics
    - Notice color diversity increasing as populations reproduce
    - Observe behavioral differences (some creatures faster, better perception)
    - Family groups may cluster near food sources
+   - Compare population trends against food availability in real-time
 
 ## Next Steps
 
@@ -180,4 +198,4 @@ See [IDEAS.md](IDEAS.md) for comprehensive future feature ideas. Priority additi
 - **Advanced genetics**: More complex traits, sexual reproduction, fitness metrics
 - **Scenario system**: Preset configurations, custom scenarios, save/load
 - **Visual enhancements**: Particle effects, trails, phylogenetic trees
-- **Population graphs**: Historical data visualization
+- **Advanced analytics**: Genetic trait graphs, phylogenetic trees, fitness metrics

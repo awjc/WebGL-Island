@@ -97,6 +97,13 @@ export class ControlPanel {
                         Show State Icons
                     </label>
                 </div>
+
+                <div class="control-group checkbox-control">
+                    <label>
+                        <input type="checkbox" id="show-graph-checkbox" checked>
+                        Show Population Graph
+                    </label>
+                </div>
             </div>
 
             <div class="reset-section">
@@ -240,6 +247,12 @@ export class ControlPanel {
         const showIconsCheckbox = document.getElementById('show-icons-checkbox');
         showIconsCheckbox.addEventListener('change', (e) => {
             this.world.setShowStateIcons(e.target.checked);
+        });
+
+        // Show graph checkbox
+        const showGraphCheckbox = document.getElementById('show-graph-checkbox');
+        showGraphCheckbox.addEventListener('change', (e) => {
+            this.world.setShowGraph(e.target.checked);
         });
 
         // Toggle panel - clicking header or button

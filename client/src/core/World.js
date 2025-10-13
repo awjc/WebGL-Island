@@ -1,6 +1,7 @@
 import { Creature } from '../entities/Creature.js';
 import { Food } from '../entities/Food.js';
 import { soundManager } from '../utils/SoundManager.js';
+import { PopulationGraph } from '../ui/PopulationGraph.js';
 import { WORLD_CONFIG, UI_CONFIG } from '../config.js';
 
 /**
@@ -22,6 +23,9 @@ export class World {
         // Statistics tracking
         this.totalBirths = 0;
         this.totalDeaths = 0;
+
+        // Population graph
+        this.populationGraph = new PopulationGraph();
     }
 
     /**
@@ -29,6 +33,12 @@ export class World {
      */
     start() {
         console.log('Starting world simulation...');
+
+        // Initialize population graph
+        const canvas = document.getElementById('population-graph');
+        if (canvas) {
+            this.populationGraph.init(canvas);
+        }
 
         // Start update loop (entities will be spawned by ControlPanel calling reset())
         this.lastTimestamp = performance.now();
@@ -61,6 +71,12 @@ export class World {
             }
 
             this.time += deltaTime;
+
+            // Update population graph
+            const stats = this.getStats();
+            stats.elapsedTime = this.time;
+            stats.creatureCount = this.creatures.length;
+            this.populationGraph.update(deltaTime, stats);
         }
 
         // Continue animation loop
@@ -232,6 +248,13 @@ export class World {
     }
 
     /**
+     * Toggle visibility of population graph
+     */
+    setShowGraph(show) {
+        this.populationGraph.setVisible(show);
+    }
+
+    /**
      * Reset simulation with new parameters
      */
     reset(creatureCount, foodCount) {
@@ -253,6 +276,9 @@ export class World {
         this.time = 0;
         this.totalBirths = 0;
         this.totalDeaths = 0;
+
+        // Reset population graph
+        this.populationGraph.reset({ totalBirths: 0, totalDeaths: 0 });
 
         // Spawn new food
         this.spawnInitialFood(foodCount);
