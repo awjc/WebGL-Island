@@ -18,6 +18,21 @@ function parseColor(hexColor) {
     return parseInt(hex, 16);
 }
 
+/**
+ * Generate a random number from a Gaussian (normal) distribution
+ * Uses Box-Muller transform
+ * @param {number} mean - Mean of the distribution
+ * @param {number} stddev - Standard deviation of the distribution
+ * @returns {number} Random value from the Gaussian distribution
+ */
+export function gaussianRandom(mean, stddev) {
+    // Box-Muller transform to generate Gaussian random numbers
+    const u1 = Math.random();
+    const u2 = Math.random();
+    const z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+    return z0 * stddev + mean;
+}
+
 // ============================================================================
 // WORLD SETTINGS
 // ============================================================================
@@ -67,7 +82,9 @@ export const CREATURE_CONFIG = {
 
 export const FOOD_CONFIG = {
     NUTRITION: 15,                  // Energy restored when eaten
-    RESPAWN_DELAY: 20,              // Seconds until food respawns
+    RESPAWN_DELAY_MEAN: 20,         // Mean respawn time (seconds)
+    RESPAWN_DELAY_STDDEV: 5,        // Standard deviation for respawn time
+    RESPAWN_DELAY_MIN: 10,          // Minimum respawn time (clips the distribution)
 };
 
 // ============================================================================

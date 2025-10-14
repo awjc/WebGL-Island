@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Entity } from '../core/Entity.js';
-import { FOOD_CONFIG, VISUAL_CONFIG } from '../config.js';
+import { FOOD_CONFIG, VISUAL_CONFIG, gaussianRandom } from '../config.js';
 
 /**
  * Food entity - static resource that creatures can eat
@@ -13,7 +13,8 @@ export class Food extends Entity {
         this.nutrition = FOOD_CONFIG.NUTRITION;
         this.isConsumed = false;
         this.respawnTimer = 0;
-        this.respawnDelay = FOOD_CONFIG.RESPAWN_DELAY;
+        // Generate random respawn delay using Gaussian distribution
+        this.respawnDelay = this.generateRespawnDelay();
 
         // Visual: small light green sphere
         const geometry = new THREE.SphereGeometry(0.3, 8, 8);
@@ -28,6 +29,19 @@ export class Food extends Entity {
         this.mesh.castShadow = true;
 
         this.position.y = 0.5; // Update entity position to match
+    }
+
+    /**
+     * Generate a random respawn delay using Gaussian distribution
+     * Mean = 20s, StdDev = 5s, Min = 10s
+     */
+    generateRespawnDelay() {
+        const delay = gaussianRandom(
+            FOOD_CONFIG.RESPAWN_DELAY_MEAN,
+            FOOD_CONFIG.RESPAWN_DELAY_STDDEV
+        );
+        // Clip to minimum value
+        return Math.max(delay, FOOD_CONFIG.RESPAWN_DELAY_MIN);
     }
 
     /**
@@ -52,6 +66,8 @@ export class Food extends Entity {
                 this.isConsumed = false;
                 this.mesh.visible = true;
                 this.respawnTimer = 0;
+                // Generate new random delay for next respawn
+                this.respawnDelay = this.generateRespawnDelay();
             }
         }
     }
