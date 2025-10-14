@@ -342,6 +342,34 @@ export class PopulationGraph {
     }
 
     /**
+     * Set the time window (max data points to display)
+     */
+    setTimeWindow(seconds) {
+        this.maxDataPoints = Math.max(10, Math.min(600, seconds)); // Clamp between 10 and 600 seconds
+
+        // Trim data if new window is smaller than current data
+        while (this.timeLabels.length > this.maxDataPoints) {
+            this.timeLabels.shift();
+            this.populationData.shift();
+            this.foodData.shift();
+            this.birthRateData.shift();
+            this.deathRateData.shift();
+            this.avgSizeData.shift();
+        }
+
+        if (this.chart) {
+            this.chart.update('none');
+        }
+    }
+
+    /**
+     * Get current time window in seconds
+     */
+    getTimeWindow() {
+        return this.maxDataPoints;
+    }
+
+    /**
      * Destroy the chart instance
      */
     destroy() {

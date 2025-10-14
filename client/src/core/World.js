@@ -272,6 +272,13 @@ export class World {
     }
 
     /**
+     * Set graph time window (in seconds)
+     */
+    setGraphTimeWindow(seconds) {
+        this.populationGraph.setTimeWindow(seconds);
+    }
+
+    /**
      * Reset simulation with new parameters
      */
     reset(creatureCount, foodCount) {

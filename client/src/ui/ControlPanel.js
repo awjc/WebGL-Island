@@ -104,6 +104,13 @@ export class ControlPanel {
                         Show Population Graph
                     </label>
                 </div>
+
+                <div class="control-group">
+                    <label for="graph-window-slider">
+                        <span class="label-text">Graph Time Window: <span id="graph-window-value">300</span>s</span>
+                    </label>
+                    <input type="range" id="graph-window-slider" min="30" max="600" value="300" step="30">
+                </div>
             </div>
 
             <div class="reset-section">
@@ -253,6 +260,15 @@ export class ControlPanel {
         const showGraphCheckbox = document.getElementById('show-graph-checkbox');
         showGraphCheckbox.addEventListener('change', (e) => {
             this.world.setShowGraph(e.target.checked);
+        });
+
+        // Graph time window slider
+        const graphWindowSlider = document.getElementById('graph-window-slider');
+        const graphWindowValue = document.getElementById('graph-window-value');
+        graphWindowSlider.addEventListener('input', (e) => {
+            const windowSize = parseInt(e.target.value);
+            this.world.setGraphTimeWindow(windowSize);
+            graphWindowValue.textContent = windowSize;
         });
 
         // Toggle panel - clicking header or button
