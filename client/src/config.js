@@ -45,6 +45,9 @@ export const WORLD_CONFIG = {
     // Initial population
     DEFAULT_FOOD_COUNT: 80,         // Starting number of food items
     DEFAULT_CREATURE_COUNT: 12,     // Starting number of creatures
+
+    // Time delta filtering (prevents jumps when tabbing away)
+    MAX_DELTA_TIME: 1.0,            // Maximum allowed time delta in seconds (ignore larger deltas)
 };
 
 // ============================================================================

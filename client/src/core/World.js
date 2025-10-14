@@ -51,8 +51,17 @@ export class World {
     update(timestamp = performance.now()) {
         if (!this.isPaused) {
             const rawDeltaTime = (timestamp - this.lastTimestamp) / 1000; // Convert to seconds
-            const deltaTime = rawDeltaTime * this.timeScale; // Apply time scale
             this.lastTimestamp = timestamp;
+
+            // Filter out large time deltas (e.g., when tabbing away)
+            // This prevents discontinuities in the simulation
+            if (rawDeltaTime > WORLD_CONFIG.MAX_DELTA_TIME) {
+                // Skip this frame - too much time has passed
+                requestAnimationFrame((t) => this.update(t));
+                return;
+            }
+
+            const deltaTime = rawDeltaTime * this.timeScale; // Apply time scale
 
             // Update all creatures
             for (let i = this.creatures.length - 1; i >= 0; i--) {
