@@ -37,6 +37,7 @@ body {
     top: 10px;
     left: 10px;
     width: 250px;
+    max-height: calc(100vh - 20px);
     background: rgba(0, 0, 0, 0.8);
     color: white;
     padding: 20px;
@@ -46,6 +47,8 @@ body {
     z-index: 1000;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     transition: width 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 #control-panel.minimized {
@@ -57,16 +60,43 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     border-bottom: 2px solid #4a7c59;
     padding-bottom: 8px;
     cursor: pointer;
     user-select: none;
     transition: opacity 0.2s;
+    flex-shrink: 0;
 }
 
 .panel-header:hover {
     opacity: 0.8;
+}
+
+.panel-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-grow: 1;
+    min-height: 0;
+}
+
+/* Custom scrollbar for panel content */
+.panel-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+    background: #4a7c59;
+    border-radius: 4px;
+}
+
+.panel-content::-webkit-scrollbar-thumb:hover {
+    background: #5a8c69;
 }
 
 #control-panel h3 {
@@ -101,8 +131,8 @@ body {
 }
 
 #control-panel h4 {
-    margin: 0 0 8px 0;
-    font-size: 14px;
+    margin: 0 0 6px 0;
+    font-size: 13px;
     color: #90ee90;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -111,15 +141,15 @@ body {
 .stats-section,
 .controls-section,
 .reset-section {
-    margin-bottom: 16px;
-    padding-bottom: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .reset-section {
     border-bottom: none;
     padding-bottom: 0;
-    margin-top: 20px;
+    margin-top: 12px;
 }
 
 .stats-section {
@@ -129,8 +159,8 @@ body {
 .stat-item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
-    padding: 4px 0;
+    margin-bottom: 6px;
+    padding: 2px 0;
 }
 
 .stat-label {
@@ -146,8 +176,8 @@ body {
 
 .action-button {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 8px;
+    padding: 8px;
+    margin-bottom: 6px;
     background: #5a8c69;
     color: white;
     border: none;
@@ -171,12 +201,12 @@ body {
 
 .button-group {
     display: flex;
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: 6px;
+    margin-bottom: 6px;
 }
 
 .half-width {
-    width: calc(50% - 4px);
+    width: calc(50% - 3px);
 }
 
 #btn-play-pause {
@@ -199,8 +229,8 @@ body {
 
 .speed-control,
 .volume-control {
-    margin-top: 12px;
-    padding-top: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -229,14 +259,14 @@ body {
 }
 
 .control-group {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .control-group label {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     color: #ccc;
     font-size: 13px;
 }
@@ -290,7 +320,7 @@ input[type="range"]::-moz-range-thumb:hover {
 
 .reset-button {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     background: #4a7c59;
     color: white;
     border: none;
@@ -314,8 +344,8 @@ input[type="range"]::-moz-range-thumb:hover {
 
 /* Checkbox control styling */
 .checkbox-control {
-    margin-top: 12px;
-    padding-top: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -388,7 +418,7 @@ input[type="range"]::-moz-range-thumb:hover {
 #graph-container {
     position: fixed;
     bottom: 10px;
-    left: 10px;
+    left: 280px;
     width: 600px;
     height: 300px;
     background: rgba(0, 0, 0, 0.85);
@@ -405,13 +435,22 @@ input[type="range"]::-moz-range-thumb:hover {
     height: 100%;
 }
 
-/* Hide graph on mobile devices */
+/* Adjust graph on smaller screens */
+@media screen and (max-width: 1024px) {
+    #graph-container {
+        left: 10px;
+        width: calc(100vw - 20px);
+        height: 250px;
+        top: auto;
+        bottom: 10px;
+    }
+}
+
 @media screen and (max-width: 768px) {
     #graph-container {
         width: calc(100vw - 20px);
         height: 200px;
         bottom: 10px;
         left: 10px;
-        right: 10px;
     }
 }
