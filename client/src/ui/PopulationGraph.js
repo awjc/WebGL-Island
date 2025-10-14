@@ -16,6 +16,7 @@ export class PopulationGraph {
         this.foodData = [];
         this.birthRateData = [];
         this.deathRateData = [];
+        this.avgSizeData = [];
 
         // For calculating rates (births/deaths per second)
         this.lastBirths = 0;
@@ -92,6 +93,18 @@ export class PopulationGraph {
                         pointRadius: 0,
                         pointHitRadius: 10,
                         yAxisID: 'y-rate',
+                    },
+                    {
+                        label: 'Avg Size',
+                        data: this.avgSizeData,
+                        borderColor: '#ff69b4',
+                        backgroundColor: 'rgba(255, 105, 180, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: false,
+                        pointRadius: 0,
+                        pointHitRadius: 10,
+                        yAxisID: 'y-size',
                     }
                 ]
             },
@@ -178,6 +191,23 @@ export class PopulationGraph {
                             drawOnChartArea: false, // Don't draw grid lines for this axis
                         },
                         beginAtZero: true
+                    },
+                    'y-size': {
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Size',
+                            color: '#ff69b4'
+                        },
+                        ticks: {
+                            color: '#ff69b4',
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        min: 0.5,
+                        max: 2.0
                     }
                 }
             }
@@ -233,8 +263,9 @@ export class PopulationGraph {
             this.foodData.push(stats.foodCount);
             this.birthRateData.push(parseFloat(this.smoothedBirthRate.toFixed(2)));
             this.deathRateData.push(parseFloat(this.smoothedDeathRate.toFixed(2)));
+            this.avgSizeData.push(parseFloat(stats.avgSize.toFixed(2)));
 
-            console.log(`Graph update: Pop=${stats.creatureCount}, Food=${stats.foodCount}, BirthRate=${this.smoothedBirthRate.toFixed(2)}/s, Time=${currentTime.toFixed(1)}s`);
+            console.log(`Graph update: Pop=${stats.creatureCount}, Food=${stats.foodCount}, AvgSize=${stats.avgSize.toFixed(2)}, Time=${currentTime.toFixed(1)}s`);
 
             // Remove old data if we exceed max points
             if (this.timeLabels.length > this.maxDataPoints) {
@@ -243,6 +274,7 @@ export class PopulationGraph {
                 this.foodData.shift();
                 this.birthRateData.shift();
                 this.deathRateData.shift();
+                this.avgSizeData.shift();
             }
 
             // Update chart data references (Chart.js needs this)
@@ -251,6 +283,7 @@ export class PopulationGraph {
             this.chart.data.datasets[1].data = this.foodData;
             this.chart.data.datasets[2].data = this.birthRateData;
             this.chart.data.datasets[3].data = this.deathRateData;
+            this.chart.data.datasets[4].data = this.avgSizeData;
 
             // Update chart
             this.chart.update('none'); // 'none' mode = no animation
@@ -271,6 +304,7 @@ export class PopulationGraph {
         this.foodData = [];
         this.birthRateData = [];
         this.deathRateData = [];
+        this.avgSizeData = [];
 
         this.lastBirths = stats ? stats.totalBirths : 0;
         this.lastDeaths = stats ? stats.totalDeaths : 0;

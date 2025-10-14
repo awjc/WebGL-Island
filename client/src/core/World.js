@@ -183,12 +183,20 @@ export class World {
      * Get current simulation statistics
      */
     getStats() {
+        // Calculate average creature size
+        let avgSize = 1.0; // Default if no creatures
+        if (this.creatures.length > 0) {
+            const totalSize = this.creatures.reduce((sum, c) => sum + c.dna.genes.size, 0);
+            avgSize = totalSize / this.creatures.length;
+        }
+
         return {
             population: this.creatures.length,
             foodCount: this.foodEntities.filter(f => !f.isConsumed).length,
             simulationTime: Math.floor(this.time),
             totalBirths: this.totalBirths,
-            totalDeaths: this.totalDeaths
+            totalDeaths: this.totalDeaths,
+            avgSize: avgSize
         };
     }
 
