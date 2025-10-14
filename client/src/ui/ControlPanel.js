@@ -1,4 +1,4 @@
-import { WORLD_CONFIG, UI_CONFIG } from '../config.js';
+import { WORLD_CONFIG, UI_CONFIG, VISUAL_CONFIG } from '../config.js';
 import { soundManager } from '../utils/SoundManager.js';
 
 /**
@@ -9,6 +9,7 @@ export class ControlPanel {
         this.world = world;
         this.foodCount = WORLD_CONFIG.DEFAULT_FOOD_COUNT;
         this.creatureCount = WORLD_CONFIG.DEFAULT_CREATURE_COUNT;
+        this.treeCount = VISUAL_CONFIG.TREE_COUNT;
         this.isMuted = false;
         this.volumeBeforeMute = UI_CONFIG.DEFAULT_VOLUME;
 
@@ -129,6 +130,13 @@ export class ControlPanel {
                     <input type="range" id="creature-slider" min="${UI_CONFIG.CREATURE_SLIDER_MIN}" max="${UI_CONFIG.CREATURE_SLIDER_MAX}" value="${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}" step="${UI_CONFIG.CREATURE_SLIDER_STEP}">
                 </div>
 
+                <div class="control-group">
+                    <label for="tree-slider">
+                        <span class="label-text">Trees: <span id="tree-value">${VISUAL_CONFIG.TREE_COUNT}</span></span>
+                    </label>
+                    <input type="range" id="tree-slider" min="${UI_CONFIG.TREE_SLIDER_MIN}" max="${UI_CONFIG.TREE_SLIDER_MAX}" value="${VISUAL_CONFIG.TREE_COUNT}" step="${UI_CONFIG.TREE_SLIDER_STEP}">
+                </div>
+
                 <button id="reset-button" class="reset-button">Reset Simulation</button>
             </div>
             </div>
@@ -172,6 +180,14 @@ export class ControlPanel {
         creatureSlider.addEventListener('input', (e) => {
             this.creatureCount = parseInt(e.target.value);
             creatureValue.textContent = this.creatureCount;
+        });
+
+        // Tree slider
+        const treeSlider = document.getElementById('tree-slider');
+        const treeValue = document.getElementById('tree-value');
+        treeSlider.addEventListener('input', (e) => {
+            this.treeCount = parseInt(e.target.value);
+            treeValue.textContent = this.treeCount;
         });
 
         // Reset button
@@ -313,7 +329,7 @@ export class ControlPanel {
      * Reset the simulation with current slider values
      */
     resetSimulation() {
-        console.log(`Resetting simulation: ${this.creatureCount} creatures, ${this.foodCount} food`);
-        this.world.reset(this.creatureCount, this.foodCount);
+        console.log(`Resetting simulation: ${this.creatureCount} creatures, ${this.foodCount} food, ${this.treeCount} trees`);
+        this.world.reset(this.creatureCount, this.foodCount, this.treeCount);
     }
 }

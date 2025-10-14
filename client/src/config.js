@@ -104,6 +104,10 @@ export const UI_CONFIG = {
     CREATURE_SLIDER_MAX: 50,
     CREATURE_SLIDER_STEP: 1,
 
+    TREE_SLIDER_MIN: 0,
+    TREE_SLIDER_MAX: 100,
+    TREE_SLIDER_STEP: 1,
+
     // Simulation speed
     SPEED_SLIDER_MIN: 0.1,
     SPEED_SLIDER_MAX: 10.0,

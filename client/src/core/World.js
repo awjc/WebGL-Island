@@ -26,6 +26,16 @@ export class World {
 
         // Population graph
         this.populationGraph = new PopulationGraph();
+
+        // Tree update callback (set by main.js)
+        this.updateTreesCallback = null;
+    }
+
+    /**
+     * Set callback for updating trees
+     */
+    setTreeUpdateCallback(callback) {
+        this.updateTreesCallback = callback;
     }
 
     /**
@@ -281,7 +291,12 @@ export class World {
     /**
      * Reset simulation with new parameters
      */
-    reset(creatureCount, foodCount) {
+    reset(creatureCount, foodCount, treeCount = null) {
+        // Update trees if tree count provided and callback is set
+        if (treeCount !== null && this.updateTreesCallback) {
+            this.updateTreesCallback(treeCount);
+        }
+
         // Remove all existing creatures
         for (let i = this.creatures.length - 1; i >= 0; i--) {
             const creature = this.creatures[i];

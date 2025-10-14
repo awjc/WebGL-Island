@@ -15,6 +15,24 @@ let lastTime = performance.now();
 let frames = 0;
 
 /**
+ * Update the number of trees on the island
+ */
+function updateTrees(count) {
+    // Remove existing trees
+    trees.forEach(tree => {
+        renderer.removeMesh(tree.mesh);
+    });
+
+    // Create new trees
+    trees = Tree.createForest(count);
+    trees.forEach(tree => {
+        renderer.addMesh(tree.mesh);
+    });
+
+    console.log(`Updated to ${trees.length} trees on the island`);
+}
+
+/**
  * Initialize the application
  */
 function init() {
@@ -40,6 +58,7 @@ function init() {
 
         // Initialize world simulation
         world = new World(renderer);
+        world.setTreeUpdateCallback(updateTrees);
         world.start();
 
         // Create control panel UI
