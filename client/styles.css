@@ -418,7 +418,7 @@ input[type="range"]::-moz-range-thumb:hover {
 #graph-container {
     position: fixed;
     bottom: 10px;
-    left: 280px;
+    right: 10px;
     width: 600px;
     height: 300px;
     background: rgba(0, 0, 0, 0.85);
@@ -438,11 +438,10 @@ input[type="range"]::-moz-range-thumb:hover {
 /* Adjust graph on smaller screens */
 @media screen and (max-width: 1024px) {
     #graph-container {
+        right: 10px;
         left: 10px;
         width: calc(100vw - 20px);
         height: 250px;
-        top: auto;
-        bottom: 10px;
     }
 }
 
@@ -451,6 +450,7 @@ input[type="range"]::-moz-range-thumb:hover {
         width: calc(100vw - 20px);
         height: 200px;
         bottom: 10px;
+        right: 10px;
         left: 10px;
     }
 }
