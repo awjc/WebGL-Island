@@ -6,8 +6,9 @@ import Chart from 'chart.js/auto';
  */
 export class PopulationGraph {
     constructor() {
-        // Data storage (rolling window of last 300 seconds)
-        this.maxDataPoints = 300;
+        // Data storage (keep up to 3600 seconds of history)
+        this.maxStoredDataPoints = 3600; // Store up to 1 hour of data
+        this.displayDataPoints = 300; // Display last 5 minutes by default
         this.updateInterval = 1.0; // Update every 1 second
         this.timeSinceLastUpdate = 0;
 
@@ -267,8 +268,8 @@ export class PopulationGraph {
 
             console.log(`Graph update: Pop=${stats.creatureCount}, Food=${stats.foodCount}, AvgSize=${stats.avgSize.toFixed(2)}, Time=${currentTime.toFixed(1)}s`);
 
-            // Remove old data if we exceed max points
-            if (this.timeLabels.length > this.maxDataPoints) {
+            // Remove old data if we exceed max storage limit (3600s)
+            if (this.timeLabels.length > this.maxStoredDataPoints) {
                 this.timeLabels.shift();
                 this.populationData.shift();
                 this.foodData.shift();
@@ -277,13 +278,14 @@ export class PopulationGraph {
                 this.avgSizeData.shift();
             }
 
-            // Update chart data references (Chart.js needs this)
-            this.chart.data.labels = this.timeLabels;
-            this.chart.data.datasets[0].data = this.populationData;
-            this.chart.data.datasets[1].data = this.foodData;
-            this.chart.data.datasets[2].data = this.birthRateData;
-            this.chart.data.datasets[3].data = this.deathRateData;
-            this.chart.data.datasets[4].data = this.avgSizeData;
+            // Update chart with only the last N points (display window)
+            const startIndex = Math.max(0, this.timeLabels.length - this.displayDataPoints);
+            this.chart.data.labels = this.timeLabels.slice(startIndex);
+            this.chart.data.datasets[0].data = this.populationData.slice(startIndex);
+            this.chart.data.datasets[1].data = this.foodData.slice(startIndex);
+            this.chart.data.datasets[2].data = this.birthRateData.slice(startIndex);
+            this.chart.data.datasets[3].data = this.deathRateData.slice(startIndex);
+            this.chart.data.datasets[4].data = this.avgSizeData.slice(startIndex);
 
             // Update chart
             this.chart.update('none'); // 'none' mode = no animation
@@ -342,22 +344,21 @@ export class PopulationGraph {
     }
 
     /**
-     * Set the time window (max data points to display)
+     * Set the time window (number of seconds to display)
+     * Does NOT delete data - just changes what's visible
      */
     setTimeWindow(seconds) {
-        this.maxDataPoints = Math.max(10, Math.min(600, seconds)); // Clamp between 10 and 600 seconds
+        this.displayDataPoints = Math.max(10, Math.min(3600, seconds)); // Clamp between 10 and 3600 seconds
 
-        // Trim data if new window is smaller than current data
-        while (this.timeLabels.length > this.maxDataPoints) {
-            this.timeLabels.shift();
-            this.populationData.shift();
-            this.foodData.shift();
-            this.birthRateData.shift();
-            this.deathRateData.shift();
-            this.avgSizeData.shift();
-        }
-
+        // Update chart to show new window (data is preserved)
         if (this.chart) {
+            const startIndex = Math.max(0, this.timeLabels.length - this.displayDataPoints);
+            this.chart.data.labels = this.timeLabels.slice(startIndex);
+            this.chart.data.datasets[0].data = this.populationData.slice(startIndex);
+            this.chart.data.datasets[1].data = this.foodData.slice(startIndex);
+            this.chart.data.datasets[2].data = this.birthRateData.slice(startIndex);
+            this.chart.data.datasets[3].data = this.deathRateData.slice(startIndex);
+            this.chart.data.datasets[4].data = this.avgSizeData.slice(startIndex);
             this.chart.update('none');
         }
     }
@@ -366,7 +367,7 @@ export class PopulationGraph {
      * Get current time window in seconds
      */
     getTimeWindow() {
-        return this.maxDataPoints;
+        return this.displayDataPoints;
     }
 
     /**

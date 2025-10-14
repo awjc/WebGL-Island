@@ -109,7 +109,7 @@ export class ControlPanel {
                     <label for="graph-window-slider">
                         <span class="label-text">Graph Time Window: <span id="graph-window-value">300</span>s</span>
                     </label>
-                    <input type="range" id="graph-window-slider" min="30" max="600" value="300" step="30">
+                    <input type="range" id="graph-window-slider" min="10" max="3600" value="300" step="10">
                 </div>
             </div>
 
