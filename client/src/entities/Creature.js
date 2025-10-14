@@ -145,10 +145,8 @@ export class Creature extends Entity {
         // Update visual based on energy and genetics
         const energyPercent = this.energy / this.maxEnergy;
 
-        // Scale changes with energy
-        const scale = CREATURE_CONFIG.MIN_SCALE +
-                      energyPercent * (CREATURE_CONFIG.MAX_SCALE - CREATURE_CONFIG.MIN_SCALE);
-        this.mesh.scale.set(scale, scale, scale);
+        // Size is fixed based on genetics (no energy-based scaling)
+        // Scale is already set based on genetic size in constructor
 
         // Color from DNA based on state and energy
         const color = this.dna.getColor(energyPercent, this.state);
