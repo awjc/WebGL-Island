@@ -26,12 +26,12 @@ export class PopulationGraph {
         // Moving average: track births/deaths with timestamps
         this.birthEvents = []; // Array of {timestamp, count}
         this.deathEvents = []; // Array of {timestamp, count}
-        this.movingAverageWindowSeconds = 10; // Calculate rate over last 10 seconds
+        this.movingAverageWindowSeconds = 60; // Calculate rate over last 60 seconds
 
         // Exponential smoothing for display (reduces jitter in the graph)
         this.smoothedBirthRate = 0;
         this.smoothedDeathRate = 0;
-        this.smoothingFactor = 0.15; // Lower = smoother but slower to respond, higher = more reactive
+        this.smoothingFactor = 0.025; // Lower = smoother but slower to respond, higher = more reactive
 
         // Chart instance
         this.chart = null;
@@ -72,7 +72,7 @@ export class PopulationGraph {
                         pointHitRadius: 10,
                     },
                     {
-                        label: 'Birth Rate (10s avg)',
+                        label: 'Birth Rate (60s avg)',
                         data: this.birthRateData,
                         borderColor: '#ffd700',
                         backgroundColor: 'rgba(255, 215, 0, 0.1)',
@@ -84,7 +84,7 @@ export class PopulationGraph {
                         yAxisID: 'y-rate',
                     },
                     {
-                        label: 'Death Rate (10s avg)',
+                        label: 'Death Rate (60s avg)',
                         data: this.deathRateData,
                         borderColor: '#ff6b6b',
                         backgroundColor: 'rgba(255, 107, 107, 0.1)',
