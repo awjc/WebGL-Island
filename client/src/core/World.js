@@ -261,7 +261,7 @@ export class World {
      * Set simulation speed (time scale multiplier)
      */
     setTimeScale(scale) {
-        this.timeScale = Math.max(0.1, Math.min(10.0, scale)); // Clamp between 0.1x and 10x
+        this.timeScale = Math.max(UI_CONFIG.CREATURE_SLIDER_MIN, Math.min(UI_CONFIG.SPEED_SLIDER_MAX, scale));
     }
 
     /**

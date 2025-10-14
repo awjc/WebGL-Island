@@ -208,7 +208,7 @@ export class PopulationGraph {
                             drawOnChartArea: false,
                         },
                         min: 0.5,
-                        max: 2.0
+                        max: 1.2
                     }
                 }
             }
