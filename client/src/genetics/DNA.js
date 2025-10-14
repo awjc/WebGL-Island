@@ -35,6 +35,10 @@ export class DNA {
                     // Hue can shift in any direction, wraps around
                     mutatedGenes[gene] += (Math.random() - 0.5) * GENETICS_CONFIG.MUTATION_AMOUNT;
                     mutatedGenes[gene] = (mutatedGenes[gene] + 1) % 1; // Wrap to 0-1
+                } else if (gene === 'size') {
+                    // Size has wider range than other genes
+                    mutatedGenes[gene] += (Math.random() - 0.5) * GENETICS_CONFIG.MUTATION_AMOUNT;
+                    mutatedGenes[gene] = Math.max(0.5, Math.min(2.0, mutatedGenes[gene])); // Clamp 0.5 - 2.0
                 } else {
                     // Other genes mutate within bounds
                     mutatedGenes[gene] += (Math.random() - 0.5) * GENETICS_CONFIG.MUTATION_AMOUNT;

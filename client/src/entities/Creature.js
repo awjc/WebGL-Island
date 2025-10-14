@@ -34,7 +34,12 @@ export class Creature extends Entity {
         // Apply genetic modifiers to traits
         this.speed = CREATURE_CONFIG.SPEED * this.dna.genes.speed;
         this.perceptionRadius = CREATURE_CONFIG.PERCEPTION_RADIUS * this.dna.genes.perception;
-        this.energyDrainRate = CREATURE_CONFIG.ENERGY_DRAIN_RATE / this.dna.genes.efficiency;
+
+        // Size-based energy modifier: size gene (0.5-2.0) directly maps to energy multiplier
+        // Larger creatures use more energy (direct linear mapping: 0.5->0.5x, 1.0->1.0x, 2.0->2.0x)
+        const sizeEnergyMultiplier = this.dna.genes.size;
+
+        this.energyDrainRate = (CREATURE_CONFIG.ENERGY_DRAIN_RATE / this.dna.genes.efficiency) * sizeEnergyMultiplier;
 
         this.state = 'wandering';
         this.age = 0;
