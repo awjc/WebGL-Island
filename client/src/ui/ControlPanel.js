@@ -1,4 +1,4 @@
-import { WORLD_CONFIG, UI_CONFIG, VISUAL_CONFIG } from '../config.js';
+import { WORLD_CONFIG, UI_CONFIG, TREE_CONFIG } from '../config.js';
 import { soundManager } from '../utils/SoundManager.js';
 
 /**
@@ -9,7 +9,7 @@ export class ControlPanel {
         this.world = world;
         this.foodCount = WORLD_CONFIG.DEFAULT_FOOD_COUNT;
         this.creatureCount = WORLD_CONFIG.DEFAULT_CREATURE_COUNT;
-        this.treeCount = VISUAL_CONFIG.TREE_COUNT;
+        this.treeCount = TREE_CONFIG.COUNT;
         this.isMuted = false;
         this.volumeBeforeMute = UI_CONFIG.DEFAULT_VOLUME;
 
@@ -132,9 +132,9 @@ export class ControlPanel {
 
                 <div class="control-group">
                     <label for="tree-slider">
-                        <span class="label-text">Trees: <span id="tree-value">${VISUAL_CONFIG.TREE_COUNT}</span></span>
+                        <span class="label-text">Trees: <span id="tree-value">${TREE_CONFIG.COUNT}</span></span>
                     </label>
-                    <input type="range" id="tree-slider" min="${UI_CONFIG.TREE_SLIDER_MIN}" max="${UI_CONFIG.TREE_SLIDER_MAX}" value="${VISUAL_CONFIG.TREE_COUNT}" step="${UI_CONFIG.TREE_SLIDER_STEP}">
+                    <input type="range" id="tree-slider" min="${UI_CONFIG.TREE_SLIDER_MIN}" max="${UI_CONFIG.TREE_SLIDER_MAX}" value="${TREE_CONFIG.COUNT}" step="${UI_CONFIG.TREE_SLIDER_STEP}">
                 </div>
 
                 <button id="reset-button" class="reset-button">Reset Simulation</button>
