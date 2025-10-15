@@ -328,7 +328,7 @@ export class World {
     /**
      * Reset simulation with new parameters
      */
-    reset(creatureCount, foodCount, treeCount = TREE_CONFIG.COUNT) {
+    reset(creatureCount, treeCount = TREE_CONFIG.COUNT) {
         // Remove all existing creatures
         for (let i = this.creatures.length - 1; i >= 0; i--) {
             const creature = this.creatures[i];

@@ -7,7 +7,6 @@ import { soundManager } from '../utils/SoundManager.js';
 export class ControlPanel {
     constructor(world) {
         this.world = world;
-        this.foodCount = WORLD_CONFIG.DEFAULT_FOOD_COUNT;
         this.creatureCount = WORLD_CONFIG.DEFAULT_CREATURE_COUNT;
         this.treeCount = TREE_CONFIG.COUNT;
         this.isMuted = false;
@@ -117,13 +116,6 @@ export class ControlPanel {
             <div class="reset-section">
                 <h4>Reset Simulation</h4>
                 <div class="control-group">
-                    <label for="food-slider">
-                        <span class="label-text">Food Count: <span id="food-value">${WORLD_CONFIG.DEFAULT_FOOD_COUNT}</span></span>
-                    </label>
-                    <input type="range" id="food-slider" min="${UI_CONFIG.FOOD_SLIDER_MIN}" max="${UI_CONFIG.FOOD_SLIDER_MAX}" value="${WORLD_CONFIG.DEFAULT_FOOD_COUNT}" step="${UI_CONFIG.FOOD_SLIDER_STEP}">
-                </div>
-
-                <div class="control-group">
                     <label for="creature-slider">
                         <span class="label-text">Creatures: <span id="creature-value">${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}</span></span>
                     </label>
@@ -166,14 +158,6 @@ export class ControlPanel {
      * Set up event listeners for controls
      */
     setupEventListeners() {
-        // Food slider
-        const foodSlider = document.getElementById('food-slider');
-        const foodValue = document.getElementById('food-value');
-        foodSlider.addEventListener('input', (e) => {
-            this.foodCount = parseInt(e.target.value);
-            foodValue.textContent = this.foodCount;
-        });
-
         // Creature slider
         const creatureSlider = document.getElementById('creature-slider');
         const creatureValue = document.getElementById('creature-value');
@@ -329,7 +313,7 @@ export class ControlPanel {
      * Reset the simulation with current slider values
      */
     resetSimulation() {
-        console.log(`Resetting simulation: ${this.creatureCount} creatures, ${this.foodCount} food, ${this.treeCount} trees`);
-        this.world.reset(this.creatureCount, this.foodCount, this.treeCount);
+        console.log(`Resetting simulation: ${this.creatureCount} creatures, ${this.treeCount} trees`);
+        this.world.reset(this.creatureCount, this.treeCount);
     }
 }
