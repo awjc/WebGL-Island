@@ -369,19 +369,16 @@ export class World {
             this.renderer.addMesh(tree.mesh);
         }
 
-        // Spawn new creatures in a grid pattern
-        const spacing = 20;
-        const gridSize = Math.ceil(Math.sqrt(creatureCount));
-        const offset = -(gridSize - 1) * spacing / 2;
+        // Spawn creatures randomly throughout the island's available space
+        for (let i = 0; i < creatureCount; i++) {
+            // Generate random position within island radius using polar coordinates
+            // This ensures uniform distribution across the circular area
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.sqrt(Math.random()) * WORLD_CONFIG.ISLAND_USABLE_RADIUS;
+            const x = Math.cos(angle) * distance;
+            const z = Math.sin(angle) * distance;
 
-        let spawned = 0;
-        for (let i = 0; i < gridSize && spawned < creatureCount; i++) {
-            for (let j = 0; j < gridSize && spawned < creatureCount; j++) {
-                const x = offset + i * spacing;
-                const z = offset + j * spacing;
-                this.spawnCreature(x, z);
-                spawned++;
-            }
+            this.spawnCreature(x, z);
         }
 
         console.log(`Simulation reset: ${this.creatures.length} creatures, ${this.trees.length} trees`);
