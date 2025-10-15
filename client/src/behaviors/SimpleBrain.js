@@ -12,7 +12,10 @@ export class SimpleBrain {
         this.creature = creature;
         this.wanderTimer = 0;
         this.wanderDirection = this.randomDirection();
-        this.wanderChangeInterval = CREATURE_CONFIG.WANDER_DIRECTION_CHANGE;
+
+        // Add ±20% randomness to wander interval to prevent resonance
+        const fuzzFactor = 0.8 + Math.random() * 0.4; // Range: 0.8 to 1.2 (±20%)
+        this.wanderChangeInterval = CREATURE_CONFIG.WANDER_DIRECTION_CHANGE * fuzzFactor;
     }
 
     /**

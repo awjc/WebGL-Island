@@ -94,7 +94,7 @@ export class ControlPanel {
                 <div class="control-group checkbox-control">
                     <label>
                         <input type="checkbox" id="show-icons-checkbox" ${UI_CONFIG.SHOW_STATE_ICONS ? 'checked' : ''}>
-                        Show State Icons
+                        Show Hungry Icons
                     </label>
                 </div>
 

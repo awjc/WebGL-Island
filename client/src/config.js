@@ -121,7 +121,7 @@ export const UI_CONFIG = {
     DEFAULT_VOLUME: 0.5,
 
     // Visual features
-    SHOW_STATE_ICONS: true,         // Show floating icons above creatures
+    SHOW_STATE_ICONS: false,        // Show floating icons above creatures
 };
 
 // ============================================================================
