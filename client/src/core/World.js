@@ -29,6 +29,7 @@ export class World {
         // Extinction tracking
         this.isExtinct = false;
         this.extinctionOverlay = document.getElementById('extinction-overlay');
+        this.onExtinctionCallback = null; // Callback to notify when extinction happens
 
         // Population graph
         this.populationGraph = new PopulationGraph();
@@ -55,7 +56,7 @@ export class World {
      * Main update loop - called every frame
      */
     update(timestamp = performance.now()) {
-        if (!this.isPaused) {
+        if (!this.isPaused && !this.isExtinct) {
             const rawDeltaTime = (timestamp - this.lastTimestamp) / 1000; // Convert to seconds
             this.lastTimestamp = timestamp;
 
@@ -312,6 +313,11 @@ export class World {
         // Show extinction overlay
         if (this.extinctionOverlay) {
             this.extinctionOverlay.style.display = 'flex';
+        }
+
+        // Notify control panel (if callback is set)
+        if (this.onExtinctionCallback) {
+            this.onExtinctionCallback();
         }
     }
 

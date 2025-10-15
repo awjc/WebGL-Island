@@ -17,6 +17,9 @@ export class ControlPanel {
 
         this.createPanel();
 
+        // Set up extinction callback
+        this.world.onExtinctionCallback = () => this.handleExtinction();
+
         // Initialize simulation with default values
         this.resetSimulation();
     }
@@ -315,5 +318,32 @@ export class ControlPanel {
     resetSimulation() {
         console.log(`Resetting simulation: ${this.creatureCount} creatures, ${this.treeCount} trees`);
         this.world.reset(this.creatureCount, this.treeCount);
+
+        // Re-enable play/pause buttons after reset
+        const playPauseBtn = document.getElementById('btn-play-pause');
+        const stepForwardBtn = document.getElementById('btn-step-forward');
+        if (playPauseBtn) {
+            playPauseBtn.disabled = false;
+            playPauseBtn.textContent = '⏸';
+            playPauseBtn.title = 'Pause';
+        }
+        if (stepForwardBtn) {
+            stepForwardBtn.disabled = true;
+        }
+    }
+
+    /**
+     * Handle extinction event - disable play/pause controls
+     */
+    handleExtinction() {
+        const playPauseBtn = document.getElementById('btn-play-pause');
+        const stepForwardBtn = document.getElementById('btn-step-forward');
+
+        if (playPauseBtn) {
+            playPauseBtn.disabled = true;
+        }
+        if (stepForwardBtn) {
+            stepForwardBtn.disabled = true;
+        }
     }
 }
