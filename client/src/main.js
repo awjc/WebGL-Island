@@ -35,6 +35,14 @@ function init() {
         // Create control panel UI
         controlPanel = new ControlPanel(world);
 
+        // Set up extinction overlay restart button
+        const restartButton = document.getElementById('restart-button');
+        if (restartButton) {
+            restartButton.addEventListener('click', () => {
+                controlPanel.handleReset();
+            });
+        }
+
         // Start animation loop
         animate();
     } catch (error) {

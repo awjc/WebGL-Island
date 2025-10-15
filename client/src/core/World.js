@@ -26,6 +26,10 @@ export class World {
         this.totalBirths = 0;
         this.totalDeaths = 0;
 
+        // Extinction tracking
+        this.isExtinct = false;
+        this.extinctionOverlay = document.getElementById('extinction-overlay');
+
         // Population graph
         this.populationGraph = new PopulationGraph();
     }
@@ -94,6 +98,11 @@ export class World {
             }
 
             this.time += deltaTime;
+
+            // Check for extinction
+            if (!this.isExtinct && this.creatures.length === 0 && this.totalBirths > 0) {
+                this.handleExtinction();
+            }
 
             // Update population graph
             const stats = this.getStats();
@@ -293,6 +302,30 @@ export class World {
     }
 
     /**
+     * Handle extinction event - pause simulation and show overlay
+     */
+    handleExtinction() {
+        console.log('EXTINCTION: All creatures have died');
+        this.isExtinct = true;
+        this.isPaused = true;
+
+        // Show extinction overlay
+        if (this.extinctionOverlay) {
+            this.extinctionOverlay.style.display = 'flex';
+        }
+    }
+
+    /**
+     * Hide extinction overlay
+     */
+    hideExtinctionOverlay() {
+        if (this.extinctionOverlay) {
+            this.extinctionOverlay.style.display = 'none';
+        }
+        this.isExtinct = false;
+    }
+
+    /**
      * Reset simulation with new parameters
      */
     reset(creatureCount, foodCount) {
@@ -321,6 +354,10 @@ export class World {
         this.time = 0;
         this.totalBirths = 0;
         this.totalDeaths = 0;
+
+        // Hide extinction overlay and unpause if extinct
+        this.hideExtinctionOverlay();
+        this.isPaused = false;
 
         // Reset population graph
         this.populationGraph.reset({ totalBirths: 0, totalDeaths: 0 });
