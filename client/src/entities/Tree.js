@@ -21,6 +21,12 @@ export class Tree extends Entity {
         // Track food items this tree has spawned (to enforce max limit)
         this.foodItems = [];
 
+        // Calculate visual scale based on spawn rate (0.7x to 1.3x)
+        // Higher spawn rate = larger tree
+        const rateRange = TREE_CONFIG.FOOD_SPAWN_RATE_MAX - TREE_CONFIG.FOOD_SPAWN_RATE_MIN;
+        const rateNormalized = (this.spawnRate - TREE_CONFIG.FOOD_SPAWN_RATE_MIN) / rateRange;
+        this.visualScale = 0.7 + rateNormalized * 0.6; // Maps 0-1 to 0.7-1.3
+
         // Visual representation
         this.mesh = this.createTreeMesh();
     }
@@ -53,6 +59,9 @@ export class Tree extends Entity {
         foliage.position.y = 4; // On top of trunk
         foliage.castShadow = true;
         treeGroup.add(foliage);
+
+        // Apply visual scale based on spawn rate
+        treeGroup.scale.set(this.visualScale, this.visualScale, this.visualScale);
 
         // Position the tree group
         treeGroup.position.set(this.position.x, this.position.y, this.position.z);
