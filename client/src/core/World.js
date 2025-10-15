@@ -1,8 +1,9 @@
 import { Creature } from '../entities/Creature.js';
 import { Food } from '../entities/Food.js';
+import { Tree } from '../entities/Tree.js';
 import { soundManager } from '../utils/SoundManager.js';
 import { PopulationGraph } from '../ui/PopulationGraph.js';
-import { WORLD_CONFIG, UI_CONFIG } from '../config.js';
+import { WORLD_CONFIG, UI_CONFIG, TREE_CONFIG } from '../config.js';
 
 /**
  * World class - manages all entities and simulation state
@@ -13,6 +14,7 @@ export class World {
         this.renderer = renderer;
         this.creatures = [];
         this.foodEntities = [];
+        this.trees = [];
         this.time = 0;
         this.isPaused = false;
         this.lastTimestamp = 0;
@@ -26,16 +28,6 @@ export class World {
 
         // Population graph
         this.populationGraph = new PopulationGraph();
-
-        // Tree update callback (set by main.js)
-        this.updateTreesCallback = null;
-    }
-
-    /**
-     * Set callback for updating trees
-     */
-    setTreeUpdateCallback(callback) {
-        this.updateTreesCallback = callback;
     }
 
     /**
@@ -87,6 +79,11 @@ export class World {
             // Update all food
             for (const food of this.foodEntities) {
                 food.update(deltaTime, this);
+            }
+
+            // Update all trees (they spawn food)
+            for (const tree of this.trees) {
+                tree.update(deltaTime, this);
             }
 
             this.time += deltaTime;
@@ -291,12 +288,7 @@ export class World {
     /**
      * Reset simulation with new parameters
      */
-    reset(creatureCount, foodCount, treeCount = null) {
-        // Update trees if tree count provided and callback is set
-        if (treeCount !== null && this.updateTreesCallback) {
-            this.updateTreesCallback(treeCount);
-        }
-
+    reset(creatureCount, foodCount) {
         // Remove all existing creatures
         for (let i = this.creatures.length - 1; i >= 0; i--) {
             const creature = this.creatures[i];
@@ -311,6 +303,13 @@ export class World {
         }
         this.foodEntities = [];
 
+        // Remove all existing trees
+        for (let i = this.trees.length - 1; i >= 0; i--) {
+            const tree = this.trees[i];
+            this.renderer.removeMesh(tree.mesh);
+        }
+        this.trees = [];
+
         // Reset simulation time and statistics
         this.time = 0;
         this.totalBirths = 0;
@@ -319,8 +318,12 @@ export class World {
         // Reset population graph
         this.populationGraph.reset({ totalBirths: 0, totalDeaths: 0 });
 
-        // Spawn new food
-        this.spawnInitialFood(foodCount);
+        // Create trees (they will spawn food over time)
+        const newTrees = Tree.createForest(TREE_CONFIG.COUNT);
+        for (const tree of newTrees) {
+            this.trees.push(tree);
+            this.renderer.addMesh(tree.mesh);
+        }
 
         // Spawn new creatures in a grid pattern
         const spacing = 20;
@@ -337,6 +340,6 @@ export class World {
             }
         }
 
-        console.log(`Simulation reset: ${this.creatures.length} creatures, ${this.foodEntities.length} food`);
+        console.log(`Simulation reset: ${this.creatures.length} creatures, ${this.trees.length} trees`);
     }
 }

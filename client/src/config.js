@@ -125,12 +125,22 @@ export const UI_CONFIG = {
 };
 
 // ============================================================================
+// TREE SETTINGS
+// ============================================================================
+
+export const TREE_CONFIG = {
+    COUNT: 15,                      // Number of trees on the island
+    FOOD_SPAWN_RADIUS: 5.0,         // Radius around tree where food spawns
+    FOOD_SPAWN_RATE_MIN: 0.5,       // Min fruits per minute
+    FOOD_SPAWN_RATE_MAX: 2.0,       // Max fruits per minute
+    MAX_FOOD_PER_TREE: 10,          // Max food items a tree can have at once
+};
+
+// ============================================================================
 // VISUAL SETTINGS
 // ============================================================================
 
 export const VISUAL_CONFIG = {
-    // Tree decoration
-    TREE_COUNT: 15,                 // Number of decorative trees on island
 
     // Colors (hex strings parsed to integers for Three.js)
     // Format: '#RRGGBB' or '#RRGGBBAA' (alpha will be stripped)
