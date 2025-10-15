@@ -76,9 +76,16 @@ export class World {
                 }
             }
 
-            // Update all food
-            for (const food of this.foodEntities) {
+            // Update all food and remove consumed food
+            for (let i = this.foodEntities.length - 1; i >= 0; i--) {
+                const food = this.foodEntities[i];
                 food.update(deltaTime, this);
+
+                // Remove consumed food permanently (trees will spawn new food)
+                if (food.isConsumed) {
+                    this.foodEntities.splice(i, 1);
+                    this.renderer.removeMesh(food.mesh);
+                }
             }
 
             // Update all trees (they spawn food)

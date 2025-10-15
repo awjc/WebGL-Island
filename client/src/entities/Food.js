@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { Entity } from '../core/Entity.js';
-import { FOOD_CONFIG, VISUAL_CONFIG, gaussianRandom } from '../config.js';
+import { FOOD_CONFIG, VISUAL_CONFIG } from '../config.js';
 
 /**
  * Food entity - static resource that creatures can eat
- * Respawns after being consumed
+ * Once consumed, it is removed from the world (trees spawn new food)
  */
 export class Food extends Entity {
     constructor(x, z) {
@@ -12,9 +12,6 @@ export class Food extends Entity {
 
         this.nutrition = FOOD_CONFIG.NUTRITION;
         this.isConsumed = false;
-        this.respawnTimer = 0;
-        // Generate random respawn delay using Gaussian distribution
-        this.respawnDelay = this.generateRespawnDelay();
 
         // Visual: small light green sphere
         const geometry = new THREE.SphereGeometry(0.3, 8, 8);
@@ -32,43 +29,10 @@ export class Food extends Entity {
     }
 
     /**
-     * Generate a random respawn delay using Gaussian distribution
-     * Mean = 20s, StdDev = 5s, Min = 10s
-     */
-    generateRespawnDelay() {
-        const delay = gaussianRandom(
-            FOOD_CONFIG.RESPAWN_DELAY_MEAN,
-            FOOD_CONFIG.RESPAWN_DELAY_STDDEV
-        );
-        // Clip to minimum value
-        return Math.max(delay, FOOD_CONFIG.RESPAWN_DELAY_MIN);
-    }
-
-    /**
-     * Mark food as consumed and make it invisible
+     * Mark food as consumed (will be removed from world)
      */
     consume() {
         this.isConsumed = true;
         this.mesh.visible = false;
-    }
-
-    /**
-     * Update food state - handles respawn timer
-     */
-    update(deltaTime, world) {
-        super.update(deltaTime, world);
-
-        if (this.isConsumed) {
-            this.respawnTimer += deltaTime;
-
-            // Respawn after delay
-            if (this.respawnTimer >= this.respawnDelay) {
-                this.isConsumed = false;
-                this.mesh.visible = true;
-                this.respawnTimer = 0;
-                // Generate new random delay for next respawn
-                this.respawnDelay = this.generateRespawnDelay();
-            }
-        }
     }
 }

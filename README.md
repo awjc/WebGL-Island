@@ -88,14 +88,14 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 
 ### Iteration 1: Island and Camera
 - ✅ 3D circular island with terrain
-- ✅ Decorative trees scattered on island
 - ✅ Interactive camera controls (orbit, pan, zoom)
 - ✅ Lighting and shadows
 - ✅ FPS counter
 
 ### Iteration 2: Entities and Movement
 - ✅ Base entity system with physics
-- ✅ Food entities that respawn after being consumed
+- ✅ Tree entities that produce food periodically
+- ✅ Food entities spawned by trees (consumed permanently)
 - ✅ Creature entities with energy system
 - ✅ Basic movement and boundary checking
 - ✅ World simulation manager
@@ -112,7 +112,7 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 - ✅ **Procedural sound effects**: Death sounds and eating chirps using Web Audio API
 - ✅ **Balanced food consumption**: Creatures need multiple food items to become satisfied
 - ✅ **Dynamic starting conditions**: Creatures spawn with randomized hunger levels (50-70%)
-- ✅ **Improved food distribution**: Even grid-based placement with natural jitter
+- ✅ **Tree-based food spawning**: Food spawns naturally around trees at variable rates
 - ✅ **Centralized configuration**: All parameters in config.js for easy tweaking
 
 ### Iteration 4: Enhanced UI and Statistics
@@ -139,22 +139,34 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 
 ### Iteration 6: Population Graphs & Analytics
 - ✅ **Real-time population graphs**: Live Chart.js visualization of ecosystem trends
-- ✅ **Multi-dataset tracking**: Population count, food availability, birth rate, death rate
-- ✅ **Dual Y-axis display**: Counts (left) and rates per second (right)
-- ✅ **Rolling window**: Last 300 seconds of data for performance
+- ✅ **Multi-dataset tracking**: Population, food, birth rate, death rate, average creature size
+- ✅ **Triple Y-axis display**: Counts (left), rates (right), size (right)
+- ✅ **Adjustable time window**: View 30s to 3600s (1 hour) of history
+- ✅ **Lossless zoom**: Data preserved when adjusting window size
+- ✅ **Moving averages**: 10-second smoothed birth/death rates
 - ✅ **Toggle visibility**: Show/hide graph via control panel checkbox
 - ✅ **Responsive design**: Adapts to mobile screens
 - ✅ **Automatic reset**: Graph clears when simulation resets
 
+### Iteration 7: Size-Based Metabolism & Tree Food System
+- ✅ **Size-based energy usage**: Larger creatures (2x size) use 4x more energy
+- ✅ **Size gene range**: 0.5 to 2.0 multiplier (tiny to giant creatures)
+- ✅ **Fixed visual size**: Creature size no longer shrinks with hunger
+- ✅ **Tree food production**: Each tree spawns 0.5-2 fruits per minute
+- ✅ **Localized food sources**: Food spawns in 5-unit radius around trees
+- ✅ **Permanent consumption**: Food doesn't respawn after being eaten
+- ✅ **Food hotspots**: Creates strategic feeding zones around productive trees
+- ✅ **Tab-away protection**: Simulation pauses properly when browser is unfocused
+
 ### Interactive Controls
 - ✅ **Statistics section**: Monitor population, food, births, deaths, and time (updates 10x/sec)
-- ✅ **Population graph**: Real-time line charts showing trends over time (toggle on/off)
+- ✅ **Population graph**: Real-time line charts with 5 datasets
+- ✅ **Graph time window**: Adjust visible history from 30s to 3600s (10s increments)
 - ✅ **Spawn creature**: Add single creature at random location
-- ✅ **Spawn food**: Add single food item at random location
+- ✅ **Spawn food**: Add single food item at random location (near trees)
 - ✅ **Pause/resume**: Freeze/unfreeze simulation time
 - ✅ **Mute/unmute**: Toggle sound effects
 - ✅ **Speed slider**: Adjust simulation speed (0.1x - 10x)
-- ✅ **Food slider**: Adjust food count (5-1000) for resets
 - ✅ **Creature slider**: Adjust creature count (1-50) for resets
 - ✅ **Reset simulation**: Restart with custom parameters
 - ✅ **Minimize panel**: Click header to collapse/expand (auto-minimizes on mobile)
@@ -178,17 +190,19 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 3. **Visual Indicators**:
    - **Varied colors**: Each creature has unique color based on genetics
    - **Red tint**: Hungry and actively seeking food
-   - **Size variation**: Genetic size differences (0.8x - 1.2x)
-   - **Green spheres**: Available food
-   - **Scale with energy**: Creatures shrink as they lose energy
+   - **Size variation**: Genetic size differences (0.5x - 2.0x, fixed throughout life)
+   - **Green spheres**: Available food around trees
+   - **Trees**: Brown trunks with green foliage, produce food periodically
+   - **Opacity changes**: Creatures fade when very hungry
 
 4. **Observing Evolution**:
    - Increase simulation speed (5-10x) to see evolution faster
    - Watch the population graph to identify boom/bust cycles and equilibrium
    - Monitor birth/death rates to understand population dynamics
-   - Notice color diversity increasing as populations reproduce
-   - Observe behavioral differences (some creatures faster, better perception)
-   - Family groups may cluster near food sources
+   - Track average creature size evolution on the pink line
+   - Notice territorial behavior around productive trees
+   - Observe size-metabolism tradeoffs (small = efficient, large = hungry)
+   - Watch creatures discover and camp near high-yield trees
    - Compare population trends against food availability in real-time
 
 ## Next Steps

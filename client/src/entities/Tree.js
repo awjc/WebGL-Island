@@ -68,9 +68,10 @@ export class Tree extends Entity {
 
         this.timeSinceLastSpawn += deltaTime;
 
-        // Remove references to food that has been consumed and respawned
-        // (Food respawns on its own, but we lose track of it)
-        this.foodItems = this.foodItems.filter(food => !food.isConsumed);
+        // Remove references to food that has been consumed (permanently removed from world)
+        this.foodItems = this.foodItems.filter(food =>
+            !food.isConsumed && world.foodEntities.includes(food)
+        );
 
         // Check if it's time to spawn food
         if (this.timeSinceLastSpawn >= this.spawnInterval) {
