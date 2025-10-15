@@ -110,7 +110,7 @@ export const UI_CONFIG = {
 
     // Simulation speed
     SPEED_SLIDER_MIN: 0.1,
-    SPEED_SLIDER_MAX: 30.0,
+    SPEED_SLIDER_MAX: 15.0,
     SPEED_SLIDER_STEP: 0.1,
     DEFAULT_SPEED: 1.0,
 
