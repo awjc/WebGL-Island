@@ -207,7 +207,7 @@ export class PopulationGraph {
                         grid: {
                             drawOnChartArea: false,
                         },
-                        min: 0.5,
+                        min: 0.3,
                         max: 1.2
                     }
                 }
