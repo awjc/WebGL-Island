@@ -80,7 +80,7 @@ export class ControlPanel {
 
                 <div class="control-group speed-control">
                     <label for="speed-slider">
-                        <span class="label-text">Simulation Speed: <span id="speed-value">${UI_CONFIG.DEFAULT_SPEED}x</span></span>
+                        <span class="label-text">Simulation Speed: <span id="speed-value">${UI_CONFIG.DEFAULT_SPEED.toFixed(1)}x</span></span>
                         <button id="btn-reset-speed" class="inline-toggle" title="Reset to 1x">1x</button>
                     </label>
                     <input type="range" id="speed-slider" min="${UI_CONFIG.SPEED_SLIDER_MIN}" max="${UI_CONFIG.SPEED_SLIDER_MAX}" value="${UI_CONFIG.DEFAULT_SPEED}" step="${UI_CONFIG.SPEED_SLIDER_STEP}">

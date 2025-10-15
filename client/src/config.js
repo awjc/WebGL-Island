@@ -109,9 +109,9 @@ export const UI_CONFIG = {
     TREE_SLIDER_STEP: 1,
 
     // Simulation speed
-    SPEED_SLIDER_MIN: 0.1,
+    SPEED_SLIDER_MIN: 0.2,
     SPEED_SLIDER_MAX: 15.0,
-    SPEED_SLIDER_STEP: 0.1,
+    SPEED_SLIDER_STEP: 0.2,
     DEFAULT_SPEED: 1.0,
 
     // Audio volume
