@@ -99,8 +99,8 @@ export class World {
 
             this.time += deltaTime;
 
-            // Check for extinction
-            if (!this.isExtinct && this.creatures.length === 0 && this.totalBirths > 0) {
+            // Check for extinction (triggers whenever all creatures die)
+            if (!this.isExtinct && this.creatures.length === 0) {
                 this.handleExtinction();
             }
 
@@ -328,7 +328,7 @@ export class World {
     /**
      * Reset simulation with new parameters
      */
-    reset(creatureCount, foodCount) {
+    reset(creatureCount, foodCount, treeCount = TREE_CONFIG.COUNT) {
         // Remove all existing creatures
         for (let i = this.creatures.length - 1; i >= 0; i--) {
             const creature = this.creatures[i];
@@ -363,7 +363,7 @@ export class World {
         this.populationGraph.reset({ totalBirths: 0, totalDeaths: 0 });
 
         // Create trees (they will spawn food over time)
-        const newTrees = Tree.createForest(TREE_CONFIG.COUNT);
+        const newTrees = Tree.createForest(treeCount);
         for (const tree of newTrees) {
             this.trees.push(tree);
             this.renderer.addMesh(tree.mesh);

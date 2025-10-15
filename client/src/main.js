@@ -39,7 +39,7 @@ function init() {
         const restartButton = document.getElementById('restart-button');
         if (restartButton) {
             restartButton.addEventListener('click', () => {
-                controlPanel.handleReset();
+                controlPanel.resetSimulation();
             });
         }
 
