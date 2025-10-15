@@ -129,10 +129,10 @@ export const UI_CONFIG = {
 // ============================================================================
 
 export const TREE_CONFIG = {
-    COUNT: 15,                      // Number of trees on the island
+    COUNT: 25,                      // Number of trees on the island
     FOOD_SPAWN_RADIUS: 5.0,         // Radius around tree where food spawns
-    FOOD_SPAWN_RATE_MIN: 0.5,       // Min fruits per minute
-    FOOD_SPAWN_RATE_MAX: 2.0,       // Max fruits per minute
+    FOOD_SPAWN_RATE_MIN: 2.0,       // Min fruits per minute
+    FOOD_SPAWN_RATE_MAX: 4.0,       // Max fruits per minute
     MAX_FOOD_PER_TREE: 10,          // Max food items a tree can have at once
     INITIAL_FOOD_MIN: 1,            // Min food items spawned at tree creation
     INITIAL_FOOD_MAX: 3,            // Max food items spawned at tree creation
