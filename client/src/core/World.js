@@ -368,11 +368,12 @@ export class World {
         // Reset population graph
         this.populationGraph.reset({ totalBirths: 0, totalDeaths: 0 });
 
-        // Create trees (they will spawn food over time)
+        // Create trees and spawn initial food around them
         const newTrees = Tree.createForest(treeCount);
         for (const tree of newTrees) {
             this.trees.push(tree);
             this.renderer.addMesh(tree.mesh);
+            tree.spawnInitialFood(this);
         }
 
         // Spawn creatures randomly throughout the island's available space

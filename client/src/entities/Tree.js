@@ -103,6 +103,20 @@ export class Tree extends Entity {
     }
 
     /**
+     * Spawn initial food around the tree when it's first created
+     */
+    spawnInitialFood(world) {
+        const count = Math.floor(
+            TREE_CONFIG.INITIAL_FOOD_MIN +
+            Math.random() * (TREE_CONFIG.INITIAL_FOOD_MAX - TREE_CONFIG.INITIAL_FOOD_MIN + 1)
+        );
+
+        for (let i = 0; i < count; i++) {
+            this.spawnFood(world);
+        }
+    }
+
+    /**
      * Create multiple trees scattered on the island
      */
     static createForest(count) {

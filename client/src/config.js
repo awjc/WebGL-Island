@@ -134,6 +134,8 @@ export const TREE_CONFIG = {
     FOOD_SPAWN_RATE_MIN: 0.5,       // Min fruits per minute
     FOOD_SPAWN_RATE_MAX: 2.0,       // Max fruits per minute
     MAX_FOOD_PER_TREE: 10,          // Max food items a tree can have at once
+    INITIAL_FOOD_MIN: 1,            // Min food items spawned at tree creation
+    INITIAL_FOOD_MAX: 3,            // Max food items spawned at tree creation
 };
 
 // ============================================================================
