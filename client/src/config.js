@@ -105,7 +105,7 @@ export const UI_CONFIG = {
     CREATURE_SLIDER_STEP: 1,
 
     TREE_SLIDER_MIN: 0,
-    TREE_SLIDER_MAX: 100,
+    TREE_SLIDER_MAX: 250,
     TREE_SLIDER_STEP: 1,
 
     ISLAND_RADIUS_SLIDER_MIN: 25,       // Half of default (50 / 2)
