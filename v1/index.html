@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL Island</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="client/styles.css">
+</head>
+<body>
+    <canvas id="glCanvas"></canvas>
+    <div id="fps-counter">0 FPS</div>
+
+    <div id="graph-container">
+        <canvas id="population-graph"></canvas>
+    </div>
+
+    <div id="extinction-overlay" class="extinction-overlay" style="display: none;">
+        <div class="extinction-message">
+            <h1>Extinction Event</h1>
+            <p>All creatures have died</p>
+            <button id="restart-button" class="restart-button">Reset Simulation</button>
+        </div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+            "chart.js/auto": "https://esm.sh/chart.js@4.4.1/auto"
+        }
+    }
+    </script>
+    <script type="module" src="client/src/main.js"></script>
+</body>
+</html>
