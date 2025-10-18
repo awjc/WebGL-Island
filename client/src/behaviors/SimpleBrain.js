@@ -107,7 +107,7 @@ export class SimpleBrain {
     }
 
     /**
-     * Find nearest food within perception radius
+     * Find nearest food within perception radius that is actually reachable
      */
     findNearestFood(world) {
         let nearest = null;
@@ -119,14 +119,40 @@ export class SimpleBrain {
 
             const dist = this.distanceTo(food);
 
-            // Check if within perception radius and closer than previous
-            if (dist < this.creature.perceptionRadius && dist < minDist) {
+            // Check if within perception radius
+            if (dist >= this.creature.perceptionRadius) continue;
+
+            // Check if food is actually reachable
+            if (!this.isFoodReachable(food)) continue;
+
+            // This food is reachable and closer than previous
+            if (dist < minDist) {
                 minDist = dist;
                 nearest = food;
             }
         }
 
         return nearest;
+    }
+
+    /**
+     * Check if food is reachable (either on ground or within jump range)
+     */
+    isFoodReachable(food) {
+        const verticalDist = food.position.y - this.creature.position.y;
+
+        // Food at ground level or below us - always reachable
+        if (verticalDist <= 1.0) {
+            return true;
+        }
+
+        // Food is above us - check if we can jump to it
+        if (JUMPING_CONFIG.ENABLED) {
+            return this.canReachFood(food);
+        }
+
+        // Jumping disabled and food is high - unreachable
+        return false;
     }
 
     /**
