@@ -18,6 +18,7 @@ export class PopulationGraph {
         this.birthRateData = [];
         this.deathRateData = [];
         this.avgSizeData = [];
+        this.avgJumpPowerData = [];
 
         // For calculating rates (births/deaths per second)
         this.lastBirths = 0;
@@ -106,6 +107,18 @@ export class PopulationGraph {
                         pointRadius: 0,
                         pointHitRadius: 10,
                         yAxisID: 'y-size',
+                    },
+                    {
+                        label: 'Avg Jump Power',
+                        data: this.avgJumpPowerData,
+                        borderColor: '#00d4ff',
+                        backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: false,
+                        pointRadius: 0,
+                        pointHitRadius: 10,
+                        yAxisID: 'y-jump',
                     }
                 ]
             },
@@ -208,7 +221,24 @@ export class PopulationGraph {
                             drawOnChartArea: false,
                         },
                         min: 0.3,
-                        max: 1.2
+                        max: 2.2
+                    },
+                    'y-jump': {
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Jump Power',
+                            color: '#00d4ff'
+                        },
+                        ticks: {
+                            color: '#00d4ff',
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        min: 0.4,
+                        max: 1.6
                     }
                 }
             }
@@ -265,8 +295,9 @@ export class PopulationGraph {
             this.birthRateData.push(parseFloat(this.smoothedBirthRate.toFixed(2)));
             this.deathRateData.push(parseFloat(this.smoothedDeathRate.toFixed(2)));
             this.avgSizeData.push(parseFloat(stats.avgSize.toFixed(2)));
+            this.avgJumpPowerData.push(parseFloat(stats.avgJumpPower.toFixed(2)));
 
-            console.log(`Graph update: Pop=${stats.creatureCount}, Food=${stats.foodCount}, AvgSize=${stats.avgSize.toFixed(2)}, Time=${currentTime.toFixed(1)}s`);
+            console.log(`Graph update: Pop=${stats.creatureCount}, Food=${stats.foodCount}, AvgSize=${stats.avgSize.toFixed(2)}, AvgJump=${stats.avgJumpPower.toFixed(2)}, Time=${currentTime.toFixed(1)}s`);
 
             // Remove old data if we exceed max storage limit (3600s)
             if (this.timeLabels.length > this.maxStoredDataPoints) {
@@ -276,6 +307,7 @@ export class PopulationGraph {
                 this.birthRateData.shift();
                 this.deathRateData.shift();
                 this.avgSizeData.shift();
+                this.avgJumpPowerData.shift();
             }
 
             // Update chart with only the last N points (display window)
@@ -286,6 +318,7 @@ export class PopulationGraph {
             this.chart.data.datasets[2].data = this.birthRateData.slice(startIndex);
             this.chart.data.datasets[3].data = this.deathRateData.slice(startIndex);
             this.chart.data.datasets[4].data = this.avgSizeData.slice(startIndex);
+            this.chart.data.datasets[5].data = this.avgJumpPowerData.slice(startIndex);
 
             // Update chart
             this.chart.update('none'); // 'none' mode = no animation
@@ -307,6 +340,7 @@ export class PopulationGraph {
         this.birthRateData = [];
         this.deathRateData = [];
         this.avgSizeData = [];
+        this.avgJumpPowerData = [];
 
         this.lastBirths = stats ? stats.totalBirths : 0;
         this.lastDeaths = stats ? stats.totalDeaths : 0;
@@ -359,6 +393,7 @@ export class PopulationGraph {
             this.chart.data.datasets[2].data = this.birthRateData.slice(startIndex);
             this.chart.data.datasets[3].data = this.deathRateData.slice(startIndex);
             this.chart.data.datasets[4].data = this.avgSizeData.slice(startIndex);
+            this.chart.data.datasets[5].data = this.avgJumpPowerData.slice(startIndex);
             this.chart.update('none');
         }
     }

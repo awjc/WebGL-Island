@@ -216,11 +216,16 @@ export class World {
      * Get current simulation statistics
      */
     getStats() {
-        // Calculate average creature size
+        // Calculate average creature size and jump power
         let avgSize = 1.0; // Default if no creatures
+        let avgJumpPower = 1.0; // Default if no creatures
+
         if (this.creatures.length > 0) {
             const totalSize = this.creatures.reduce((sum, c) => sum + c.dna.genes.size, 0);
             avgSize = totalSize / this.creatures.length;
+
+            const totalJumpPower = this.creatures.reduce((sum, c) => sum + c.dna.genes.jumpPower, 0);
+            avgJumpPower = totalJumpPower / this.creatures.length;
         }
 
         return {
@@ -229,7 +234,8 @@ export class World {
             simulationTime: Math.floor(this.time),
             totalBirths: this.totalBirths,
             totalDeaths: this.totalDeaths,
-            avgSize: avgSize
+            avgSize: avgSize,
+            avgJumpPower: avgJumpPower
         };
     }
 
