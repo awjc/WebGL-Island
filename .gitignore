@@ -60,3 +60,6 @@ coverage/
 
 # VSCode / Claude Code is creating random .tmp. files for some reason
 *.tmp.*
+
+# Claude folder
+/.claude
