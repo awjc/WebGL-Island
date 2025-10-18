@@ -82,13 +82,13 @@ export class World {
                 }
             }
 
-            // Update all food and remove consumed food
+            // Update all food and remove consumed or expired food
             for (let i = this.foodEntities.length - 1; i >= 0; i--) {
                 const food = this.foodEntities[i];
                 food.update(deltaTime, this);
 
-                // Remove consumed food permanently (trees will spawn new food)
-                if (food.isConsumed) {
+                // Remove consumed or expired food permanently (trees will spawn new food)
+                if (food.isConsumed || food.isExpired) {
                     this.foodEntities.splice(i, 1);
                     this.renderer.removeMesh(food.mesh);
                 }

@@ -12,6 +12,8 @@ export class Food extends Entity {
 
         this.nutrition = FOOD_CONFIG.NUTRITION;
         this.isConsumed = false;
+        this.isExpired = false;
+        this.age = 0; // Track how long food has existed (in seconds)
         this.isAttachedToTree = false; // When true, food doesn't fall due to gravity
 
         // Visual: small light green sphere
@@ -30,9 +32,17 @@ export class Food extends Entity {
     }
 
     /**
-     * Update food entity - respects tree attachment
+     * Update food entity - respects tree attachment and tracks expiration
      */
     update(deltaTime, world) {
+        // Track age and check for expiration
+        this.age += deltaTime;
+        if (this.age >= FOOD_CONFIG.EXPIRATION_TIME) {
+            this.isExpired = true;
+            this.mesh.visible = false;
+            return;
+        }
+
         if (this.isAttachedToTree) {
             // Food attached to tree stays at fixed position (no gravity)
             // Just update mesh to match position (in case position changed externally)
