@@ -25,8 +25,8 @@ export class Tree extends Entity {
         this.foodItems = [];
 
         // Tree dimensions (separate height and width for evolutionary pressure)
-        // Height varies from 4m to 12m
-        this.height = 4 + Math.random() * 8;
+        this.height = TREE_CONFIG.HEIGHT_MIN +
+                      Math.random() * (TREE_CONFIG.HEIGHT_MAX - TREE_CONFIG.HEIGHT_MIN);
 
         // Width (canopy radius) varies from 1m to 3m
         this.width = 1 + Math.random() * 2;

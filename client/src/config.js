@@ -135,6 +135,8 @@ export const UI_CONFIG = {
 
 export const TREE_CONFIG = {
     COUNT: 25,                      // Number of trees on the island
+    HEIGHT_MIN: 3.0,                // Minimum tree height (meters)
+    HEIGHT_MAX: 15.0,               // Maximum tree height (meters)
     FOOD_SPAWN_RADIUS: 5.0,         // Radius around tree where food spawns
     FOOD_SPAWN_RATE_MIN: 2.0,       // Min fruits per minute
     FOOD_SPAWN_RATE_MAX: 6.0,       // Max fruits per minute
