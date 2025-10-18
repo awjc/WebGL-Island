@@ -128,10 +128,10 @@ export class World {
     }
 
     /**
-     * Spawn food at specified position
+     * Spawn food at specified position (with optional height)
      */
-    spawnFood(x, z) {
-        const food = new Food(x, z);
+    spawnFood(x, z, y = 0.5) {
+        const food = new Food(x, z, y);
         this.foodEntities.push(food);
         this.renderer.addMesh(food.mesh);
         return food;

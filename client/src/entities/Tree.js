@@ -1,14 +1,17 @@
 import * as THREE from 'three';
 import { Entity } from '../core/Entity.js';
-import { TREE_CONFIG, WORLD_CONFIG } from '../config.js';
+import { TREE_CONFIG, WORLD_CONFIG, JUMPING_CONFIG } from '../config.js';
 
 /**
  * Tree entity - produces food periodically at random positions nearby
- * Each tree has a unique food production rate
+ * Each tree has a unique food production rate, height, and width
  */
 export class Tree extends Entity {
     constructor(x, z) {
         super(x, z);
+
+        // Disable gravity for trees (they're rooted in place)
+        this.affectedByGravity = false;
 
         // Unique spawn rate for this tree (fruits per minute)
         this.spawnRate = TREE_CONFIG.FOOD_SPAWN_RATE_MIN +
@@ -21,47 +24,57 @@ export class Tree extends Entity {
         // Track food items this tree has spawned (to enforce max limit)
         this.foodItems = [];
 
-        // Calculate visual scale based on spawn rate (0.7x to 1.3x)
-        // Higher spawn rate = larger tree
-        const rateRange = TREE_CONFIG.FOOD_SPAWN_RATE_MAX - TREE_CONFIG.FOOD_SPAWN_RATE_MIN;
-        const rateNormalized = (this.spawnRate - TREE_CONFIG.FOOD_SPAWN_RATE_MIN) / rateRange;
-        this.visualScale = 0.7 + rateNormalized * 0.6; // Maps 0-1 to 0.7-1.3
+        // Tree dimensions (separate height and width for evolutionary pressure)
+        // Height varies from 4m to 12m
+        this.height = 4 + Math.random() * 8;
+
+        // Width (canopy radius) varies from 1m to 3m
+        this.width = 1 + Math.random() * 2;
+
+        // Trunk dimensions scale with height
+        this.trunkHeight = this.height * 0.6; // Trunk is 60% of total height
+        this.trunkRadius = 0.2 + (this.height / 20); // Thicker trunk for taller trees
 
         // Visual representation
         this.mesh = this.createTreeMesh();
     }
 
     /**
-     * Create the 3D mesh for the tree
+     * Create the 3D mesh for the tree using actual height and width dimensions
      */
     createTreeMesh() {
         // Create a group to hold trunk and foliage
         const treeGroup = new THREE.Group();
 
-        // Trunk - brown cylinder
-        const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.4, 3, 8);
+        // Trunk - brown cylinder (tapered slightly)
+        const trunkTopRadius = this.trunkRadius * 0.8;
+        const trunkBottomRadius = this.trunkRadius;
+        const trunkGeometry = new THREE.CylinderGeometry(
+            trunkTopRadius,
+            trunkBottomRadius,
+            this.trunkHeight,
+            8
+        );
         const trunkMaterial = new THREE.MeshStandardMaterial({
             color: '#4a3728', // Dark brown
             roughness: 0.9
         });
         const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-        trunk.position.y = 1.5; // Half of trunk height
+        trunk.position.y = this.trunkHeight / 2; // Center at half height
         trunk.castShadow = true;
         treeGroup.add(trunk);
 
-        // Foliage - green cone on top
-        const foliageGeometry = new THREE.ConeGeometry(1.5, 3, 8);
+        // Foliage - green cone on top (height is remaining 40% of tree)
+        const foliageHeight = this.height - this.trunkHeight;
+        const foliageGeometry = new THREE.ConeGeometry(this.width, foliageHeight, 8);
         const foliageMaterial = new THREE.MeshStandardMaterial({
             color: '#2d5a3d', // Dark green
             roughness: 0.8
         });
         const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
-        foliage.position.y = 4; // On top of trunk
+        foliage.position.y = this.trunkHeight + foliageHeight / 2; // On top of trunk
         foliage.castShadow = true;
         treeGroup.add(foliage);
-
-        // Apply visual scale based on spawn rate
-        treeGroup.scale.set(this.visualScale, this.visualScale, this.visualScale);
 
         // Position the tree group
         treeGroup.position.set(this.position.x, this.position.y, this.position.z);
@@ -93,10 +106,10 @@ export class Tree extends Entity {
     }
 
     /**
-     * Spawn a food item at a random position near the tree
+     * Spawn a food item at a random position near and ON the tree (vertical placement)
      */
     spawnFood(world) {
-        // Random angle and distance within spawn radius
+        // Random angle and distance within spawn radius (horizontal)
         const angle = Math.random() * Math.PI * 2;
         const distance = Math.random() * TREE_CONFIG.FOOD_SPAWN_RADIUS;
 
@@ -106,7 +119,21 @@ export class Tree extends Entity {
         // Check if position is within island bounds
         const distFromCenter = Math.sqrt(foodX * foodX + foodZ * foodZ);
         if (distFromCenter < WORLD_CONFIG.ISLAND_USABLE_RADIUS) {
-            const food = world.spawnFood(foodX, foodZ);
+            // Calculate food height based on configuration bias
+            // bias = 0: all food at ground
+            // bias = 0.5: uniform distribution
+            // bias = 1: all food at top
+            const heightDistribution = Math.pow(Math.random(), 2 - JUMPING_CONFIG.FOOD_HEIGHT_BIAS * 2);
+            const minHeight = JUMPING_CONFIG.FOOD_HEIGHT_MIN * this.height;
+            const maxHeight = JUMPING_CONFIG.FOOD_HEIGHT_MAX * this.height;
+            const foodY = minHeight + heightDistribution * (maxHeight - minHeight);
+
+            // Spawn food at the calculated height
+            const food = world.spawnFood(foodX, foodZ, foodY);
+
+            // Mark food as attached to tree (won't fall due to gravity)
+            food.isAttachedToTree = true;
+
             this.foodItems.push(food);
         }
     }

@@ -1,4 +1,4 @@
-import { CREATURE_CONFIG } from '../config.js';
+import { CREATURE_CONFIG, JUMPING_CONFIG, PHYSICS_CONFIG } from '../config.js';
 
 /**
  * SimpleBrain - AI state machine for creature behavior
@@ -60,16 +60,20 @@ export class SimpleBrain {
     }
 
     /**
-     * Seek food behavior - move toward nearest visible food
+     * Seek food behavior - move toward nearest visible food (now in 3D!)
      */
     seekFood(deltaTime, world) {
         // Find nearest food within perception radius
         const nearestFood = this.findNearestFood(world);
 
         if (nearestFood) {
-            const distance = this.distanceTo(nearestFood);
+            const horizontalDist = this.distanceTo(nearestFood); // 2D horizontal distance
+            const verticalDist = nearestFood.position.y - this.creature.position.y;
+            const totalDist = this.distance3DTo(nearestFood); // Full 3D distance
 
-            if (distance < CREATURE_CONFIG.EATING_DISTANCE) {
+            // Check if we're close enough to eat (3D distance check)
+            const eatingRadius = CREATURE_CONFIG.EATING_DISTANCE + this.creature.dna.genes.size * 0.5;
+            if (totalDist < eatingRadius) {
                 // Close enough to eat
                 this.creature.eat(nearestFood);
                 // Continue seeking if still hungry, otherwise return to wandering
@@ -77,7 +81,21 @@ export class SimpleBrain {
                     this.creature.state = 'wandering';
                 }
             } else {
-                // Move toward food at increased speed
+                // Food is out of reach - decide whether to jump or move horizontally
+
+                // If food is above us and we're close horizontally
+                if (JUMPING_CONFIG.ENABLED &&
+                    verticalDist > 1.0 &&
+                    horizontalDist < CREATURE_CONFIG.EATING_DISTANCE * 3) {
+
+                    // Check if we can reach it with our jump ability
+                    if (this.canReachFood(nearestFood)) {
+                        // Try to jump (will fail if on cooldown or not enough energy)
+                        this.creature.jump();
+                    }
+                }
+
+                // Move toward food horizontally (whether jumping or not)
                 const direction = this.directionTo(nearestFood);
                 this.creature.velocity.x = direction.x * this.creature.speed * CREATURE_CONFIG.SEEK_SPEED_MULTIPLIER;
                 this.creature.velocity.z = direction.z * this.creature.speed * CREATURE_CONFIG.SEEK_SPEED_MULTIPLIER;
@@ -112,7 +130,7 @@ export class SimpleBrain {
     }
 
     /**
-     * Calculate distance to another entity
+     * Calculate horizontal (2D) distance to another entity
      */
     distanceTo(entity) {
         const dx = entity.position.x - this.creature.position.x;
@@ -121,14 +139,43 @@ export class SimpleBrain {
     }
 
     /**
-     * Get normalized direction vector toward entity
+     * Calculate full 3D distance to another entity
+     */
+    distance3DTo(entity) {
+        const dx = entity.position.x - this.creature.position.x;
+        const dy = entity.position.y - this.creature.position.y;
+        const dz = entity.position.z - this.creature.position.z;
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    /**
+     * Check if creature can reach food with its jump ability
+     */
+    canReachFood(food) {
+        if (!JUMPING_CONFIG.ENABLED) return false;
+
+        // Calculate required jump height to reach food
+        const foodHeight = food.position.y;
+        const creatureHeight = this.creature.position.y;
+        const requiredJumpHeight = foodHeight - creatureHeight;
+
+        // Can reach if max jump height >= required height
+        return this.creature.maxJumpHeight >= requiredJumpHeight;
+    }
+
+    /**
+     * Get normalized direction vector toward entity (horizontal only)
      */
     directionTo(entity) {
         const dx = entity.position.x - this.creature.position.x;
         const dz = entity.position.z - this.creature.position.z;
         const length = Math.sqrt(dx * dx + dz * dz);
 
-        // Return normalized direction
+        // Return normalized direction (or zero if already at position)
+        if (length < 0.001) {
+            return { x: 0, z: 0 };
+        }
+
         return {
             x: dx / length,
             z: dz / length

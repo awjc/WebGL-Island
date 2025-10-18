@@ -174,6 +174,33 @@ export const GENETICS_CONFIG = {
 };
 
 // ============================================================================
+// PHYSICS SETTINGS
+// ============================================================================
+
+export const PHYSICS_CONFIG = {
+    GRAVITY: 20.0,                  // Gravity acceleration (m/s²) - stronger than Earth for visible effect
+    GROUND_LEVEL: 0.0,              // Y position of ground plane
+    AIR_RESISTANCE: 0.98,           // Velocity dampening per second (1.0 = no resistance)
+};
+
+// ============================================================================
+// JUMPING SETTINGS
+// ============================================================================
+
+export const JUMPING_CONFIG = {
+    ENABLED: true,                  // Master toggle for jumping mechanics
+    BASE_JUMP_VELOCITY: 10.0,       // Base upward velocity when jumping (m/s)
+    JUMP_COOLDOWN: 2.0,             // Seconds between jumps
+    JUMP_ENERGY_COST_BASE: 5,       // Base energy cost to jump
+    JUMP_ENERGY_SCALING: 1.5,       // How much cost scales with jump power gene
+
+    // Food height distribution on trees
+    FOOD_HEIGHT_MIN: 0.0,           // Minimum height (ground level)
+    FOOD_HEIGHT_MAX: 1.0,           // Maximum height (fraction of tree height)
+    FOOD_HEIGHT_BIAS: 0.7,          // Distribution bias (0=ground, 1=top, 0.5=uniform)
+};
+
+// ============================================================================
 // AUDIO SETTINGS
 // ============================================================================
 

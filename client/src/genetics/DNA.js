@@ -17,6 +17,7 @@ export class DNA {
                 efficiency: 0.8 + Math.random() * 0.4,      // 0.8 - 1.2 multiplier (affects energy drain)
                 size: 0.8 + Math.random() * 0.4,            // 0.8 - 1.2 multiplier
                 hue: Math.random(),                         // 0.0 - 1.0 (color variation)
+                jumpPower: 0.8 + Math.random() * 0.4,       // 0.8 - 1.2 multiplier (affects jump height)
             };
         }
     }
@@ -39,6 +40,10 @@ export class DNA {
                     // Size has wider range than other genes
                     mutatedGenes[gene] += (Math.random() - 0.5) * GENETICS_CONFIG.MUTATION_AMOUNT;
                     mutatedGenes[gene] = Math.max(0.5, Math.min(2.0, mutatedGenes[gene])); // Clamp 0.5 - 2.0
+                } else if (gene === 'jumpPower') {
+                    // Jump power has same range as size (can vary widely for evolutionary pressure)
+                    mutatedGenes[gene] += (Math.random() - 0.5) * GENETICS_CONFIG.MUTATION_AMOUNT;
+                    mutatedGenes[gene] = Math.max(0.5, Math.min(1.5, mutatedGenes[gene])); // Clamp 0.5 - 1.5
                 } else {
                     // Other genes mutate within bounds
                     mutatedGenes[gene] += (Math.random() - 0.5) * GENETICS_CONFIG.MUTATION_AMOUNT;

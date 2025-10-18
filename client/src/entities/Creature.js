@@ -3,7 +3,7 @@ import { Entity } from '../core/Entity.js';
 import { SimpleBrain } from '../behaviors/SimpleBrain.js';
 import { soundManager } from '../utils/SoundManager.js';
 import { DNA } from '../genetics/DNA.js';
-import { CREATURE_CONFIG, GENETICS_CONFIG, UI_CONFIG } from '../config.js';
+import { CREATURE_CONFIG, GENETICS_CONFIG, UI_CONFIG, JUMPING_CONFIG, PHYSICS_CONFIG } from '../config.js';
 
 /**
  * Creature entity - living being that moves, eats, and has energy
@@ -46,6 +46,10 @@ export class Creature extends Entity {
         this.isDead = false;
         this.timeSinceReproduction = 0; // Cooldown timer
         this.showStateIcon = UI_CONFIG.SHOW_STATE_ICONS; // Control icon visibility
+
+        // Jumping mechanics
+        this.jumpCooldown = 0;          // Time until can jump again
+        this.maxJumpHeight = this.calculateMaxJumpHeight(); // Calculated from genetics
 
         // AI brain for decision making
         this.brain = new SimpleBrain(this);
@@ -117,6 +121,55 @@ export class Creature extends Entity {
     }
 
     /**
+     * Get ground height for creature (half its size above ground)
+     */
+    getGroundHeight() {
+        return 0.5 * this.dna.genes.size;
+    }
+
+    /**
+     * Calculate maximum jump height from genetics
+     * Uses physics formula: height = velocity² / (2 * gravity)
+     */
+    calculateMaxJumpHeight() {
+        if (!JUMPING_CONFIG.ENABLED) return 0;
+
+        const jumpVelocity = JUMPING_CONFIG.BASE_JUMP_VELOCITY * this.dna.genes.jumpPower;
+        return (jumpVelocity * jumpVelocity) / (2 * PHYSICS_CONFIG.GRAVITY);
+    }
+
+    /**
+     * Attempt to jump (if conditions are met)
+     * @returns {boolean} True if jump was successful
+     */
+    jump() {
+        if (!JUMPING_CONFIG.ENABLED) return false;
+        if (!this.isGrounded) return false;
+        if (this.jumpCooldown > 0) return false;
+
+        // Calculate energy cost (scales with jump power and size)
+        const energyCost = JUMPING_CONFIG.JUMP_ENERGY_COST_BASE *
+            this.dna.genes.jumpPower *
+            JUMPING_CONFIG.JUMP_ENERGY_SCALING *
+            this.dna.genes.size; // Larger creatures pay more
+
+        // Check if enough energy
+        if (this.energy < energyCost) return false;
+
+        // Apply jump velocity
+        const jumpVelocity = JUMPING_CONFIG.BASE_JUMP_VELOCITY * this.dna.genes.jumpPower;
+        this.velocity.y = jumpVelocity;
+
+        // Deduct energy
+        this.energy -= energyCost;
+
+        // Start cooldown
+        this.jumpCooldown = JUMPING_CONFIG.JUMP_COOLDOWN;
+
+        return true;
+    }
+
+    /**
      * Update creature - handles aging, energy, and AI behavior
      */
     update(deltaTime, world) {
@@ -124,6 +177,11 @@ export class Creature extends Entity {
         this.age += deltaTime;
         this.timeSinceReproduction += deltaTime;
         this.energy -= this.energyDrainRate * deltaTime;
+
+        // Update jump cooldown
+        if (this.jumpCooldown > 0) {
+            this.jumpCooldown -= deltaTime;
+        }
 
         // Die if out of energy
         if (this.energy <= 0) {

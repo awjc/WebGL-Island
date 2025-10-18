@@ -1,4 +1,4 @@
-import { WORLD_CONFIG } from '../config.js';
+import { WORLD_CONFIG, PHYSICS_CONFIG } from '../config.js';
 
 /**
  * Base Entity class - represents any object in the world
@@ -10,9 +10,11 @@ let nextEntityId = 0;
 export class Entity {
     constructor(x, z) {
         this.id = nextEntityId++;
-        this.position = { x, y: 0, z }; // y=0 for ground level
-        this.velocity = { x: 0, z: 0 };
+        this.position = { x, y: 0, z }; // y starts at ground level
+        this.velocity = { x: 0, y: 0, z: 0 }; // Now includes y-component for vertical movement
         this.mesh = null; // Set by subclass
+        this.isGrounded = true; // Track if entity is on the ground
+        this.affectedByGravity = true; // Can be disabled for static entities
     }
 
     /**
@@ -21,11 +23,27 @@ export class Entity {
      * @param {World} world - Reference to world for entity queries
      */
     update(deltaTime, world) {
-        // Apply velocity to position
+        // Apply gravity to vertical velocity (if enabled and not grounded)
+        if (this.affectedByGravity && !this.isGrounded) {
+            this.velocity.y -= PHYSICS_CONFIG.GRAVITY * deltaTime;
+        }
+
+        // Apply velocity to position (now includes y-component)
         this.position.x += this.velocity.x * deltaTime;
+        this.position.y += this.velocity.y * deltaTime;
         this.position.z += this.velocity.z * deltaTime;
 
-        // Keep entities on island (simple boundary check)
+        // Ground collision check
+        const groundHeight = this.getGroundHeight();
+        if (this.position.y <= groundHeight) {
+            this.position.y = groundHeight;
+            this.velocity.y = 0;
+            this.isGrounded = true;
+        } else {
+            this.isGrounded = false;
+        }
+
+        // Keep entities on island (horizontal boundary check)
         const distFromCenter = Math.sqrt(this.position.x ** 2 + this.position.z ** 2);
 
         if (distFromCenter > WORLD_CONFIG.ISLAND_USABLE_RADIUS) {
@@ -34,7 +52,7 @@ export class Entity {
             this.position.x = Math.cos(angle) * WORLD_CONFIG.ISLAND_USABLE_RADIUS;
             this.position.z = Math.sin(angle) * WORLD_CONFIG.ISLAND_USABLE_RADIUS;
 
-            // Reflect velocity (bounce)
+            // Reflect horizontal velocity (bounce)
             const normal = { x: -Math.cos(angle), z: -Math.sin(angle) };
             const dot = this.velocity.x * normal.x + this.velocity.z * normal.z;
             this.velocity.x -= 2 * dot * normal.x;
@@ -45,6 +63,15 @@ export class Entity {
         if (this.mesh) {
             this.mesh.position.set(this.position.x, this.position.y, this.position.z);
         }
+    }
+
+    /**
+     * Get the ground height at this entity's position
+     * Subclasses can override for entity-specific ground heights
+     * @returns {number} Ground height in world units
+     */
+    getGroundHeight() {
+        return PHYSICS_CONFIG.GROUND_LEVEL;
     }
 
     /**

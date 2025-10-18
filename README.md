@@ -158,6 +158,19 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 - ✅ **Food hotspots**: Creates strategic feeding zones around productive trees
 - ✅ **Tab-away protection**: Simulation pauses properly when browser is unfocused
 
+### Iteration 8: Jumping Creatures & 3D Physics
+- ✅ **Gravity system**: Full vertical physics with parabolic motion
+- ✅ **Jump gene**: Inheritable jumpPower trait (0.5-1.5 multiplier)
+- ✅ **Energy-based jumping**: Jump cost scales with power and size
+- ✅ **Vertical food distribution**: Food spawns at varying heights on trees (0m to tree height)
+- ✅ **Tree height variation**: Trees vary from 4m to 12m tall
+- ✅ **Separate tree dimensions**: Height and width (canopy radius) are independent
+- ✅ **3D AI perception**: Creatures calculate 3D distance to food
+- ✅ **Jump-to-eat behavior**: Creatures intelligently jump to reach high food
+- ✅ **Reachability checking**: AI determines if food is within jump range
+- ✅ **Configurable food bias**: Adjust food height distribution (ground vs. tree-top)
+- ✅ **Evolutionary pressure**: Selection for jump height based on food availability
+
 ### Interactive Controls
 - ✅ **Statistics section**: Monitor population, food, births, deaths, and time (updates 10x/sec)
 - ✅ **Population graph**: Real-time line charts with 5 datasets
@@ -191,9 +204,10 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
    - **Varied colors**: Each creature has unique color based on genetics
    - **Red tint**: Hungry and actively seeking food
    - **Size variation**: Genetic size differences (0.5x - 2.0x, fixed throughout life)
-   - **Green spheres**: Available food around trees
-   - **Trees**: Brown trunks with green foliage, produce food periodically
+   - **Green spheres**: Available food on and around trees (at various heights)
+   - **Trees**: Variable heights (4-12m) with brown trunks and green foliage
    - **Opacity changes**: Creatures fade when very hungry
+   - **Jumping creatures**: Watch creatures leap upward to reach high food
 
 4. **Observing Evolution**:
    - Increase simulation speed (5-10x) to see evolution faster
@@ -204,6 +218,9 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
    - Observe size-metabolism tradeoffs (small = efficient, large = hungry)
    - Watch creatures discover and camp near high-yield trees
    - Compare population trends against food availability in real-time
+   - **See jump evolution**: Creatures with better jump genes access more food
+   - **Observe vertical strategies**: Some creatures specialize in high food, others in ground food
+   - **Watch physics in action**: Parabolic jump arcs and realistic gravity
 
 ## Next Steps
 
