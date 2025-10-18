@@ -29,7 +29,8 @@ function init() {
         console.log('Island ecosystem initialized successfully');
 
         // Initialize world simulation (trees will be created in reset())
-        world = new World(renderer);
+        // Pass terrain reference so world can update island size
+        world = new World(renderer, terrain);
         world.start();
 
         // Create control panel UI

@@ -10,8 +10,9 @@ import { WORLD_CONFIG, UI_CONFIG, TREE_CONFIG } from '../config.js';
  * Handles spawning, updating, and removing entities
  */
 export class World {
-    constructor(renderer) {
+    constructor(renderer, terrain = null) {
         this.renderer = renderer;
+        this.terrain = terrain; // Reference to terrain for resizing
         this.creatures = [];
         this.foodEntities = [];
         this.trees = [];
@@ -340,7 +341,19 @@ export class World {
     /**
      * Reset simulation with new parameters
      */
-    reset(creatureCount, treeCount = TREE_CONFIG.COUNT) {
+    reset(creatureCount, treeCount = TREE_CONFIG.COUNT, islandRadius = WORLD_CONFIG.ISLAND_RADIUS) {
+        // Update world config with new island radius
+        WORLD_CONFIG.ISLAND_RADIUS = islandRadius;
+        WORLD_CONFIG.ISLAND_USABLE_RADIUS = islandRadius - 2; // Maintain 2-unit buffer from edge
+
+        // Update terrain size if terrain reference exists
+        if (this.terrain) {
+            this.terrain.updateSize(islandRadius);
+        }
+
+        // Update camera zoom limits to match new island size
+        this.renderer.updateCameraLimits(islandRadius);
+
         // Remove all existing creatures
         for (let i = this.creatures.length - 1; i >= 0; i--) {
             const creature = this.creatures[i];
@@ -394,6 +407,6 @@ export class World {
             this.spawnCreature(x, z);
         }
 
-        console.log(`Simulation reset: ${this.creatures.length} creatures, ${this.trees.length} trees`);
+        console.log(`Simulation reset: ${this.creatures.length} creatures, ${this.trees.length} trees, ${islandRadius}m radius`);
     }
 }

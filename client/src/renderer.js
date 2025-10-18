@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { WORLD_CONFIG } from './config.js';
 
 /**
  * Renderer class - manages Three.js scene, camera, lights, and rendering
@@ -35,9 +36,10 @@ export class Renderer {
         this.controls = new OrbitControls(this.camera, canvas);
         this.controls.enableDamping = true; // Smooth camera movement
         this.controls.dampingFactor = 0.05;
-        this.controls.minDistance = 20;
-        this.controls.maxDistance = 150;
         this.controls.maxPolarAngle = Math.PI / 2 - 0.1; // Prevent going below ground
+
+        // Set initial camera limits based on island size
+        this.updateCameraLimits(WORLD_CONFIG.ISLAND_RADIUS);
 
         // Configure mouse buttons - middle button same as right (pan)
         this.controls.mouseButtons = {
@@ -84,6 +86,18 @@ export class Renderer {
         this.renderer.setSize(width, height, false);
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
+    }
+
+    /**
+     * Update camera zoom limits based on island size
+     */
+    updateCameraLimits(islandRadius) {
+        // Scale camera limits with island size
+        // Min distance: close enough to see details (0.4x radius)
+        this.controls.minDistance = islandRadius * 0.4;
+
+        // Max distance: far enough to see entire island (3x radius)
+        this.controls.maxDistance = islandRadius * 3;
     }
 
     render() {

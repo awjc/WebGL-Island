@@ -108,6 +108,10 @@ export const UI_CONFIG = {
     TREE_SLIDER_MAX: 100,
     TREE_SLIDER_STEP: 1,
 
+    ISLAND_RADIUS_SLIDER_MIN: 25,       // Half of default (50 / 2)
+    ISLAND_RADIUS_SLIDER_MAX: 100,      // Double of default (50 * 2)
+    ISLAND_RADIUS_SLIDER_STEP: 5,
+
     // Simulation speed
     SPEED_SLIDER_MIN: 0.2,
     SPEED_SLIDER_MAX: 15.0,

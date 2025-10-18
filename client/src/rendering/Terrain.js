@@ -30,4 +30,15 @@ export class Terrain {
 
         return mesh;
     }
+
+    /**
+     * Update terrain size (recreate geometry with new radius)
+     */
+    updateSize(radius) {
+        // Dispose of old geometry to free memory
+        this.mesh.geometry.dispose();
+
+        // Create new geometry with updated radius
+        this.mesh.geometry = new THREE.CircleGeometry(radius, 32);
+    }
 }

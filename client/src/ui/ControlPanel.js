@@ -9,6 +9,7 @@ export class ControlPanel {
         this.world = world;
         this.creatureCount = WORLD_CONFIG.DEFAULT_CREATURE_COUNT;
         this.treeCount = TREE_CONFIG.COUNT;
+        this.islandRadius = WORLD_CONFIG.ISLAND_RADIUS;
         this.isMuted = false;
         this.volumeBeforeMute = UI_CONFIG.DEFAULT_VOLUME;
 
@@ -119,6 +120,13 @@ export class ControlPanel {
             <div class="reset-section">
                 <h4>Reset Simulation</h4>
                 <div class="control-group">
+                    <label for="island-radius-slider">
+                        <span class="label-text">Island Radius: <span id="island-radius-value">${WORLD_CONFIG.ISLAND_RADIUS}</span>m</span>
+                    </label>
+                    <input type="range" id="island-radius-slider" min="${UI_CONFIG.ISLAND_RADIUS_SLIDER_MIN}" max="${UI_CONFIG.ISLAND_RADIUS_SLIDER_MAX}" value="${WORLD_CONFIG.ISLAND_RADIUS}" step="${UI_CONFIG.ISLAND_RADIUS_SLIDER_STEP}">
+                </div>
+
+                <div class="control-group">
                     <label for="creature-slider">
                         <span class="label-text">Creatures: <span id="creature-value">${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}</span></span>
                     </label>
@@ -161,6 +169,14 @@ export class ControlPanel {
      * Set up event listeners for controls
      */
     setupEventListeners() {
+        // Island radius slider
+        const islandRadiusSlider = document.getElementById('island-radius-slider');
+        const islandRadiusValue = document.getElementById('island-radius-value');
+        islandRadiusSlider.addEventListener('input', (e) => {
+            this.islandRadius = parseInt(e.target.value);
+            islandRadiusValue.textContent = this.islandRadius;
+        });
+
         // Creature slider
         const creatureSlider = document.getElementById('creature-slider');
         const creatureValue = document.getElementById('creature-value');
@@ -316,8 +332,8 @@ export class ControlPanel {
      * Reset the simulation with current slider values
      */
     resetSimulation() {
-        console.log(`Resetting simulation: ${this.creatureCount} creatures, ${this.treeCount} trees`);
-        this.world.reset(this.creatureCount, this.treeCount);
+        console.log(`Resetting simulation: ${this.creatureCount} creatures, ${this.treeCount} trees, ${this.islandRadius}m radius`);
+        this.world.reset(this.creatureCount, this.treeCount, this.islandRadius);
 
         // Re-enable play/pause buttons after reset
         const playPauseBtn = document.getElementById('btn-play-pause');
