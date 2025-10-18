@@ -15,3 +15,4 @@ Begin by reading the README.md file to understand the project structure and orga
 - When coding colors, always prefer the style of '#AA77FF' instead of 0xAA77FF,
   since the style of string with # prefix allows VSCode to offer a nice color 
   swatch picker tool.
+- IGNORE files in the directories like 'v1', 'v2', 'v3', etc. These are just snapshots of old versions of the code at previous git commits, but kept around in such a way as to be able to visit the site and run it. They are readonly point-in-time snapshots and the current version of the code will just be in the root directory.
