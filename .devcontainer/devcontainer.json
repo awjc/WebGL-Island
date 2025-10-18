@@ -4,7 +4,8 @@
     "dockerfile": "Dockerfile",
     "args": {
       "TZ": "${localEnv:TZ:America/Los_Angeles}",
-      "CLAUDE_CODE_VERSION": "latest"
+      "CLAUDE_CODE_VERSION": "latest",
+      "USERNAME": "devcon"
     }
   },
   "runArgs": [

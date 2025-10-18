@@ -14,32 +14,32 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   jq \
   vim
 
-# Make devcon user
-RUN useradd -m -s /bin/bash devcon
+# Make dev container user1
+ARG USERNAME
+RUN useradd -m -s /bin/bash ${USERNAME}
 
-# Ensure devcon user has access to /usr/local/share
+# Ensure dev container user has access to /usr/local/share
 RUN mkdir -p /usr/local/share/npm-global && \
-  chown -R devcon:devcon /usr/local/share
+  chown -R ${USERNAME}:${USERNAME} /usr/local/share
 
-ARG USERNAME=devcon
 
 # Persist bash history.
 RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
   && mkdir /commandhistory \
   && touch /commandhistory/.bash_history \
-  && chown -R $USERNAME /commandhistory
+  && chown -R ${USERNAME} /commandhistory
 
 # Set `DEVCONTAINER` environment variable to help with orientation
 ENV DEVCONTAINER=true
 
 # Create workspace and config directories and set permissions
-RUN mkdir -p /workspace /home/devcon/.claude && \
-  chown -R devcon:devcon /workspace /home/devcon/.claude
+RUN mkdir -p /workspace /home/${USERNAME}/.claude && \
+  chown -R ${USERNAME}:${USERNAME} /workspace /home/${USERNAME}/.claude
 
 WORKDIR /workspace
 
 # Set up non-root user
-USER devcon
+USER ${USERNAME}
 
 # Install global packages
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
