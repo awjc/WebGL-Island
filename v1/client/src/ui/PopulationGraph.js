@@ -6,8 +6,8 @@ import Chart from 'chart.js/auto';
  */
 export class PopulationGraph {
     constructor() {
-        // Data storage (keep up to 3600 seconds of history)
-        this.maxStoredDataPoints = 3600; // Store up to 1 hour of data
+        // Data storage (keep up to N seconds of history)
+        this.maxStoredDataPoints = 7200; // Store up to N hour of data
         this.displayDataPoints = 300; // Display last 5 minutes by default
         this.updateInterval = 1.0; // Update every 1 second
         this.timeSinceLastUpdate = 0;
@@ -268,7 +268,7 @@ export class PopulationGraph {
 
             console.log(`Graph update: Pop=${stats.creatureCount}, Food=${stats.foodCount}, AvgSize=${stats.avgSize.toFixed(2)}, Time=${currentTime.toFixed(1)}s`);
 
-            // Remove old data if we exceed max storage limit (3600s)
+            // Remove old data if we exceed max storage limit
             if (this.timeLabels.length > this.maxStoredDataPoints) {
                 this.timeLabels.shift();
                 this.populationData.shift();
@@ -348,7 +348,7 @@ export class PopulationGraph {
      * Does NOT delete data - just changes what's visible
      */
     setTimeWindow(seconds) {
-        this.displayDataPoints = Math.max(10, Math.min(3600, seconds)); // Clamp between 10 and 3600 seconds
+        this.displayDataPoints = Math.max(10, Math.min(7200, seconds)); // Clamp between 10 and MAX seconds
 
         // Update chart to show new window (data is preserved)
         if (this.chart) {

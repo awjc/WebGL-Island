@@ -418,8 +418,8 @@ input[type="range"]::-moz-range-thumb:hover {
 #graph-container {
     position: fixed;
     bottom: 10px;
-    right: 10px;
-    width: 1200px;
+    left: 10px;
+    width: 600px;
     height: 300px;
     background: rgba(0, 0, 0, 0.85);
     padding: 15px;
@@ -428,11 +428,39 @@ input[type="range"]::-moz-range-thumb:hover {
     z-index: 999;
     display: block;
     transition: opacity 0.3s ease;
+    overflow: auto;
+    min-width: 400px;
+    min-height: 200px;
+    max-width: calc(100vw - 20px);
+    max-height: calc(100vh - 20px);
 }
 
 #population-graph {
     width: 100%;
     height: 100%;
+}
+
+/* Custom resize handle for bottom-left anchored element */
+.graph-resize-handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    cursor: ne-resize;
+    z-index: 1000;
+}
+
+.graph-resize-handle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0px 16px 16px 0px;
+    border-color: transparent rgba(74, 124, 89, 0.7) transparent transparent;
 }
 
 /* Adjust graph on smaller screens */

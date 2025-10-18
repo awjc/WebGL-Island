@@ -45,6 +45,9 @@ export class PopulationGraph {
     init(canvasElement) {
         const ctx = canvasElement.getContext('2d');
 
+        // Initialize resize functionality
+        this.initResize();
+
         this.chart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -406,12 +409,89 @@ export class PopulationGraph {
     }
 
     /**
+     * Initialize resize functionality for the graph container
+     */
+    initResize() {
+        const container = document.getElementById('graph-container');
+        const resizeHandle = container.querySelector('.graph-resize-handle');
+
+        if (!resizeHandle) return;
+
+        let isResizing = false;
+        let startX, startY, startWidth, startHeight;
+
+        const onMouseDown = (e) => {
+            isResizing = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startWidth = container.offsetWidth;
+            startHeight = container.offsetHeight;
+
+            e.preventDefault();
+            document.body.style.cursor = 'ne-resize';
+            document.body.style.userSelect = 'none';
+        };
+
+        const onMouseMove = (e) => {
+            if (!isResizing) return;
+
+            // Calculate deltas
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+
+            // For bottom-left anchor: moving right increases width, moving up decreases height
+            const newWidth = startWidth + deltaX;
+            const newHeight = startHeight - deltaY; // Inverted for bottom anchor
+
+            // Apply constraints
+            const minWidth = 400;
+            const minHeight = 200;
+            const maxWidth = window.innerWidth - 20; // Leave room for control panel
+            const maxHeight = window.innerHeight - 20;
+
+            const clampedWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
+            const clampedHeight = Math.max(minHeight, Math.min(maxHeight, newHeight));
+
+            container.style.width = clampedWidth + 'px';
+            container.style.height = clampedHeight + 'px';
+
+            // Trigger chart resize
+            if (this.chart) {
+                this.chart.resize();
+            }
+        };
+
+        const onMouseUp = () => {
+            if (isResizing) {
+                isResizing = false;
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+            }
+        };
+
+        resizeHandle.addEventListener('mousedown', onMouseDown);
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+
+        // Store cleanup function
+        this.cleanupResize = () => {
+            resizeHandle.removeEventListener('mousedown', onMouseDown);
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        };
+    }
+
+    /**
      * Destroy the chart instance
      */
     destroy() {
         if (this.chart) {
             this.chart.destroy();
             this.chart = null;
+        }
+
+        if (this.cleanupResize) {
+            this.cleanupResize();
         }
     }
 }
