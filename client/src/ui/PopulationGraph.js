@@ -223,8 +223,8 @@ export class PopulationGraph {
                         grid: {
                             drawOnChartArea: false,
                         },
-                        min: 0.3,
-                        max: 2.2
+                        min: 0.4,
+                        max: 2.1
                     },
                     'y-jump': {
                         display: true,
@@ -241,7 +241,7 @@ export class PopulationGraph {
                             drawOnChartArea: false,
                         },
                         min: 0.4,
-                        max: 1.6
+                        max: 2.1
                     }
                 }
             }
