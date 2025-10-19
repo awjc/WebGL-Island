@@ -25,7 +25,6 @@ export class World {
 
         // Statistics tracking
         this.totalBirths = 0;
-        this.totalDeaths = 0;
 
         // Extinction tracking
         this.isExtinct = false;
@@ -205,7 +204,6 @@ export class World {
         if (index > -1) {
             this.creatures.splice(index, 1);
             this.renderer.removeMesh(creature.mesh);
-            this.totalDeaths++;
             console.log(`Creature ${creature.id} died at age ${creature.age.toFixed(1)}s, Gen ${creature.generation}`);
 
             // Play death sound
@@ -234,7 +232,6 @@ export class World {
             foodCount: this.foodEntities.filter(f => !f.isConsumed).length,
             simulationTime: Math.floor(this.time),
             totalBirths: this.totalBirths,
-            totalDeaths: this.totalDeaths,
             avgSize: avgSize,
             avgJumpPower: avgJumpPower
         };
@@ -385,14 +382,13 @@ export class World {
         // Reset simulation time and statistics
         this.time = 0;
         this.totalBirths = 0;
-        this.totalDeaths = 0;
 
         // Hide extinction overlay and unpause if extinct
         this.hideExtinctionOverlay();
         this.isPaused = false;
 
         // Reset population graph
-        this.populationGraph.reset({ totalBirths: 0, totalDeaths: 0 });
+        this.populationGraph.reset({ totalBirths: 0 });
 
         // Create trees and spawn initial food around them
         const newTrees = Tree.createForest(treeCount);

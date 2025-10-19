@@ -63,10 +63,6 @@ export class ControlPanel {
                     <span id="stat-births" class="stat-value">0</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-label">Total Deaths:</span>
-                    <span id="stat-deaths" class="stat-value">0</span>
-                </div>
-                <div class="stat-item">
                     <span class="stat-label">Simulation Time:</span>
                     <span id="stat-time" class="stat-value">0s</span>
                 </div>
@@ -336,7 +332,6 @@ export class ControlPanel {
             document.getElementById('stat-population').textContent = stats.population;
             document.getElementById('stat-food').textContent = stats.foodCount;
             document.getElementById('stat-births').textContent = stats.totalBirths;
-            document.getElementById('stat-deaths').textContent = stats.totalDeaths;
             document.getElementById('stat-time').textContent = stats.simulationTime + 's';
         }, 100); // Update 10 times per second
     }
