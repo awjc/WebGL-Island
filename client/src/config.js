@@ -85,7 +85,7 @@ export const CREATURE_CONFIG = {
 
 export const FOOD_CONFIG = {
     NUTRITION: 25,                  // Energy restored when eaten
-    EXPIRATION_TIME: 60,            // Seconds until food expires and disappears
+    EXPIRATION_TIME: 300,            // Seconds until food expires and disappears
     RESPAWN_DELAY_MEAN: 20,         // Mean respawn time (seconds)
     RESPAWN_DELAY_STDDEV: 5,        // Standard deviation for respawn time
     RESPAWN_DELAY_MIN: 10,          // Minimum respawn time (clips the distribution)
@@ -158,8 +158,6 @@ export const VISUAL_CONFIG = {
 
     // Creature colors
     CREATURE_HEALTHY_COLOR: parseColor('#4169e1'),   // Blue when healthy
-    CREATURE_HUNGRY_COLOR: parseColor('#ff3333'),    // Red when seeking food
-    CREATURE_WANDERING_FADE: parseColor('#ff8833'),  // Orange transition when wandering but low energy
 };
 
 // ============================================================================
@@ -204,7 +202,7 @@ export const JUMPING_CONFIG = {
     // Food height distribution on trees
     FOOD_HEIGHT_MIN: 0.0,           // Minimum height (ground level)
     FOOD_HEIGHT_MAX: 1.0,           // Maximum height (fraction of tree height)
-    FOOD_HEIGHT_BIAS: 0.7,          // Distribution bias (0=ground, 1=top, 0.5=uniform)
+    FOOD_HEIGHT_BIAS: 0.8,          // Distribution bias (0=ground, 1=top, 0.5=uniform)
 };
 
 // ============================================================================
