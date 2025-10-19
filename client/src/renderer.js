@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { WORLD_CONFIG } from './config.js';
+import { WORLD_CONFIG, VISUAL_CONFIG } from './config.js';
 
 /**
  * Renderer class - manages Three.js scene, camera, lights, and rendering
@@ -15,9 +15,12 @@ export class Renderer {
             antialias: true
         });
         this.renderer.setPixelRatio(window.devicePixelRatio);
-        this.renderer.setClearColor('#87CEEB'); // Sky blue background
+        this.renderer.setClearColor(VISUAL_CONFIG.SKY_COLOR_LIGHT); // Default to light theme
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        // Track current theme
+        this.isDarkTheme = false;
 
         // Create scene
         this.scene = new THREE.Scene();
@@ -113,5 +116,15 @@ export class Renderer {
 
     removeMesh(mesh) {
         this.scene.remove(mesh);
+    }
+
+    /**
+     * Toggle between dark and light themes
+     * @param {boolean} isDark - True for dark theme, false for light theme
+     */
+    setDarkTheme(isDark) {
+        this.isDarkTheme = isDark;
+        const skyColor = isDark ? VISUAL_CONFIG.SKY_COLOR_DARK : VISUAL_CONFIG.SKY_COLOR_LIGHT;
+        this.renderer.setClearColor(skyColor);
     }
 }

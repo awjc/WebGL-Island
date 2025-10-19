@@ -310,6 +310,13 @@ export class World {
     }
 
     /**
+     * Toggle between dark and light themes
+     */
+    setDarkTheme(isDark) {
+        this.renderer.setDarkTheme(isDark);
+    }
+
+    /**
      * Handle extinction event - pause simulation and show overlay
      */
     handleExtinction() {

@@ -109,6 +109,13 @@ export class ControlPanel {
                     </label>
                 </div>
 
+                <div class="control-group checkbox-control">
+                    <label>
+                        <input type="checkbox" id="dark-theme-checkbox">
+                        Dark Theme
+                    </label>
+                </div>
+
                 <div class="control-group">
                     <label for="graph-window-slider">
                         <span class="label-text">Graph Time Window: <span id="graph-window-value">300</span>s</span>
@@ -279,6 +286,12 @@ export class ControlPanel {
         const showGraphCheckbox = document.getElementById('show-graph-checkbox');
         showGraphCheckbox.addEventListener('change', (e) => {
             this.world.setShowGraph(e.target.checked);
+        });
+
+        // Dark theme checkbox
+        const darkThemeCheckbox = document.getElementById('dark-theme-checkbox');
+        darkThemeCheckbox.addEventListener('change', (e) => {
+            this.world.setDarkTheme(e.target.checked);
         });
 
         // Graph time window slider

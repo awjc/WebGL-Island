@@ -158,6 +158,10 @@ export const VISUAL_CONFIG = {
 
     // Creature colors
     CREATURE_HEALTHY_COLOR: parseColor('#4169e1'),   // Blue when healthy
+
+    // Theme colors
+    SKY_COLOR_LIGHT: '#87CEEB',     // Light blue sky
+    SKY_COLOR_DARK: '#1a1a2e',      // Dark blue-grey night sky
 };
 
 // ============================================================================
