@@ -22,6 +22,7 @@ export class World {
         this.timeScale = 1.0; // Simulation speed multiplier
         this.soundManager = soundManager;
         this.showStateIcons = UI_CONFIG.SHOW_STATE_ICONS; // Track icon visibility state
+        this.showTrees = UI_CONFIG.SHOW_TREES; // Track tree visibility state
 
         // Statistics tracking
         this.totalBirths = 0;
@@ -317,6 +318,7 @@ export class World {
      * Toggle visibility of trees (food production continues regardless)
      */
     setShowTrees(show) {
+        this.showTrees = show; // Store the state
         for (const tree of this.trees) {
             tree.setVisible(show);
         }
@@ -404,6 +406,7 @@ export class World {
         for (const tree of newTrees) {
             this.trees.push(tree);
             this.renderer.addMesh(tree.mesh);
+            tree.setVisible(this.showTrees); // Apply current visibility setting
             tree.spawnInitialFood(this);
         }
 
