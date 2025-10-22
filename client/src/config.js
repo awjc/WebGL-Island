@@ -85,7 +85,8 @@ export const CREATURE_CONFIG = {
 
 export const FOOD_CONFIG = {
     NUTRITION: 25,                  // Energy restored when eaten
-    EXPIRATION_TIME: 300,            // Seconds until food expires and disappears
+    EXPIRATION_TIME_MEAN: 300,      // Mean expiration time (seconds)
+    EXPIRATION_TIME_VARIANCE: 0.2,  // ±20% variance
     RESPAWN_DELAY_MEAN: 20,         // Mean respawn time (seconds)
     RESPAWN_DELAY_STDDEV: 5,        // Standard deviation for respawn time
     RESPAWN_DELAY_MIN: 10,          // Minimum respawn time (clips the distribution)

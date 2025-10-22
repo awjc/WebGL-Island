@@ -16,6 +16,11 @@ export class Food extends Entity {
         this.age = 0; // Track how long food has existed (in seconds)
         this.isAttachedToTree = false; // When true, food doesn't fall due to gravity
 
+        // Randomize expiration time: mean ± variance
+        const variance = FOOD_CONFIG.EXPIRATION_TIME_VARIANCE;
+        const randomFactor = 1 + (Math.random() * 2 - 1) * variance; // Range: [1-variance, 1+variance]
+        this.expirationTime = FOOD_CONFIG.EXPIRATION_TIME_MEAN * randomFactor;
+
         // Visual: small light green sphere
         const geometry = new THREE.SphereGeometry(0.3, 8, 8);
         const material = new THREE.MeshStandardMaterial({
@@ -37,7 +42,7 @@ export class Food extends Entity {
     update(deltaTime, world) {
         // Track age and check for expiration
         this.age += deltaTime;
-        if (this.age >= FOOD_CONFIG.EXPIRATION_TIME) {
+        if (this.age >= this.expirationTime) {
             this.isExpired = true;
             this.mesh.visible = false;
             return;
