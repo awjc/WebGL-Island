@@ -83,16 +83,6 @@ export class Tree extends Entity {
     }
 
     /**
-     * Toggle visibility of the tree mesh
-     * @param {boolean} visible - True to show, false to hide
-     */
-    setVisible(visible) {
-        if (this.mesh) {
-            this.mesh.visible = visible;
-        }
-    }
-
-    /**
      * Update tree - spawns food periodically
      */
     update(deltaTime, world) {

@@ -319,8 +319,9 @@ export class World {
      */
     setShowTrees(show) {
         this.showTrees = show; // Store the state
+        // Apply visibility to all existing tree meshes
         for (const tree of this.trees) {
-            tree.setVisible(show);
+            tree.mesh.visible = show;
         }
     }
 
@@ -405,8 +406,8 @@ export class World {
         const newTrees = Tree.createForest(treeCount);
         for (const tree of newTrees) {
             this.trees.push(tree);
+            tree.mesh.visible = this.showTrees; // Apply current visibility setting
             this.renderer.addMesh(tree.mesh);
-            tree.setVisible(this.showTrees); // Apply current visibility setting
             tree.spawnInitialFood(this);
         }
 
