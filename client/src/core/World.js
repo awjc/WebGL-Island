@@ -314,6 +314,15 @@ export class World {
     }
 
     /**
+     * Toggle visibility of trees (food production continues regardless)
+     */
+    setShowTrees(show) {
+        for (const tree of this.trees) {
+            tree.setVisible(show);
+        }
+    }
+
+    /**
      * Handle extinction event - pause simulation and show overlay
      */
     handleExtinction() {

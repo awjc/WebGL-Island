@@ -112,6 +112,13 @@ export class ControlPanel {
                     </label>
                 </div>
 
+                <div class="control-group checkbox-control">
+                    <label>
+                        <input type="checkbox" id="show-trees-checkbox" ${UI_CONFIG.SHOW_TREES ? 'checked' : ''}>
+                        Show Trees
+                    </label>
+                </div>
+
                 <div class="control-group">
                     <label for="graph-window-slider">
                         <span class="label-text">Graph Time Window: <span id="graph-window-value">300</span>s</span>
@@ -288,6 +295,12 @@ export class ControlPanel {
         const darkThemeCheckbox = document.getElementById('dark-theme-checkbox');
         darkThemeCheckbox.addEventListener('change', (e) => {
             this.world.setDarkTheme(e.target.checked);
+        });
+
+        // Show trees checkbox
+        const showTreesCheckbox = document.getElementById('show-trees-checkbox');
+        showTreesCheckbox.addEventListener('change', (e) => {
+            this.world.setShowTrees(e.target.checked);
         });
 
         // Graph time window slider

@@ -127,6 +127,7 @@ export const UI_CONFIG = {
 
     // Visual features
     SHOW_STATE_ICONS: false,        // Show floating icons above creatures
+    SHOW_TREES: true,               // Show tree meshes (food production still occurs when hidden)
 };
 
 // ============================================================================
