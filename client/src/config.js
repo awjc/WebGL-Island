@@ -109,7 +109,7 @@ export const UI_CONFIG = {
     TREE_SLIDER_MAX: 250,
     TREE_SLIDER_STEP: 1,
 
-    ISLAND_RADIUS_SLIDER_MIN: 25,       // Half of default (50 / 2)
+    ISLAND_RADIUS_SLIDER_MIN: 10,       // Minimum island radius
     ISLAND_RADIUS_SLIDER_MAX: 100,      // Double of default (50 * 2)
     ISLAND_RADIUS_SLIDER_STEP: 5,
 
