@@ -15,23 +15,25 @@ let frames = 0;
  * Initialize the application
  */
 function init() {
-    alert('DEBUG: init() called');
     const canvas = document.getElementById('glCanvas');
     fpsCounter = document.getElementById('fps-counter');
 
     try {
-        alert('DEBUG: creating Renderer...');
+        // Initialize renderer
         renderer = new Renderer(canvas);
 
-        alert('DEBUG: creating Terrain...');
+        // Create and add terrain (island)
         terrain = new Terrain();
         renderer.addMesh(terrain.mesh);
 
-        alert('DEBUG: creating World...');
+        console.log('Island ecosystem initialized successfully');
+
+        // Initialize world simulation (trees will be created in reset())
+        // Pass terrain reference so world can update island size
         world = new World(renderer, terrain);
         world.start();
 
-        alert('DEBUG: creating ControlPanel...');
+        // Create control panel UI
         controlPanel = new ControlPanel(world);
 
         // Set up extinction overlay restart button
@@ -42,10 +44,9 @@ function init() {
             });
         }
 
-        alert('DEBUG: starting animation loop...');
+        // Start animation loop
         animate();
     } catch (error) {
-        alert('ERROR in init(): ' + error.message + '\n' + error.stack?.slice(0, 200));
         console.error('Failed to initialize:', error);
     }
 }
