@@ -3,7 +3,8 @@ import { Entity } from '../core/Entity.js';
 import { SimpleBrain } from '../behaviors/SimpleBrain.js';
 import { soundManager } from '../utils/SoundManager.js';
 import { DNA } from '../genetics/DNA.js';
-import { CREATURE_CONFIG, GENETICS_CONFIG, UI_CONFIG, JUMPING_CONFIG, PHYSICS_CONFIG } from '../config.js';
+import { CREATURE_CONFIG, GENETICS_CONFIG, UI_CONFIG, JUMPING_CONFIG, PHYSICS_CONFIG, PREDATOR_CONFIG } from '../config.js';
+import { PredatorBrain } from '../behaviors/PredatorBrain.js';
 
 /**
  * Creature entity - living being that moves, eats, and has energy
@@ -18,11 +19,13 @@ export class Creature extends Entity {
         if (parentDNA) {
             // Offspring: inherit and mutate
             this.dna = parentDNA.mutate();
-            this.energy = GENETICS_CONFIG.OFFSPRING_STARTING_ENERGY;
+            this.energy = (species === 'carnivore')
+                ? PREDATOR_CONFIG.OFFSPRING_STARTING_ENERGY
+                : GENETICS_CONFIG.OFFSPRING_STARTING_ENERGY;
             this.generation = parentDNA.generation ? parentDNA.generation + 1 : 1;
         } else {
-            // First generation: random DNA
-            this.dna = new DNA();
+            // First generation: random DNA (species-aware for correct hue range)
+            this.dna = new DNA(null, species);
             this.dna.generation = 0;
             this.energy = CREATURE_CONFIG.STARTING_ENERGY_MIN +
                           Math.random() * (CREATURE_CONFIG.STARTING_ENERGY_MAX - CREATURE_CONFIG.STARTING_ENERGY_MIN);
@@ -31,15 +34,25 @@ export class Creature extends Entity {
 
         this.maxEnergy = CREATURE_CONFIG.MAX_ENERGY;
 
-        // Apply genetic modifiers to traits
-        this.speed = CREATURE_CONFIG.SPEED * this.dna.genes.speed;
-        this.perceptionRadius = CREATURE_CONFIG.PERCEPTION_RADIUS * this.dna.genes.perception;
+        // Apply genetic modifiers to traits (predators get base speed/perception boost)
+        const speedBase = (species === 'carnivore')
+            ? CREATURE_CONFIG.SPEED * PREDATOR_CONFIG.SPEED_MULTIPLIER
+            : CREATURE_CONFIG.SPEED;
+        const perceptionBase = (species === 'carnivore')
+            ? PREDATOR_CONFIG.DETECTION_RADIUS
+            : CREATURE_CONFIG.PERCEPTION_RADIUS;
+
+        this.speed = speedBase * this.dna.genes.speed;
+        this.perceptionRadius = perceptionBase * this.dna.genes.perception;
 
         // Size-based energy modifier: size gene (0.5-2.0) directly maps to energy multiplier
-        // Larger creatures use more energy (direct linear mapping: 0.5->0.5x, 1.0->1.0x, 2.0->2.0x)
+        // Predators also pay an extra baseline cost for being apex predators
         const sizeEnergyMultiplier = this.dna.genes.size;
+        const speciesDrainMultiplier = (species === 'carnivore') ? PREDATOR_CONFIG.ENERGY_DRAIN_MULTIPLIER : 1.0;
 
-        this.energyDrainRate = (CREATURE_CONFIG.ENERGY_DRAIN_RATE / this.dna.genes.efficiency) * sizeEnergyMultiplier;
+        this.energyDrainRate = (CREATURE_CONFIG.ENERGY_DRAIN_RATE / this.dna.genes.efficiency)
+            * sizeEnergyMultiplier
+            * speciesDrainMultiplier;
 
         this.state = 'wandering';
         this.age = 0;
@@ -51,80 +64,114 @@ export class Creature extends Entity {
         this.jumpCooldown = 0;          // Time until can jump again
         this.maxJumpHeight = this.calculateMaxJumpHeight(); // Calculated from genetics
 
-        // AI brain for decision making
-        this.brain = new SimpleBrain(this);
+        // AI brain: predators use PredatorBrain, herbivores use SimpleBrain
+        this.brain = (species === 'carnivore') ? new PredatorBrain(this) : new SimpleBrain(this);
 
-        // Visual: colored cube with genetic variation
+        // Visual geometry: predators are cones (pointy, menacing), herbivores are cubes
         const baseSize = this.dna.genes.size;
-        const geometry = new THREE.BoxGeometry(baseSize, baseSize, baseSize);
+        let geometry;
+        if (species === 'carnivore') {
+            // Tall, sharp cone - visually menacing
+            geometry = new THREE.ConeGeometry(baseSize * 0.5, baseSize * 1.4, 6);
+        } else {
+            geometry = new THREE.BoxGeometry(baseSize, baseSize, baseSize);
+        }
+
         const material = new THREE.MeshStandardMaterial({
             color: this.dna.getColor(1.0, 'wandering'),
-            roughness: 0.7,
-            metalness: 0.1,
+            roughness: 0.5,
+            metalness: 0.3,
             transparent: true,
             opacity: 1.0
         });
 
         this.mesh = new THREE.Mesh(geometry, material);
-        this.mesh.position.set(x, 0.5 * baseSize, z);
+        // Predator cone tip points up, center it so base sits on ground
+        const meshYOffset = (species === 'carnivore') ? baseSize * 0.7 : 0.5 * baseSize;
+        this.mesh.position.set(x, meshYOffset, z);
         this.mesh.castShadow = true;
 
-        this.position.y = 0.5 * baseSize; // Update entity position to match
+        this.position.y = meshYOffset; // Update entity position to match
 
-        // Create "!" indicator for seeking food state
-        this.createSeekingIndicator(baseSize);
+        // Create state indicator: "!" for hungry herbivores, "◆" for hunting predators
+        this.createStateIndicator(baseSize);
     }
 
     /**
-     * Create the "!" indicator that shows when seeking food
+     * Create a floating state indicator sprite above the creature.
+     * Herbivores show "!" when hungry; predators show "◆" when hunting.
      */
-    createSeekingIndicator(baseSize) {
-        // Create a sprite for the "!" indicator
+    createStateIndicator(baseSize) {
         const canvas = document.createElement('canvas');
         canvas.width = 128;
         canvas.height = 128;
         const ctx = canvas.getContext('2d');
 
-        // Clear canvas with transparency
         ctx.clearRect(0, 0, 128, 128);
 
-        // Draw white background circle for visibility
+        // Background circle
         ctx.fillStyle = '#FFFFFF';
         ctx.beginPath();
         ctx.arc(64, 64, 50, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw red "!" on canvas - bolder and wider
-        ctx.fillStyle = '#FF0000';
-        ctx.font = 'bold 100px Impact, Arial Black, sans-serif'; // Wider, bolder font
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-
-        // Draw multiple times for extra boldness
-        ctx.fillText('!', 64, 64);
-        ctx.fillText('!', 64.5, 64); // Slight offset for extra thickness
-        ctx.fillText('!', 63.5, 64);
+        if (this.species === 'carnivore') {
+            // Red diamond for hunting predator
+            ctx.fillStyle = '#CC0000';
+            ctx.font = 'bold 90px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('◆', 64, 64);
+        } else {
+            // Red "!" for hungry herbivore
+            ctx.fillStyle = '#FF0000';
+            ctx.font = 'bold 100px Impact, Arial Black, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('!', 64, 64);
+            ctx.fillText('!', 64.5, 64);
+            ctx.fillText('!', 63.5, 64);
+        }
 
         const texture = new THREE.CanvasTexture(canvas);
         const material = new THREE.SpriteMaterial({
             map: texture,
             transparent: true,
-            depthTest: false // Always visible on top
+            depthTest: false
         });
 
         this.seekingIndicator = new THREE.Sprite(material);
-        this.seekingIndicator.scale.set(1.0, 1.0, 1.0); // Bigger scale
-        this.seekingIndicator.position.y = baseSize * 2.0; // Higher above creature
+        this.seekingIndicator.scale.set(1.0, 1.0, 1.0);
+        this.seekingIndicator.position.y = baseSize * 2.0;
         this.seekingIndicator.visible = false;
 
         this.mesh.add(this.seekingIndicator);
     }
 
     /**
-     * Get ground height for creature (half its size above ground)
+     * Get ground height for creature (resting Y position above ground)
      */
     getGroundHeight() {
+        if (this.species === 'carnivore') {
+            return this.dna.genes.size * 0.7; // Cone center is 70% of base size up
+        }
         return 0.5 * this.dna.genes.size;
+    }
+
+    /**
+     * Kill a prey herbivore and gain energy from the kill
+     * Called by PredatorBrain when within kill range
+     */
+    killPrey(prey, world) {
+        if (prey.isDead) return; // Already dead (another predator got there first)
+
+        prey.isDead = true;
+        this.energy = Math.min(this.maxEnergy, this.energy + PREDATOR_CONFIG.ENERGY_FROM_KILL);
+
+        // Play kill sound
+        soundManager.playKillSound();
+
+        world.totalDeaths++;
     }
 
     /**
@@ -214,10 +261,12 @@ export class Creature extends Entity {
         const opacity = 0.3 + energyPercent * 0.7; // Range: 0.3 (very hungry) to 1.0 (full)
         this.mesh.material.opacity = opacity;
 
-        // Show "!" indicator when actively seeking food (if icons are enabled)
+        // Show state indicator when actively seeking food (herbivores) or hunting (predators)
         if (this.seekingIndicator) {
-            this.seekingIndicator.visible = this.showStateIcon && (this.state === 'seeking_food');
-            // Fade indicator opacity to match creature
+            const isActiveState = (this.species === 'carnivore')
+                ? this.state === 'hunting'
+                : (this.state === 'seeking_food' || this.state === 'fleeing');
+            this.seekingIndicator.visible = this.showStateIcon && isActiveState;
             this.seekingIndicator.material.opacity = opacity;
         }
 
@@ -229,19 +278,27 @@ export class Creature extends Entity {
     }
 
     /**
-     * Check if creature can reproduce
+     * Check if creature can reproduce (thresholds differ by species)
      */
     canReproduce() {
-        return this.energy >= GENETICS_CONFIG.REPRODUCTION_ENERGY_THRESHOLD &&
-               this.timeSinceReproduction >= GENETICS_CONFIG.REPRODUCTION_COOLDOWN;
+        const threshold = (this.species === 'carnivore')
+            ? PREDATOR_CONFIG.REPRODUCTION_ENERGY_THRESHOLD
+            : GENETICS_CONFIG.REPRODUCTION_ENERGY_THRESHOLD;
+        const cooldown = (this.species === 'carnivore')
+            ? PREDATOR_CONFIG.REPRODUCTION_COOLDOWN
+            : GENETICS_CONFIG.REPRODUCTION_COOLDOWN;
+        return this.energy >= threshold && this.timeSinceReproduction >= cooldown;
     }
 
     /**
      * Reproduce: create offspring with mutated DNA
      */
     reproduce(world) {
-        // Cost energy
-        this.energy -= GENETICS_CONFIG.REPRODUCTION_ENERGY_COST;
+        // Cost energy (differs by species)
+        const cost = (this.species === 'carnivore')
+            ? PREDATOR_CONFIG.REPRODUCTION_ENERGY_COST
+            : GENETICS_CONFIG.REPRODUCTION_ENERGY_COST;
+        this.energy -= cost;
         this.timeSinceReproduction = 0;
 
         // Calculate spawn position near parent
@@ -250,11 +307,12 @@ export class Creature extends Entity {
         const offsetX = Math.cos(angle) * distance;
         const offsetZ = Math.sin(angle) * distance;
 
-        // Request world to spawn offspring
+        // Request world to spawn offspring (same species as parent)
         world.spawnOffspring(
             this.position.x + offsetX,
             this.position.z + offsetZ,
-            this.dna
+            this.dna,
+            this.species
         );
     }
 

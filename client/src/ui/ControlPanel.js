@@ -1,4 +1,4 @@
-import { WORLD_CONFIG, UI_CONFIG, TREE_CONFIG } from '../config.js';
+import { WORLD_CONFIG, UI_CONFIG, TREE_CONFIG, PREDATOR_CONFIG } from '../config.js';
 import { soundManager } from '../utils/SoundManager.js';
 
 /**
@@ -8,6 +8,7 @@ export class ControlPanel {
     constructor(world) {
         this.world = world;
         this.creatureCount = WORLD_CONFIG.DEFAULT_CREATURE_COUNT;
+        this.predatorCount = WORLD_CONFIG.DEFAULT_PREDATOR_COUNT;
         this.treeCount = TREE_CONFIG.COUNT;
         this.islandRadius = WORLD_CONFIG.ISLAND_RADIUS;
         this.isMuted = false;
@@ -51,8 +52,12 @@ export class ControlPanel {
                 <div class="stats-section">
                 <h4>Statistics</h4>
                 <div class="stat-item">
-                    <span class="stat-label">Population:</span>
+                    <span class="stat-label">Herbivores:</span>
                     <span id="stat-population" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Predators:</span>
+                    <span id="stat-predators" class="stat-value">0</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-label">Food Available:</span>
@@ -138,9 +143,16 @@ export class ControlPanel {
 
                 <div class="control-group">
                     <label for="creature-slider">
-                        <span class="label-text">Creatures: <span id="creature-value">${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}</span></span>
+                        <span class="label-text">Herbivores: <span id="creature-value">${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}</span></span>
                     </label>
                     <input type="range" id="creature-slider" min="${UI_CONFIG.CREATURE_SLIDER_MIN}" max="${UI_CONFIG.CREATURE_SLIDER_MAX}" value="${WORLD_CONFIG.DEFAULT_CREATURE_COUNT}" step="${UI_CONFIG.CREATURE_SLIDER_STEP}">
+                </div>
+
+                <div class="control-group">
+                    <label for="predator-slider">
+                        <span class="label-text">Predators: <span id="predator-value">${WORLD_CONFIG.DEFAULT_PREDATOR_COUNT}</span></span>
+                    </label>
+                    <input type="range" id="predator-slider" min="${UI_CONFIG.PREDATOR_SLIDER_MIN}" max="${UI_CONFIG.PREDATOR_SLIDER_MAX}" value="${WORLD_CONFIG.DEFAULT_PREDATOR_COUNT}" step="${UI_CONFIG.PREDATOR_SLIDER_STEP}">
                 </div>
 
                 <div class="control-group">
@@ -193,6 +205,14 @@ export class ControlPanel {
         creatureSlider.addEventListener('input', (e) => {
             this.creatureCount = parseInt(e.target.value);
             creatureValue.textContent = this.creatureCount;
+        });
+
+        // Predator slider
+        const predatorSlider = document.getElementById('predator-slider');
+        const predatorValue = document.getElementById('predator-value');
+        predatorSlider.addEventListener('input', (e) => {
+            this.predatorCount = parseInt(e.target.value);
+            predatorValue.textContent = this.predatorCount;
         });
 
         // Tree slider
@@ -343,6 +363,7 @@ export class ControlPanel {
         setInterval(() => {
             const stats = this.world.getStats();
             document.getElementById('stat-population').textContent = stats.population;
+            document.getElementById('stat-predators').textContent = stats.predatorCount;
             document.getElementById('stat-food').textContent = stats.foodCount;
             document.getElementById('stat-births').textContent = stats.totalBirths;
             document.getElementById('stat-time').textContent = stats.simulationTime + 's';
@@ -353,8 +374,8 @@ export class ControlPanel {
      * Reset the simulation with current slider values
      */
     resetSimulation() {
-        console.log(`Resetting simulation: ${this.creatureCount} creatures, ${this.treeCount} trees, ${this.islandRadius}m radius`);
-        this.world.reset(this.creatureCount, this.treeCount, this.islandRadius);
+        console.log(`Resetting simulation: ${this.creatureCount} herbivores, ${this.predatorCount} predators, ${this.treeCount} trees, ${this.islandRadius}m radius`);
+        this.world.reset(this.creatureCount, this.treeCount, this.islandRadius, this.predatorCount);
 
         // Re-enable play/pause buttons after reset
         const playPauseBtn = document.getElementById('btn-play-pause');

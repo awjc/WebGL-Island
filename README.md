@@ -158,6 +158,22 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 - ✅ **Food hotspots**: Creates strategic feeding zones around productive trees
 - ✅ **Tab-away protection**: Simulation pauses properly when browser is unfocused
 
+### Iteration 9: Predator-Prey Ecosystem
+- ✅ **Carnivore species**: Red/orange cone-shaped predators hunt herbivores
+- ✅ **PredatorBrain AI**: State machine with `wandering` and `hunting` states
+- ✅ **Chase & kill mechanic**: Predators sprint after prey, strike when in range
+- ✅ **Fear & flee system**: Herbivores sense predators within 12m and sprint away
+- ✅ **Survival priority**: Fleeing overrides hunger — prey chooses life over food
+- ✅ **Lotka-Volterra dynamics**: Classic oscillating predator-prey population cycles
+- ✅ **Co-evolutionary arms race**: Both species evolve faster speed genes over time
+- ✅ **Species-specific DNA**: Carnivore hue locked to red-orange, stronger base genes
+- ✅ **Predator reproduction**: Slower breeding with higher energy requirements
+- ✅ **Kill sound**: Deep percussive audio feedback for predation events
+- ✅ **Predator population graph**: Red line in population chart tracks carnivores
+- ✅ **Predator count stat**: Live carnivore count in Statistics panel
+- ✅ **Predator slider**: Configure starting predator count (0–20) before reset
+- ✅ **Death tracking**: Total deaths (starvation + predation) now recorded
+
 ### Iteration 8: Jumping Creatures & 3D Physics
 - ✅ **Gravity system**: Full vertical physics with parabolic motion
 - ✅ **Jump gene**: Inheritable jumpPower trait (0.5-1.5 multiplier)
@@ -172,7 +188,7 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 - ✅ **Evolutionary pressure**: Selection for jump height based on food availability
 
 ### Interactive Controls
-- ✅ **Statistics section**: Monitor population, food, births, deaths, and time (updates 10x/sec)
+- ✅ **Statistics section**: Monitor herbivores, predators, food, births, and time (updates 10x/sec)
 - ✅ **Population graph**: Real-time line charts with 5 datasets
 - ✅ **Graph time window**: Adjust visible history from 30s to 3600s (10s increments)
 - ✅ **Spawn creature**: Add single creature at random location
@@ -225,8 +241,8 @@ Simply visit the GitHub Pages URL once deployed - the app runs entirely in the b
 ## Next Steps
 
 See [IDEAS.md](IDEAS.md) for comprehensive future feature ideas. Priority additions:
-- **Predator-prey ecosystem**: Carnivores that hunt herbivores
 - **Advanced genetics**: More complex traits, sexual reproduction, fitness metrics
 - **Scenario system**: Preset configurations, custom scenarios, save/load
-- **Visual enhancements**: Particle effects, trails, phylogenetic trees
+- **Visual enhancements**: Particle effects, trails, creature path history
 - **Advanced analytics**: Genetic trait graphs, phylogenetic trees, fitness metrics
+- **Omnivore species**: Third species that can eat both plants and creatures
