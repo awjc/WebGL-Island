@@ -13,7 +13,8 @@ export class PopulationGraph {
         this.timeSinceLastUpdate = 0;
 
         this.timeLabels = [];
-        this.populationData = [];
+        this.populationData = [];     // Herbivore count
+        this.predatorData = [];       // Carnivore (predator) count
         this.foodData = [];
         this.birthRateData = [];
         this.deathRateData = [];
@@ -54,11 +55,22 @@ export class PopulationGraph {
                 labels: this.timeLabels,
                 datasets: [
                     {
-                        label: 'Population',
+                        label: 'Herbivores',
                         data: this.populationData,
                         borderColor: '#4169e1',
                         backgroundColor: 'rgba(65, 105, 225, 0.1)',
                         borderWidth: 2,
+                        tension: 0.2,
+                        fill: true,
+                        pointRadius: 0,
+                        pointHitRadius: 10,
+                    },
+                    {
+                        label: 'Predators',
+                        data: this.predatorData,
+                        borderColor: '#ff3300',
+                        backgroundColor: 'rgba(255, 51, 0, 0.1)',
+                        borderWidth: 2.5,
                         tension: 0.2,
                         fill: true,
                         pointRadius: 0,
@@ -294,18 +306,18 @@ export class PopulationGraph {
             // Add new data point
             this.timeLabels.push(Math.floor(currentTime));
             this.populationData.push(stats.creatureCount);
+            this.predatorData.push(stats.predatorCount || 0);
             this.foodData.push(stats.foodCount);
             this.birthRateData.push(parseFloat(this.smoothedBirthRate.toFixed(2)));
             this.deathRateData.push(parseFloat(this.smoothedDeathRate.toFixed(2)));
             this.avgSizeData.push(parseFloat(stats.avgSize.toFixed(2)));
             this.avgJumpPowerData.push(parseFloat(stats.avgJumpPower.toFixed(2)));
 
-            console.log(`Graph update: Pop=${stats.creatureCount}, Food=${stats.foodCount}, AvgSize=${stats.avgSize.toFixed(2)}, AvgJump=${stats.avgJumpPower.toFixed(2)}, Time=${currentTime.toFixed(1)}s`);
-
             // Remove old data if we exceed max storage limit (7200s)
             if (this.timeLabels.length > this.maxStoredDataPoints) {
                 this.timeLabels.shift();
                 this.populationData.shift();
+                this.predatorData.shift();
                 this.foodData.shift();
                 this.birthRateData.shift();
                 this.deathRateData.shift();
@@ -314,14 +326,16 @@ export class PopulationGraph {
             }
 
             // Update chart with only the last N points (display window)
+            // Dataset order: 0=herbivores, 1=predators, 2=food, 3=birthRate, 4=deathRate, 5=avgSize, 6=avgJump
             const startIndex = Math.max(0, this.timeLabels.length - this.displayDataPoints);
             this.chart.data.labels = this.timeLabels.slice(startIndex);
             this.chart.data.datasets[0].data = this.populationData.slice(startIndex);
-            this.chart.data.datasets[1].data = this.foodData.slice(startIndex);
-            this.chart.data.datasets[2].data = this.birthRateData.slice(startIndex);
-            this.chart.data.datasets[3].data = this.deathRateData.slice(startIndex);
-            this.chart.data.datasets[4].data = this.avgSizeData.slice(startIndex);
-            this.chart.data.datasets[5].data = this.avgJumpPowerData.slice(startIndex);
+            this.chart.data.datasets[1].data = this.predatorData.slice(startIndex);
+            this.chart.data.datasets[2].data = this.foodData.slice(startIndex);
+            this.chart.data.datasets[3].data = this.birthRateData.slice(startIndex);
+            this.chart.data.datasets[4].data = this.deathRateData.slice(startIndex);
+            this.chart.data.datasets[5].data = this.avgSizeData.slice(startIndex);
+            this.chart.data.datasets[6].data = this.avgJumpPowerData.slice(startIndex);
 
             // Update chart
             this.chart.update('none'); // 'none' mode = no animation
@@ -339,6 +353,7 @@ export class PopulationGraph {
     reset(stats) {
         this.timeLabels = [];
         this.populationData = [];
+        this.predatorData = [];
         this.foodData = [];
         this.birthRateData = [];
         this.deathRateData = [];
@@ -392,11 +407,12 @@ export class PopulationGraph {
             const startIndex = Math.max(0, this.timeLabels.length - this.displayDataPoints);
             this.chart.data.labels = this.timeLabels.slice(startIndex);
             this.chart.data.datasets[0].data = this.populationData.slice(startIndex);
-            this.chart.data.datasets[1].data = this.foodData.slice(startIndex);
-            this.chart.data.datasets[2].data = this.birthRateData.slice(startIndex);
-            this.chart.data.datasets[3].data = this.deathRateData.slice(startIndex);
-            this.chart.data.datasets[4].data = this.avgSizeData.slice(startIndex);
-            this.chart.data.datasets[5].data = this.avgJumpPowerData.slice(startIndex);
+            this.chart.data.datasets[1].data = this.predatorData.slice(startIndex);
+            this.chart.data.datasets[2].data = this.foodData.slice(startIndex);
+            this.chart.data.datasets[3].data = this.birthRateData.slice(startIndex);
+            this.chart.data.datasets[4].data = this.deathRateData.slice(startIndex);
+            this.chart.data.datasets[5].data = this.avgSizeData.slice(startIndex);
+            this.chart.data.datasets[6].data = this.avgJumpPowerData.slice(startIndex);
             this.chart.update('none');
         }
     }

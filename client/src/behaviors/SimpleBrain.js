@@ -1,11 +1,12 @@
-import { CREATURE_CONFIG, JUMPING_CONFIG, PHYSICS_CONFIG } from '../config.js';
+import { CREATURE_CONFIG, JUMPING_CONFIG, PHYSICS_CONFIG, PREDATOR_CONFIG } from '../config.js';
 
 /**
- * SimpleBrain - AI state machine for creature behavior
+ * SimpleBrain - AI state machine for herbivore behavior
  *
  * States:
- * - wandering: Random movement when energy is sufficient
+ * - wandering:    Random movement when energy is sufficient
  * - seeking_food: Move toward nearest food when hungry
+ * - fleeing:      Sprint away from nearest predator (overrides hunger)
  */
 export class SimpleBrain {
     constructor(creature) {
@@ -24,7 +25,15 @@ export class SimpleBrain {
     think(deltaTime, world) {
         const c = this.creature;
 
-        // State transitions based on energy level
+        // Survival instinct: fleeing from predators overrides everything else
+        const nearestPredator = this.findNearestPredator(world);
+        if (nearestPredator) {
+            c.state = 'fleeing';
+            this.flee(nearestPredator);
+            return;
+        }
+
+        // State transitions based on energy level (when no predator nearby)
         if (c.energy < CREATURE_CONFIG.HUNGER_THRESHOLD) {
             c.state = 'seeking_food';
         } else if (c.energy > CREATURE_CONFIG.SATISFIED_THRESHOLD) {
@@ -39,6 +48,47 @@ export class SimpleBrain {
             case 'seeking_food':
                 this.seekFood(deltaTime, world);
                 break;
+        }
+    }
+
+    /**
+     * Find the nearest predator within fear radius
+     */
+    findNearestPredator(world) {
+        let nearest = null;
+        let minDist = Infinity;
+
+        for (const creature of world.creatures) {
+            if (creature.species !== 'carnivore') continue;
+            if (creature.isDead) continue;
+
+            const dist = this.distanceTo(creature);
+            if (dist < PREDATOR_CONFIG.FEAR_RADIUS && dist < minDist) {
+                nearest = creature;
+                minDist = dist;
+            }
+        }
+
+        return nearest;
+    }
+
+    /**
+     * Flee behavior - sprint in the opposite direction from the predator
+     */
+    flee(predator) {
+        // Direction away from predator (opposite of normal directionTo)
+        const dx = this.creature.position.x - predator.position.x;
+        const dz = this.creature.position.z - predator.position.z;
+        const length = Math.sqrt(dx * dx + dz * dz);
+
+        if (length < 0.001) {
+            // Directly on top of predator - pick a random escape direction
+            const angle = Math.random() * Math.PI * 2;
+            this.creature.velocity.x = Math.cos(angle) * this.creature.speed * PREDATOR_CONFIG.FLEE_SPEED_MULTIPLIER;
+            this.creature.velocity.z = Math.sin(angle) * this.creature.speed * PREDATOR_CONFIG.FLEE_SPEED_MULTIPLIER;
+        } else {
+            this.creature.velocity.x = (dx / length) * this.creature.speed * PREDATOR_CONFIG.FLEE_SPEED_MULTIPLIER;
+            this.creature.velocity.z = (dz / length) * this.creature.speed * PREDATOR_CONFIG.FLEE_SPEED_MULTIPLIER;
         }
     }
 

@@ -143,6 +143,43 @@ export class SoundManager {
     }
 
     /**
+     * Play kill sound - a deep, sudden impact when predator catches prey
+     */
+    playKillSound() {
+        if (!this.enabled) return;
+
+        try {
+            const ctx = this.initAudioContext();
+            const now = ctx.currentTime;
+
+            const oscillator = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(ctx.destination);
+
+            // Deep descending growl - predator strike
+            oscillator.frequency.setValueAtTime(AUDIO_CONFIG.KILL_SOUND_FREQ_START, now);
+            oscillator.frequency.exponentialRampToValueAtTime(
+                AUDIO_CONFIG.KILL_SOUND_FREQ_END,
+                now + AUDIO_CONFIG.KILL_SOUND_DURATION
+            );
+
+            // Sharp attack, quick decay
+            gainNode.gain.setValueAtTime(AUDIO_CONFIG.KILL_SOUND_VOLUME * this.volume, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + AUDIO_CONFIG.KILL_SOUND_DURATION);
+
+            oscillator.type = 'sawtooth';
+
+            oscillator.start(now);
+            oscillator.stop(now + AUDIO_CONFIG.KILL_SOUND_DURATION);
+
+        } catch (error) {
+            console.warn('Could not play kill sound:', error);
+        }
+    }
+
+    /**
      * Enable/disable all sounds
      */
     setEnabled(enabled) {

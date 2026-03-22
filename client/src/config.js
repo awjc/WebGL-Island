@@ -44,7 +44,8 @@ export const WORLD_CONFIG = {
 
     // Initial population
     DEFAULT_FOOD_COUNT: 80,         // Starting number of food items
-    DEFAULT_CREATURE_COUNT: 12,     // Starting number of creatures
+    DEFAULT_CREATURE_COUNT: 12,     // Starting number of herbivores
+    DEFAULT_PREDATOR_COUNT: 3,      // Starting number of predators
 
     // Time delta filtering (prevents jumps when tabbing away)
     MAX_DELTA_TIME: 1.0,            // Maximum allowed time delta in seconds (ignore larger deltas)
@@ -109,6 +110,10 @@ export const UI_CONFIG = {
     TREE_SLIDER_MIN: 0,
     TREE_SLIDER_MAX: 250,
     TREE_SLIDER_STEP: 1,
+
+    PREDATOR_SLIDER_MIN: 0,
+    PREDATOR_SLIDER_MAX: 20,
+    PREDATOR_SLIDER_STEP: 1,
 
     ISLAND_RADIUS_SLIDER_MIN: 10,       // Minimum island radius
     ISLAND_RADIUS_SLIDER_MAX: 100,      // Double of default (50 * 2)
@@ -212,6 +217,36 @@ export const JUMPING_CONFIG = {
 };
 
 // ============================================================================
+// PREDATOR SETTINGS
+// ============================================================================
+
+export const PREDATOR_CONFIG = {
+    // Energy system (carnivores drain faster - high cost of hunting)
+    STARTING_ENERGY_MIN: 50,        // Minimum starting energy
+    STARTING_ENERGY_MAX: 70,        // Maximum starting energy
+    ENERGY_DRAIN_MULTIPLIER: 1.8,   // Drain faster than herbivores (being a predator is costly)
+    ENERGY_FROM_KILL: 70,           // Energy gained from killing and eating a herbivore
+
+    // Movement (predators are faster to catch prey)
+    SPEED_MULTIPLIER: 1.4,          // Speed multiplier vs base CREATURE_CONFIG.SPEED
+    CHASE_SPEED_MULTIPLIER: 1.8,    // Speed boost when actively chasing prey
+
+    // Hunting behavior
+    DETECTION_RADIUS: 20,           // How far predator can "see" prey
+    KILL_RANGE: 1.8,                // Distance at which predator can strike prey
+
+    // Fear system (herbivores sense predators)
+    FEAR_RADIUS: 12,                // Range at which herbivores detect predators and flee
+    FLEE_SPEED_MULTIPLIER: 2.0,     // Speed boost when fleeing a predator
+
+    // Reproduction (slower than herbivores - apex predators breed less)
+    REPRODUCTION_ENERGY_THRESHOLD: 88,  // Energy needed to reproduce
+    REPRODUCTION_ENERGY_COST: 45,       // Energy spent per offspring
+    REPRODUCTION_COOLDOWN: 60,          // Seconds between reproductions (2x herbivore)
+    OFFSPRING_STARTING_ENERGY: 55,      // Starting energy for predator offspring
+};
+
+// ============================================================================
 // AUDIO SETTINGS
 // ============================================================================
 
@@ -230,4 +265,9 @@ export const AUDIO_CONFIG = {
     BIRTH_SOUND_FREQ_START: 400,
     BIRTH_SOUND_FREQ_END: 800,
     BIRTH_SOUND_DURATION: 0.2,
+
+    KILL_SOUND_VOLUME: 0.12,
+    KILL_SOUND_FREQ_START: 150,
+    KILL_SOUND_FREQ_END: 60,
+    KILL_SOUND_DURATION: 0.35,
 };

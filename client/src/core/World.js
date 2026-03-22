@@ -26,6 +26,7 @@ export class World {
 
         // Statistics tracking
         this.totalBirths = 0;
+        this.totalDeaths = 0; // All creature deaths (starvation + predation)
 
         // Extinction tracking
         this.isExtinct = false;
@@ -101,15 +102,18 @@ export class World {
 
             this.time += deltaTime;
 
-            // Check for extinction (triggers whenever all creatures die)
-            if (!this.isExtinct && this.creatures.length === 0) {
+            // Check for extinction: all herbivores gone (predators starve shortly after anyway)
+            const herbivoreCount = this.creatures.filter(c => c.species === 'herbivore').length;
+            if (!this.isExtinct && this.creatures.length > 0 && herbivoreCount === 0) {
+                this.handleExtinction();
+            } else if (!this.isExtinct && this.creatures.length === 0) {
                 this.handleExtinction();
             }
 
             // Update population graph
             const stats = this.getStats();
             stats.elapsedTime = this.time;
-            stats.creatureCount = this.creatures.length;
+            stats.creatureCount = stats.population;    // Herbivore count for backward compat
             this.populationGraph.update(deltaTime, stats);
         }
 
@@ -118,14 +122,21 @@ export class World {
     }
 
     /**
-     * Spawn a new creature at specified position
+     * Spawn a new herbivore at specified position
      */
     spawnCreature(x, z, species = 'herbivore') {
         const creature = new Creature(x, z, species);
-        creature.setShowStateIcon(this.showStateIcons); // Apply current icon setting
+        creature.setShowStateIcon(this.showStateIcons);
         this.creatures.push(creature);
         this.renderer.addMesh(creature.mesh);
         return creature;
+    }
+
+    /**
+     * Spawn a new carnivore (predator) at specified position
+     */
+    spawnCarnivore(x, z) {
+        return this.spawnCreature(x, z, 'carnivore');
     }
 
     /**
@@ -139,11 +150,11 @@ export class World {
     }
 
     /**
-     * Spawn offspring from parent DNA
+     * Spawn offspring from parent DNA, inheriting species
      */
-    spawnOffspring(x, z, parentDNA) {
-        const offspring = new Creature(x, z, 'herbivore', parentDNA);
-        offspring.setShowStateIcon(this.showStateIcons); // Apply current icon setting
+    spawnOffspring(x, z, parentDNA, species = 'herbivore') {
+        const offspring = new Creature(x, z, species, parentDNA);
+        offspring.setShowStateIcon(this.showStateIcons);
         this.creatures.push(offspring);
         this.renderer.addMesh(offspring.mesh);
         this.totalBirths++;
@@ -151,7 +162,7 @@ export class World {
         // Play birth sound
         this.soundManager.playBirthSound();
 
-        console.log(`Birth! Generation ${offspring.generation}, Population: ${this.creatures.length}`);
+        console.log(`Birth! ${species} Gen ${offspring.generation}, Pop: ${this.creatures.length}`);
         return offspring;
     }
 
@@ -205,10 +216,19 @@ export class World {
         if (index > -1) {
             this.creatures.splice(index, 1);
             this.renderer.removeMesh(creature.mesh);
-            console.log(`Creature ${creature.id} died at age ${creature.age.toFixed(1)}s, Gen ${creature.generation}`);
 
-            // Play death sound
-            this.soundManager.playDeathSound();
+            // Track death (predation kills are tracked at kill time; starvation here)
+            // Only count starvation deaths here - predation deaths are counted in killPrey()
+            // We count all removals but skip double-counting by checking: predation already
+            // incremented totalDeaths via killPrey(), so here we only count energy-death
+            if (creature.energy <= 0) {
+                this.totalDeaths++;
+                this.soundManager.playDeathSound();
+            } else {
+                // Died by predation - play kill sound already played in killPrey(), just log
+            }
+
+            console.log(`${creature.species} ${creature.id} died at age ${creature.age.toFixed(1)}s, Gen ${creature.generation}`);
         }
     }
 
@@ -216,23 +236,24 @@ export class World {
      * Get current simulation statistics
      */
     getStats() {
-        // Calculate average creature size and jump power
-        let avgSize = 1.0; // Default if no creatures
-        let avgJumpPower = 1.0; // Default if no creatures
+        const herbivores = this.creatures.filter(c => c.species === 'herbivore');
+        const carnivores = this.creatures.filter(c => c.species === 'carnivore');
 
-        if (this.creatures.length > 0) {
-            const totalSize = this.creatures.reduce((sum, c) => sum + c.dna.genes.size, 0);
-            avgSize = totalSize / this.creatures.length;
-
-            const totalJumpPower = this.creatures.reduce((sum, c) => sum + c.dna.genes.jumpPower, 0);
-            avgJumpPower = totalJumpPower / this.creatures.length;
+        // Average size and jump power across all creatures (herbivores only for meaningful comparison)
+        let avgSize = 1.0;
+        let avgJumpPower = 1.0;
+        if (herbivores.length > 0) {
+            avgSize = herbivores.reduce((sum, c) => sum + c.dna.genes.size, 0) / herbivores.length;
+            avgJumpPower = herbivores.reduce((sum, c) => sum + c.dna.genes.jumpPower, 0) / herbivores.length;
         }
 
         return {
-            population: this.creatures.length,
+            population: herbivores.length,       // Herbivore count
+            predatorCount: carnivores.length,    // Predator count
             foodCount: this.foodEntities.filter(f => !f.isConsumed).length,
             simulationTime: Math.floor(this.time),
             totalBirths: this.totalBirths,
+            totalDeaths: this.totalDeaths,
             avgSize: avgSize,
             avgJumpPower: avgJumpPower
         };
@@ -357,7 +378,7 @@ export class World {
     /**
      * Reset simulation with new parameters
      */
-    reset(creatureCount, treeCount = TREE_CONFIG.COUNT, islandRadius = WORLD_CONFIG.ISLAND_RADIUS) {
+    reset(creatureCount, treeCount = TREE_CONFIG.COUNT, islandRadius = WORLD_CONFIG.ISLAND_RADIUS, predatorCount = WORLD_CONFIG.DEFAULT_PREDATOR_COUNT) {
         // Update world config with new island radius
         WORLD_CONFIG.ISLAND_RADIUS = islandRadius;
         WORLD_CONFIG.ISLAND_USABLE_RADIUS = islandRadius - 2; // Maintain 2-unit buffer from edge
@@ -394,6 +415,7 @@ export class World {
         // Reset simulation time and statistics
         this.time = 0;
         this.totalBirths = 0;
+        this.totalDeaths = 0;
 
         // Hide extinction overlay and unpause if extinct
         this.hideExtinctionOverlay();
@@ -411,18 +433,22 @@ export class World {
             tree.spawnInitialFood(this);
         }
 
-        // Spawn creatures randomly throughout the island's available space
+        // Spawn herbivores randomly throughout the island
         for (let i = 0; i < creatureCount; i++) {
-            // Generate random position within island radius using polar coordinates
-            // This ensures uniform distribution across the circular area
             const angle = Math.random() * Math.PI * 2;
             const distance = Math.sqrt(Math.random()) * WORLD_CONFIG.ISLAND_USABLE_RADIUS;
-            const x = Math.cos(angle) * distance;
-            const z = Math.sin(angle) * distance;
-
-            this.spawnCreature(x, z);
+            this.spawnCreature(Math.cos(angle) * distance, Math.sin(angle) * distance, 'herbivore');
         }
 
-        console.log(`Simulation reset: ${this.creatures.length} creatures, ${this.trees.length} trees, ${islandRadius}m radius`);
+        // Spawn predators (carnivores) at random positions
+        for (let i = 0; i < predatorCount; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.sqrt(Math.random()) * WORLD_CONFIG.ISLAND_USABLE_RADIUS;
+            this.spawnCarnivore(Math.cos(angle) * distance, Math.sin(angle) * distance);
+        }
+
+        const herbCount = this.creatures.filter(c => c.species === 'herbivore').length;
+        const carnCount = this.creatures.filter(c => c.species === 'carnivore').length;
+        console.log(`Simulation reset: ${herbCount} herbivores, ${carnCount} predators, ${this.trees.length} trees, ${islandRadius}m radius`);
     }
 }

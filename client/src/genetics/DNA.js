@@ -5,12 +5,26 @@ import { GENETICS_CONFIG } from '../config.js';
  * Genes control various heritable characteristics
  */
 export class DNA {
-    constructor(genes = null) {
+    /**
+     * @param {Object|null} genes - Pre-built genes to clone (for inheritance), or null for random
+     * @param {string} species - 'herbivore' or 'carnivore' (only used when genes is null)
+     */
+    constructor(genes = null, species = 'herbivore') {
         if (genes) {
             // Clone existing genes (inheritance)
             this.genes = { ...genes };
+        } else if (species === 'carnivore') {
+            // Carnivore first generation: red-orange hue, slightly stronger base traits
+            this.genes = {
+                speed: 0.9 + Math.random() * 0.4,       // 0.9 - 1.3 (faster baseline)
+                perception: 0.9 + Math.random() * 0.4,  // 0.9 - 1.3
+                efficiency: 0.8 + Math.random() * 0.4,  // 0.8 - 1.2
+                size: 0.9 + Math.random() * 0.4,        // 0.9 - 1.3
+                hue: Math.random() * 0.08,              // 0.0 - 0.08 → red to orange (360 * 0.08 = ~30°)
+                jumpPower: 0.8 + Math.random() * 0.4,   // 0.8 - 1.2
+            };
         } else {
-            // Generate random genes (first generation)
+            // Herbivore first generation: random genes across full spectrum
             this.genes = {
                 speed: 0.8 + Math.random() * 0.4,           // 0.8 - 1.2 multiplier
                 perception: 0.8 + Math.random() * 0.4,      // 0.8 - 1.2 multiplier
@@ -60,6 +74,15 @@ export class DNA {
         const saturation = 50 + energyPercent * 30; // More saturated when healthy
         const lightness = 10 + energyPercent * 50;  // Very dark when hungry (10-60 range)
         return this.hslToHex(baseHue, saturation, lightness);
+    }
+
+    /**
+     * Keep predator hue mutations in the red-orange range (0°–40°)
+     */
+    clampHueForCarnivore(hue) {
+        // Wrap hue to 0-1 then clamp to 0-0.11 (0°-40°) for red/orange
+        const wrapped = ((hue % 1) + 1) % 1;
+        return Math.min(wrapped, 0.11);
     }
 
     /**
