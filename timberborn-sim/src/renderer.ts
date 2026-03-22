@@ -23,7 +23,7 @@ export class Renderer {
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setClearColor('#87CEEB');
         this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        this.renderer.shadowMap.type = THREE.PCFShadowMap;
 
         // Scene
         this.scene = new THREE.Scene();
