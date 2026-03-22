@@ -24,12 +24,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: timberborn-sim/package-lock.json
 
       - name: Install timberborn-sim dependencies
         working-directory: timberborn-sim
-        run: npm ci
+        run: npm install
 
       - name: Build timberborn-sim
         working-directory: timberborn-sim
