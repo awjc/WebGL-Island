@@ -116,16 +116,21 @@ export class WaterSim {
                 for (const { x: nx, y: ny } of neighbours4(x, y)) {
                     const nci = colIndex(nx, ny);
                     const nH  = sh[nci];
-                    if (nH < 0) continue; // void / ocean (sink handles it)
 
-                    const nSurface = nH + nl[nci];
+                    // Ocean tiles (nH < 0) act as an infinite-depth drain:
+                    // water always flows in (surface = -∞), and the sink
+                    // step drains them to zero each tick.
+                    const nSurface = nH < 0 ? -999 : nH + nl[nci];
 
                     if (mySurface > nSurface + 0.001) {
-                        // Transfer water proportional to head difference
                         const headDiff = mySurface - nSurface;
                         const transfer = Math.min(nl[ci], headDiff * FLOW_RATE);
                         nl[ci]  -= transfer;
-                        nl[nci] = Math.min(MAX_LEVEL, nl[nci] + transfer);
+                        if (nH >= 0) {
+                            nl[nci] = Math.min(MAX_LEVEL, nl[nci] + transfer);
+                        }
+                        // Water flowing into ocean (nH < 0) is simply lost —
+                        // the sink step would zero it anyway
                     }
                 }
             }

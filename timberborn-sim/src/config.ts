@@ -20,13 +20,13 @@ export const GRID_CONFIG = {
 // ============================================================================
 
 export const TERRAIN_CONFIG = {
-    NOISE_SCALE: 0.08,          // Simplex noise frequency — smaller = smoother
-    ISLAND_FALLOFF: 0.85,       // Edge-falloff sharpness — higher = steeper shore
+    NOISE_SCALE: 0.07,          // Simplex noise frequency — smaller = smoother
+    ISLAND_FALLOFF: 1.4,        // Edge-falloff sharpness — higher = steeper shore
     BASE_HEIGHT: 1,             // Minimum solid layers at island centre
-    MAX_HEIGHT: 6,              // Maximum solid layers (leaves 2 layers for water)
-    WATER_SOURCE_COUNT: 3,      // River source tiles placed near high terrain
-    WATER_SOURCE_FLOW: 0.08,    // Water volume injected per source per CA tick
-    FOOD_TILE_FRACTION: 0.06,   // ~6% of surface tiles become food tiles at gen
+    MAX_HEIGHT: 7,              // Maximum solid layers (leaves 1 layer for water)
+    WATER_SOURCE_COUNT: 4,      // River source tiles placed near high terrain
+    WATER_SOURCE_FLOW: 0.15,    // Water volume injected per source per CA tick
+    FOOD_TILE_FRACTION: 0.025,  // ~2.5% of surface tiles become food tiles at gen
 } as const;
 
 // ============================================================================
