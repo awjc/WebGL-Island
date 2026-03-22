@@ -56,7 +56,6 @@ coverage/
 
 # Misc
 .cache/
-timberborn-sim/screenshots/
 
 
 # VSCode / Claude Code is creating random .tmp. files for some reason
