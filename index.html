@@ -24,6 +24,16 @@
         </div>
     </div>
 
+    <script>
+        // Early error catching before modules load - alerts for mobile debugging
+        window.addEventListener('error', (e) => {
+            alert('JS Error: ' + e.message + '\nFile: ' + (e.filename || '?') + ':' + e.lineno);
+        });
+        window.addEventListener('unhandledrejection', (e) => {
+            alert('Unhandled Promise Rejection: ' + (e.reason?.message || String(e.reason)));
+        });
+    </script>
+
     <script type="importmap">
     {
         "imports": {
